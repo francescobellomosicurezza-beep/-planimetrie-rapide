@@ -1,4 +1,4 @@
-const CACHE = 'planimetrie-rapide-v4-1-phase1-20260623';
+const CACHE = 'planimetrie-rapide-v4-1-checkpoint-2a-20260623';
 const APP_ASSETS = [
   './',
   './index.html',

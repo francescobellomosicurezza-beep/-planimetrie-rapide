@@ -309,7 +309,7 @@
   <div class="sheet-body">
     <div class="field"><label>Tipo di documento</label></div>
     <div class="opt-grid" id="export-type-grid">
-      <div class="opt-card active" data-type="pee"><h4>Planimetria di emergenza</h4><p>Presidi, uscite, vie di esodo, punti raccolta, "sei qui" e legenda pertinente</p></div>
+      <div class="opt-card active" data-type="pee"><h4>Planimetria di emergenza</h4><p>Presidi, uscite, vie di esodo, punti raccolta, "Voi siete qui" e legenda pertinente</p></div>
       <div class="opt-card" data-type="misure"><h4>Piano misurazioni</h4><p>Punti di misura + tabella valori in coda</p></div>
       <div class="opt-card" data-type="dvr"><h4>Layout DVR</h4><p>Macchine, aree, presidi — vista completa</p></div>
       <div class="opt-card" data-type="completo"><h4>Completo</h4><p>Tutti gli elementi + tabella misure</p></div>
@@ -539,7 +539,7 @@
   // scheme: bg + fg colors per ISO color coding (green=safe, red=fire, yellow=warning)
   var SYMBOLS = [
     {id:"estintore",    label:"Estintore",       glyph:"extinguisher", bg:"#C8102E", fg:"#FFFFFF", layer:"emergency", iso:"F001", group:"Antincendio"},
-    {id:"estintore_carrellato",label:"Estintore carrell.",glyph:"wheeled_extinguisher",bg:"#C8102E",fg:"#FFFFFF",layer:"emergency",iso:"F009",group:"Antincendio"},
+    {id:"estintore_carrellato",label:"Estintore carrellato",glyph:"wheeled_extinguisher",bg:"#C8102E",fg:"#FFFFFF",layer:"emergency",iso:"F009",group:"Antincendio"},
     {id:"idrante",      label:"Idrante",         glyph:"hydrant",      bg:"#C8102E", fg:"#FFFFFF", layer:"emergency", iso:"F002", group:"Antincendio"},
     {id:"naspo",        label:"Naspo",           glyph:"hydrant",      bg:"#C8102E", fg:"#FFFFFF", layer:"emergency", iso:"F002", group:"Antincendio"},
     {id:"manichetta",   label:"Manichetta",      glyph:"firehose",     bg:"#C8102E", fg:"#FFFFFF", layer:"emergency", iso:"F002", group:"Antincendio"},
@@ -558,25 +558,25 @@
     {id:"bombola_estinguente",label:"Bombola estinguente",glyph:"suppression_bottle",bg:"#C8102E",fg:"#FFFFFF",layer:"emergency",iso:"F013",group:"Antincendio"},
     {id:"rilascio_remoto",label:"Rilascio remoto",glyph:"remote_release",bg:"#C8102E",fg:"#FFFFFF",layer:"emergency",iso:"F014",group:"Antincendio"},
     {id:"monitore_antincendio",label:"Monitor antinc.",glyph:"fire_monitor",bg:"#C8102E",fg:"#FFFFFF",layer:"emergency",iso:"F015",group:"Antincendio"},
-    {id:"coperta_antincendio",label:"Coperta antinc.",glyph:"fire_blanket",bg:"#C8102E",fg:"#FFFFFF",layer:"emergency",iso:"F016",group:"Antincendio"},
+    {id:"coperta_antincendio",label:"Coperta antifiamma",glyph:"fire_blanket",bg:"#C8102E",fg:"#FFFFFF",layer:"emergency",iso:"F016",group:"Antincendio"},
     {id:"ascensore_antincendio_sym",label:"Ascensore antinc.",glyph:"fire_lift",bg:"#C8102E",fg:"#FFFFFF",layer:"emergency",iso:"F017",group:"Antincendio"},
     {id:"lampeggiante_antincendio",label:"Lampeggiante",glyph:"flashing_light",bg:"#C8102E",fg:"#FFFFFF",layer:"emergency",iso:"F018",group:"Antincendio"},
     {id:"uscita",       label:"Uscita",          glyph:"exit",         bg:"#0F8A3C", fg:"#FFFFFF", layer:"emergency", iso:"E001/E002"},
-    {id:"uscita_emerg", label:"Uscita emerg.",   glyph:"exit",         bg:"#0F8A3C", fg:"#FFFFFF", layer:"emergency", iso:"E001/E002"},
+    {id:"uscita_emerg", label:"Uscita di emergenza",glyph:"exit",      bg:"#0F8A3C", fg:"#FFFFFF", layer:"emergency", iso:"E001/E002"},
     {id:"porta_rei",    label:"Porta REI",       glyph:"firedoor",     bg:"#C8102E", fg:"#FFFFFF", layer:"emergency"},
-    {id:"raccolta",     label:"Punto raccolta",  glyph:"assembly",     bg:"#0F8A3C", fg:"#FFFFFF", layer:"emergency", iso:"E007"},
+    {id:"raccolta",     label:"Punto di raccolta",glyph:"assembly",    bg:"#0F8A3C", fg:"#FFFFFF", layer:"emergency", iso:"E007"},
     {id:"spazio_calmo", label:"Spazio calmo",    glyph:"assembly",     bg:"#0F8A3C", fg:"#FFFFFF", layer:"emergency"},
     {id:"assistenza",   label:"Punto assistenza",glyph:"firstaid",     bg:"#0F8A3C", fg:"#FFFFFF", layer:"emergency"},
-    {id:"primo_socc",   label:"Primo soccorso",  glyph:"firstaid",     bg:"#0F8A3C", fg:"#FFFFFF", layer:"emergency", iso:"E003"},
-    {id:"pacchetto_med",label:"Pacch. medicaz.", glyph:"firstaid",     bg:"#0F8A3C", fg:"#FFFFFF", layer:"emergency"},
+    {id:"primo_socc",   label:"Cassetta di primo soccorso",glyph:"firstaid",bg:"#0F8A3C",fg:"#FFFFFF",layer:"emergency",iso:"E003"},
+    {id:"pacchetto_med",label:"Pacchetto di medicazione",glyph:"firstaid",bg:"#0F8A3C",fg:"#FFFFFF",layer:"emergency"},
     {id:"dae",          label:"DAE",             glyph:"aed",          bg:"#0F8A3C", fg:"#FFFFFF", layer:"emergency", iso:"E010"},
     {id:"infermeria",   label:"Infermeria",      glyph:"firstaid",     bg:"#0F8A3C", fg:"#FFFFFF", layer:"emergency"},
     {id:"doccia_emerg", label:"Doccia emerg.",   glyph:"generic",      bg:"#0F8A3C", fg:"#FFFFFF", layer:"emergency"},
     {id:"lavaocchi",    label:"Lavaocchi",       glyph:"generic",      bg:"#0F8A3C", fg:"#FFFFFF", layer:"emergency"},
-    {id:"sei_qui",      label:"Sei qui",         glyph:"youarehere",   bg:"#1E5BB8", fg:"#FFFFFF", layer:"emergency"},
-    {id:"quadro",       label:"Quadro elett.",   glyph:"electric",     bg:"#F2B500", fg:"#16202B", layer:"emergency", iso:"W012"},
+    {id:"sei_qui",      label:"Voi siete qui",   glyph:"youarehere",   bg:"#1E5BB8", fg:"#FFFFFF", layer:"emergency"},
+    {id:"quadro",       label:"Quadro elettrico generale",glyph:"electric",bg:"#F2B500",fg:"#16202B",layer:"emergency",iso:"W012"},
     {id:"sgancio",      label:"Sgancio elettr.", glyph:"electric",     bg:"#F2B500", fg:"#16202B", layer:"emergency"},
-    {id:"gas",          label:"Valvola gas",     glyph:"gas",          bg:"#F2B500", fg:"#16202B", layer:"emergency"},
+    {id:"gas",          label:"Valvola di intercettazione gas",glyph:"gas",bg:"#F2B500",fg:"#16202B",layer:"emergency"},
     {id:"acqua",        label:"Interc. acqua",   glyph:"gas",          bg:"#F2B500", fg:"#16202B", layer:"emergency"},
     {id:"combustibile", label:"Interc. combust.",glyph:"gas",          bg:"#F2B500", fg:"#16202B", layer:"emergency"},
     {id:"centrale_term",label:"Centrale termica",glyph:"gas",          bg:"#F2B500", fg:"#16202B", layer:"emergency"},
@@ -2020,7 +2020,7 @@
       var prefix='<b>'+escapeHtml(f.name)+':</b> ';
       var has=function(id){return f.markers.some(function(m){return m.symId===id;});};
       if(kind==="pee"||kind==="completo"){
-        if(!has("sei_qui"))issues.push({lvl:"basso",html:prefix+"manca il punto Sei qui."});
+        if(!has("sei_qui"))issues.push({lvl:"basso",html:prefix+"manca il punto Voi siete qui."});
         if(!has("uscita")&&!has("uscita_emerg"))issues.push({lvl:"alto",html:prefix+"nessuna uscita indicata."});
         if(!f.routes.length)issues.push({lvl:"medio",html:prefix+"nessuna via di esodo tracciata."});
         if(!f.markers.some(function(m){return symById(m.symId).layer==="emergency";}))issues.push({lvl:"medio",html:prefix+"nessun presidio o simbolo di emergenza."});
