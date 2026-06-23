@@ -2089,26 +2089,31 @@
   function pageOrientation(page){return page.pxW>page.pxH?"landscape":"portrait";}
   function buildPDF(pages){
     var J=window.jspdf.jsPDF,fmt=document.getElementById("export-format").value,firstOrientation=pageOrientation(pages[0]);
-    var doc=new J({unit:"mm",format:fmt,orientation:firstOrientation,compress:true}),M=12,headerH=18,footerH=11,allMeasures=[];
+    var doc=new J({unit:"mm",format:fmt,orientation:firstOrientation,compress:true}),M=12,headerH=18,footerH=11,allMeasures=[],legendPageQueue=[];
     pages.forEach(function(page,index){
       var orientation=pageOrientation(page);
       if(index>0)doc.addPage(fmt,orientation);
       var pdfW=doc.internal.pageSize.getWidth(),pdfH=doc.internal.pageSize.getHeight();
       var cartH=cartoucheHeight(fmt,orientation),cartY=pdfH-M-footerH-cartH;
       drawPdfHeader(doc,M,pdfW,headerH,page.floor.name);
-      var legendH=estimateLegendH(page.legendMarkers,page.floor),scaleBarH=10,availW=pdfW-2*M,availH=Math.max(35,cartY-(M+headerH)-legendH-scaleBarH-8);
+      var legendItems=collectLegendItems(page.legendMarkers,page.floor),scaleBarH=10,availW=pdfW-2*M,usableH=Math.max(35,cartY-(M+headerH)-scaleBarH-8);
+      var legendLayout=measureLegendLayout(doc,legendItems,{x:M,y:0,w:availW,h:usableH},fmt,orientation);
+      var legendH=legendLayout.onMain?legendLayout.h:0,availH=Math.max(35,usableH-legendH);
       var ratio=page.pxW/page.pxH,dW=availW,dH=availW/ratio;
       if(dH>availH){dH=availH;dW=availH*ratio;}
+      if(legendLayout.onMain&&dW*dH<availW*usableH*.60){legendLayout.onMain=false;legendH=0;availH=usableH;dW=availW;dH=availW/ratio;if(dH>availH){dH=availH;dW=availH*ratio;}}
       var dX=M+(availW-dW)/2,dY=M+headerH;
       doc.addImage(page.imgDataUrl,"PNG",dX,dY,dW,dH,undefined,"FAST");
       var contentWm=page.bounds.maxX-page.bounds.minX,mmPerMeter=dW/contentWm,barM=pickScaleBarRealMM(mmPerMeter),scaleRatio=Math.round(1000/mmPerMeter);
       var scaleLabel=page.floor.calibrated?"Scala 1 : "+roundScale(scaleRatio):"Scala indicativa";
       if(page.floor.calibrated)drawScaleBarMM(doc,dX+5,dY+dH-3,barM,mmPerMeter,scaleRatio);else drawIndicativeScale(doc,dX+5,dY+dH-3);
-      drawLegendPDF(doc,M,dY+dH+8,pdfW-2*M,page.legendMarkers,page.floor);
+      if(legendLayout.onMain)drawLegendPDF(doc,M,dY+dH+8,pdfW-2*M,legendItems,legendLayout);
+      else if(legendItems.length)legendPageQueue.push({floor:page.floor,items:legendItems,fmt:fmt});
       drawProfessionalCartouche(doc,resolveCartoucheData(page.floor,fmt,orientation,scaleLabel),{x:M,y:cartY,w:pdfW-2*M,h:cartH});
       drawPdfFooter(doc,M,pdfW,pdfH);
       page.legendMarkers.filter(function(m){return symById(m.symId).hasValue;}).forEach(function(m){allMeasures.push({floorName:page.floor.name,marker:m});});
     });
+    legendPageQueue.forEach(function(entry){drawLegendPages(doc,entry.items,entry.floor,entry.fmt,M,headerH);});
     if((exportType==="misure"||exportType==="completo")&&allMeasures.length){doc.addPage(fmt,"portrait");drawMeasureTable(doc,M,M+headerH+6,doc.internal.pageSize.getWidth()-2*M,allMeasures,fmt,headerH);drawPdfFooter(doc,M,doc.internal.pageSize.getWidth(),doc.internal.pageSize.getHeight());}
     if((exportType==="pee"||exportType==="completo")&&state.includeInstructions!==false&&state.instructions&&state.instructions.trim()){doc.addPage(fmt,"portrait");drawPdfHeader(doc,M,doc.internal.pageSize.getWidth(),headerH,"Istruzioni");drawInstructionsPage(doc,M,M+headerH+6,doc.internal.pageSize.getWidth()-2*M,fmt,headerH);drawPdfFooter(doc,M,doc.internal.pageSize.getWidth(),doc.internal.pageSize.getHeight());}
     var fn=safeBaseName()+"_rev"+(state.header.revisione||"1")+"_"+dateStamp()+"_"+exportType+".pdf";doc.save(fn);toast("PDF multipiano esportato");
@@ -2169,8 +2174,75 @@
   function drawScaleBarMM(doc,x,y,barMeters,mmPerMeter,scaleRatio){var barMM=barMeters*mmPerMeter,seg=barMM/4;doc.setDrawColor(20,30,40);doc.setLineWidth(.4);doc.setFillColor(20,30,40);for(var i=0;i<4;i++){if(i%2===0)doc.rect(x+i*seg,y-1.2,seg,2.4,"F");else doc.rect(x+i*seg,y-1.2,seg,2.4,"S");}doc.setFontSize(7.5);doc.setTextColor(40,50,60);doc.setFont("helvetica","normal");doc.text("0",x,y+5.5);doc.text(barMeters+" m",x+barMM,y+5.5,{align:"right"});doc.setFont("helvetica","bold");doc.setFontSize(8);doc.text("Scala 1 : "+roundScale(scaleRatio),x+barMM/2,y-3.5,{align:"center"});}
   function drawIndicativeScale(doc,x,y){doc.setFont("helvetica","bold");doc.setFontSize(8);doc.setTextColor(200,120,30);doc.text("Scala indicativa - progetto non calibrato",x,y);}
   function roundScale(r){var std=[50,100,150,200,250,500,1000,2000];return std.reduce(function(a,b){return Math.abs(b-r)<Math.abs(a-r)?b:a;});}
-  function estimateLegendH(list,floor){var used={};list.forEach(function(m){used[m.symId]=(used[m.symId]||0)+1;});var rows=Object.keys(used).length+(reiVisible()&&floor.reiWalls.length?1:0)+(routesVisible()&&floor.routes.length?1:0)+(floor.windows.length?1:0)+(floor.doors.length?1:0)+(floor.stairs.length?1:0)+(floor.elevators.length?1:0)+(floor.texts.length?1:0);return rows?Math.min(80,14+Math.ceil(rows/2)*7):8;}
-  function drawLegendPDF(doc,x,y,width,list,floor){var used={};list.forEach(function(m){if(!used[m.symId])used[m.symId]=[];used[m.symId].push(m);});var keys=SYMBOLS.map(function(s){return s.id;}).filter(function(id){return used[id];}),extra=[];if(reiVisible()&&floor.reiWalls.length)extra.push("Compartimentazioni REI/EI");if(floor.windows.length)extra.push("Finestre");if(floor.doors.length)extra.push("Porte e verso di apertura");if(floor.stairs.length)extra.push("Vani scala / collegamenti verticali");if(floor.elevators.length)extra.push("Ascensori / vani impianto");if(floor.texts.length)extra.push("Testi e annotazioni");if(routesVisible()&&floor.routes.length)extra.push("Via di esodo / percorso");if(!keys.length&&!extra.length)return;doc.setFont("helvetica","bold");doc.setFontSize(10);doc.setTextColor(20,30,40);doc.text("Legenda",x,y);y+=6;var colW=width/2,col=0,startY=y,curY=y;function advance(){curY+=6;if(col===0&&curY>startY+58){col=1;curY=startY;}}keys.forEach(function(id){var sym=symById(id),colX=x+col*colW,mini=document.createElement("canvas");mini.width=44;mini.height=44;drawGlyph(mini.getContext("2d"),sym,22,22,18);doc.addImage(mini.toDataURL("image/png"),"PNG",colX,curY-4,5,5);doc.setFont("helvetica","normal");doc.setFontSize(8.6);doc.setTextColor(40,50,60);var labels=used[id].map(function(m){return m.seqLabel;}).join(", "),iso=sym.iso?" [ISO "+sym.iso+"]":"",txt=sym.label+iso+(labels?" ("+labels+")":"");doc.text(doc.splitTextToSize(txt,colW-10),colX+7,curY);advance();});extra.forEach(function(label){var colX=x+col*colW;doc.setDrawColor(label.indexOf("REI")>=0?200:70,label.indexOf("REI")>=0?16:90,label.indexOf("REI")>=0?46:105);doc.setLineWidth(1);doc.line(colX,curY-1.5,colX+6,curY-1.5);doc.setFont("helvetica","normal");doc.setFontSize(8.6);doc.setTextColor(40,50,60);doc.text(label,colX+8,curY);advance();});}
+  function normalizeLegendLabel(v){return String(v||"").trim().toLowerCase().replace(/\s+/g," ");}
+  function legendCategoryRank(cat){return{"esodo":1,"antincendio":2,"primo":3,"impianti":4,"struttura":5,"dvr":6,"misure":7,"altro":8}[cat]||8;}
+  function legendCategoryForSym(sym){
+    if(["uscita","uscita_emerg","raccolta","sei_qui","spazio_calmo","assistenza"].indexOf(sym.id)>=0)return"esodo";
+    if(sym.layer==="measure")return"misure";
+    if(sym.layer==="dvr")return"dvr";
+    if(["primo_socc","pacchetto_med","dae","infermeria","doccia_emerg","lavaocchi"].indexOf(sym.id)>=0)return"primo";
+    if(["quadro","sgancio","gas","acqua","combustibile","centrale_term"].indexOf(sym.id)>=0)return"impianti";
+    if(sym.layer==="structure")return"struttura";
+    if(sym.layer==="emergency")return"antincendio";
+    return"altro";
+  }
+  function legendItemSort(a,b){var ca=legendCategoryRank(a.cat),cb=legendCategoryRank(b.cat);if(ca!==cb)return ca-cb;if(a.order!==b.order)return a.order-b.order;return a.label.localeCompare(b.label,"it");}
+  function addLegendItem(items,seen,item){
+    var key=item.key||normalizeLegendLabel(item.label);if(seen[key]){if(item.codes)seen[key].codes=seen[key].codes.concat(item.codes);return;}
+    item.codes=item.codes||[];seen[key]=item;items.push(item);
+  }
+  function collectLegendItems(list,floor){
+    var items=[],seen={},symOrder={};SYMBOLS.forEach(function(s,i){symOrder[s.id]=i;});
+    var grouped={};
+    list.forEach(function(m){var sym=symById(m.symId);if(!layerVisible(sym.layer))return;if(!grouped[m.symId])grouped[m.symId]=[];grouped[m.symId].push(m);});
+    Object.keys(grouped).forEach(function(id){
+      var sym=symById(id),codes=grouped[id].map(function(m){return m.seqLabel;}).filter(Boolean);
+      addLegendItem(items,seen,{type:"symbol",key:"sym:"+id,cat:legendCategoryForSym(sym),order:symOrder[id]||999,label:sym.label,iso:sym.iso||"",sym:sym,codes:codes});
+    });
+    if(routesVisible()&&floor.routes.length)addLegendItem(items,seen,{type:"line",key:"route:esodo",cat:"esodo",order:10,label:"Via di esodo / percorso",color:"#0F8A3C"});
+    if(reiVisible()&&floor.reiWalls.length)addLegendItem(items,seen,{type:"line",key:"struct:rei",cat:"struttura",order:10,label:"Compartimentazioni REI/EI",color:"#C8102E",dash:true});
+    if(floor.doors.length)addLegendItem(items,seen,{type:"line",key:"struct:doors",cat:"struttura",order:20,label:"Porte e verso di apertura",color:"#16202B"});
+    if(floor.windows.length)addLegendItem(items,seen,{type:"line",key:"struct:windows",cat:"struttura",order:30,label:"Finestre",color:"#278AA6"});
+    if(floor.stairs.length)addLegendItem(items,seen,{type:"box",key:"struct:stairs",cat:"struttura",order:40,label:"Vani scala / collegamenti verticali",color:"#52616F"});
+    if(floor.elevators.length)addLegendItem(items,seen,{type:"box",key:"struct:elevators",cat:"struttura",order:50,label:"Ascensori / vani impianto",color:"#52616F"});
+    if(exportType!=="pee"&&floor.areas.length)addLegendItem(items,seen,{type:"box",key:"struct:areas",cat:"struttura",order:60,label:"Aree / locali",color:"#3DB6B8"});
+    if(floor.texts.length)addLegendItem(items,seen,{type:"text",key:"other:texts",cat:"altro",order:10,label:"Testi e annotazioni",color:"#16202B"});
+    items.forEach(function(it){it.codes=Array.from(new Set(it.codes||[]));});
+    return items.sort(legendItemSort);
+  }
+  function estimateLegendH(list,floor){return measureLegendLayout(null,collectLegendItems(list,floor),{w:120,h:80},"a4","landscape").h;}
+  function mainLegendLimit(fmt,orientation){return fmt==="a3"?(orientation==="landscape"?10:8):(orientation==="landscape"?8:6);}
+  function measureLegendLayout(doc,items,box,fmt,orientation){
+    if(!items.length)return{onMain:false,h:0,cols:0,rowH:0,colW:0,itemsPerCol:0};
+    var cols=Math.min(2,Math.max(1,Math.floor((box.w+6)/61))),colW=(box.w-(cols-1)*6)/cols,rowH=7,titleH=7,rows=Math.ceil(items.length/cols),h=titleH+rows*rowH+2;
+    var maxArea=box.h*.28,onMain=items.length<=mainLegendLimit(fmt,orientation)&&colW>=55&&h<=maxArea;
+    return{onMain:onMain,h:h,cols:cols,rowH:rowH,colW:colW,itemsPerCol:Math.ceil(items.length/cols)};
+  }
+  function drawLegendIcon(doc,item,x,y,size){
+    if(item.type==="symbol"&&item.sym){var mini=document.createElement("canvas");mini.width=54;mini.height=54;drawGlyph(mini.getContext("2d"),item.sym,27,27,22);doc.addImage(mini.toDataURL("image/png"),"PNG",x,y-size+1,size,size);return;}
+    doc.setDrawColor(item.color||"#52616F");doc.setLineWidth(item.type==="line"?1.1:.6);if(item.dash)doc.setLineDash([2,1.4],0);
+    if(item.type==="box"){doc.rect(x,y-size+1,size,size);}else if(item.type==="text"){doc.setFont("helvetica","bold");doc.setFontSize(8);doc.setTextColor(item.color||"#16202B");doc.text("T",x+size/2,y-1,{align:"center"});}else{doc.line(x,y-size/2+1,x+size,y-size/2+1);}
+    if(item.dash)doc.setLineDash([],0);
+  }
+  function legendText(item){var txt=item.label;if(item.iso)txt+=" [ISO "+item.iso+"]";if(item.codes&&item.codes.length)txt+=" ("+item.codes.join(", ")+")";return txt;}
+  function drawLegendPDF(doc,x,y,width,items,layout){
+    if(!items.length)return;layout=layout||measureLegendLayout(doc,items,{w:width,h:80},"a4","landscape");
+    doc.setFont("helvetica","bold");doc.setFontSize(10);doc.setTextColor(20,30,40);doc.text("Legenda",x,y);y+=6;
+    var gap=6,icon=5,rowH=layout.rowH||7,colW=layout.colW||width,perCol=layout.itemsPerCol||items.length;
+    items.forEach(function(item,i){var col=Math.floor(i/perCol),row=i%perCol,colX=x+col*(colW+gap),curY=y+row*rowH;drawLegendIcon(doc,item,colX,curY,icon);doc.setFont("helvetica","normal");doc.setFontSize(8.2);doc.setTextColor(40,50,60);doc.text(doc.splitTextToSize(legendText(item),colW-icon-4),colX+icon+3,curY);});
+  }
+  function drawLegendPages(doc,items,floor,fmt,M,headerH){
+    if(!items.length)return;var baseOrientation=fmt==="a3"?"landscape":"portrait",maxCols=fmt==="a3"?3:2,pageItems=items.slice(),first=true;
+    while(pageItems.length){
+      doc.addPage(fmt,baseOrientation);var pdfW=doc.internal.pageSize.getWidth(),pdfH=doc.internal.pageSize.getHeight(),footerH=11;
+      drawPdfHeader(doc,M,pdfW,headerH,"Legenda - "+floor.name);
+      var x=M,y=M+headerH+8,width=pdfW-2*M,height=pdfH-y-M-footerH,cols=Math.min(maxCols,Math.max(1,Math.floor((width+8)/63))),gap=8,colW=(width-(cols-1)*gap)/cols,rowH=9,titleH=10,cap=Math.max(1,cols*Math.floor((height-titleH)/rowH)),chunk=pageItems.splice(0,cap),perCol=Math.ceil(chunk.length/cols);
+      doc.setFont("helvetica","bold");doc.setFontSize(15);doc.setTextColor(20,30,40);doc.text(first?"Legenda":"Legenda (continua)",x,y);first=false;
+      doc.setFont("helvetica","normal");doc.setFontSize(8);doc.setTextColor(90,100,112);doc.text(present(state.header.azienda)+" - "+floor.name+" - "+revisionLabel(),x,y+5.5);
+      chunk.forEach(function(item,i){var col=Math.floor(i/perCol),row=i%perCol,colX=x+col*(colW+gap),curY=y+titleH+row*rowH;drawLegendIcon(doc,item,colX,curY,6);doc.setFont("helvetica","normal");doc.setFontSize(8.5);doc.setTextColor(40,50,60);doc.text(doc.splitTextToSize(legendText(item),colW-11),colX+9,curY);});
+      drawPdfFooter(doc,M,pdfW,pdfH);
+    }
+  }
   function drawMeasureTable(doc,x,y,width,items,fmt,headerH){drawPdfHeader(doc,12,doc.internal.pageSize.getWidth(),headerH,"Riepilogo misurazioni");doc.setFont("helvetica","bold");doc.setFontSize(13);doc.setTextColor(20,30,40);doc.text("Tabella dei punti di misurazione",x,y);y+=8;var cols=[{t:"Piano",w:width*.14},{t:"Cod.",w:13},{t:"Tipo",w:width*.15},{t:"Valore",w:width*.12},{t:"Unita",w:14},{t:"H",w:12},{t:"Durata",w:width*.10},{t:"Data",w:width*.12},{t:"Note",w:width*.35-51}];function header(){doc.setFillColor(240,242,245);doc.rect(x,y-4,width,8,"F");doc.setFont("helvetica","bold");doc.setFontSize(7.4);doc.setTextColor(40,50,60);var cx=x+2;cols.forEach(function(col){doc.text(col.t,cx,y+1);cx+=col.w;});y+=8;}header();doc.setFont("helvetica","normal");doc.setFontSize(7.2);items.forEach(function(item){var m=item.marker,cx=x+2,note=doc.splitTextToSize(m.note||"",Math.max(12,cols[8].w-2)),rowH=Math.max(7,note.length*3.8);if(y+rowH>doc.internal.pageSize.getHeight()-22){drawPdfFooter(doc,12,doc.internal.pageSize.getWidth(),doc.internal.pageSize.getHeight());doc.addPage(fmt,"portrait");drawPdfHeader(doc,12,doc.internal.pageSize.getWidth(),headerH,"Riepilogo misurazioni");y=12+headerH+6;header();doc.setFont("helvetica","normal");doc.setFontSize(7.2);}var vals=[item.floorName,m.seqLabel||"",m.measureType||m.label||"",m.value||"-",m.unit||"",m.height||"",m.duration||"",m.date||"",note];vals.forEach(function(v,i){if(Array.isArray(v))doc.text(v,cx,y);else doc.text(doc.splitTextToSize(String(v),cols[i].w-2),cx,y);cx+=cols[i].w;});y+=rowH+2;doc.setDrawColor(228,231,234);doc.line(x,y-3,x+width,y-3);});}
   function drawInstructionsPage(doc,x,y,width,fmt,headerH){doc.setFont("helvetica","bold");doc.setFontSize(13);doc.setTextColor(20,30,40);doc.text("Istruzioni di comportamento in caso di emergenza",x,y);y+=9;doc.setFont("helvetica","normal");doc.setFontSize(10.5);doc.setTextColor(35,42,52);var lines=doc.splitTextToSize(state.instructions||DEFAULT_INSTRUCTIONS,width),lh=5.2;lines.forEach(function(line){if(y>doc.internal.pageSize.getHeight()-22){drawPdfFooter(doc,12,doc.internal.pageSize.getWidth(),doc.internal.pageSize.getHeight());doc.addPage(fmt,"portrait");drawPdfHeader(doc,12,doc.internal.pageSize.getWidth(),headerH,"Istruzioni");y=12+headerH+10;doc.setFont("helvetica","normal");doc.setFontSize(10.5);doc.setTextColor(35,42,52);}if(/^[A-ZÀ-Ý\s]+:$/.test(line.trim())){doc.setFont("helvetica","bold");doc.setTextColor(200,16,46);doc.text(line,x,y);doc.setFont("helvetica","normal");doc.setTextColor(35,42,52);}else doc.text(line,x,y);y+=lh;});}
 

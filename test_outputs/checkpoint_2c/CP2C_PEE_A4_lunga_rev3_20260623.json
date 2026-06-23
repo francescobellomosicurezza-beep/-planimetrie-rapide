@@ -1,0 +1,377 @@
+{
+  "version": 4.1,
+  "ts": 1782219738874,
+  "meta": {
+    "name": "CP2C_PEE_A4_lunga"
+  },
+  "gridSizeM": 1,
+  "activeFloorId": "f_Piano_lunga",
+  "floors": [
+    {
+      "id": "f_Piano_lunga",
+      "name": "Piano lunga",
+      "walls": [
+        {
+          "x1": 0,
+          "y1": 0,
+          "x2": 32,
+          "y2": 0
+        },
+        {
+          "x1": 32,
+          "y1": 0,
+          "x2": 32,
+          "y2": 12
+        },
+        {
+          "x1": 32,
+          "y1": 12,
+          "x2": 0,
+          "y2": 12
+        },
+        {
+          "x1": 0,
+          "y1": 12,
+          "x2": 0,
+          "y2": 0
+        }
+      ],
+      "reiWalls": [
+        {
+          "x1": 16,
+          "y1": 0,
+          "x2": 16,
+          "y2": 12,
+          "rei": "REI 60"
+        }
+      ],
+      "windows": [
+        {
+          "id": "win1",
+          "x1": 2,
+          "y1": 0,
+          "x2": 4,
+          "y2": 0,
+          "label": "Finestra"
+        }
+      ],
+      "doors": [
+        {
+          "id": "d1",
+          "x1": 29,
+          "y1": 12,
+          "x2": 30,
+          "y2": 12,
+          "label": "Porta",
+          "swing": 1,
+          "type": "normal",
+          "rei": "EI 60"
+        }
+      ],
+      "stairs": [
+        {
+          "id": "s1",
+          "x": 2,
+          "y": 10,
+          "w": 1.6,
+          "h": 2.6,
+          "label": "Scala A",
+          "direction": "up",
+          "rotation": 0,
+          "targetFloorId": ""
+        }
+      ],
+      "elevators": [
+        {
+          "id": "e1",
+          "x": 4,
+          "y": 10,
+          "w": 1.4,
+          "h": 1.4,
+          "label": "Ascensore",
+          "elevatorType": "ordinary",
+          "serves": "",
+          "notes": "",
+          "rotation": 0
+        }
+      ],
+      "areas": [
+        {
+          "points": [
+            {
+              "x": 0.5,
+              "y": 0.5
+            },
+            {
+              "x": 31.5,
+              "y": 0.5
+            },
+            {
+              "x": 31.5,
+              "y": 11.5
+            },
+            {
+              "x": 0.5,
+              "y": 11.5
+            }
+          ],
+          "label": "Area prova",
+          "color": "#3DB6B8"
+        }
+      ],
+      "texts": [
+        {
+          "id": "t1",
+          "x": 16,
+          "y": 6,
+          "text": "Locale principale",
+          "sizeM": 0.35,
+          "rotation": 0,
+          "align": "center",
+          "box": true,
+          "color": "#16202B"
+        }
+      ],
+      "markers": [
+        {
+          "id": "m1estintore",
+          "symId": "estintore",
+          "x": 3,
+          "y": 1,
+          "label": "Estintore",
+          "seqLabel": "E1",
+          "labelColor": "#16202B",
+          "value": "",
+          "unit": "",
+          "measureType": ""
+        },
+        {
+          "id": "m2estintore_carrellato",
+          "symId": "estintore_carrellato",
+          "x": 5,
+          "y": 1,
+          "label": "Estintore carrellato",
+          "seqLabel": "E2",
+          "labelColor": "#16202B",
+          "value": "",
+          "unit": "",
+          "measureType": ""
+        },
+        {
+          "id": "m3idrante",
+          "symId": "idrante",
+          "x": 7,
+          "y": 1,
+          "label": "Idrante",
+          "seqLabel": "I3",
+          "labelColor": "#16202B",
+          "value": "",
+          "unit": "",
+          "measureType": ""
+        },
+        {
+          "id": "m4naspo",
+          "symId": "naspo",
+          "x": 9,
+          "y": 1,
+          "label": "Naspo",
+          "seqLabel": "N4",
+          "labelColor": "#16202B",
+          "value": "",
+          "unit": "",
+          "measureType": ""
+        },
+        {
+          "id": "m5allarme",
+          "symId": "allarme",
+          "x": 11,
+          "y": 1,
+          "label": "Pulsante allarme",
+          "seqLabel": "A5",
+          "labelColor": "#16202B",
+          "value": "",
+          "unit": "",
+          "measureType": ""
+        },
+        {
+          "id": "m6tel_emerg",
+          "symId": "tel_emerg",
+          "x": 13,
+          "y": 1,
+          "label": "Tel. emergenza",
+          "seqLabel": "T6",
+          "labelColor": "#16202B",
+          "value": "",
+          "unit": "",
+          "measureType": ""
+        },
+        {
+          "id": "m7uscita",
+          "symId": "uscita",
+          "x": 15,
+          "y": 1,
+          "label": "Uscita",
+          "seqLabel": "U7",
+          "labelColor": "#16202B",
+          "value": "",
+          "unit": "",
+          "measureType": ""
+        },
+        {
+          "id": "m8uscita_emerg",
+          "symId": "uscita_emerg",
+          "x": 17,
+          "y": 1,
+          "label": "Uscita di emergenza",
+          "seqLabel": "U8",
+          "labelColor": "#16202B",
+          "value": "",
+          "unit": "",
+          "measureType": ""
+        },
+        {
+          "id": "m9raccolta",
+          "symId": "raccolta",
+          "x": 19,
+          "y": 1,
+          "label": "Punto di raccolta",
+          "seqLabel": "R9",
+          "labelColor": "#16202B",
+          "value": "",
+          "unit": "",
+          "measureType": ""
+        },
+        {
+          "id": "m10sei_qui",
+          "symId": "sei_qui",
+          "x": 1,
+          "y": 3,
+          "label": "Voi siete qui",
+          "seqLabel": "S10",
+          "labelColor": "#16202B",
+          "value": "",
+          "unit": "",
+          "measureType": ""
+        },
+        {
+          "id": "m11primo_socc",
+          "symId": "primo_socc",
+          "x": 3,
+          "y": 3,
+          "label": "Cassetta di primo soccorso",
+          "seqLabel": "P11",
+          "labelColor": "#16202B",
+          "value": "",
+          "unit": "",
+          "measureType": ""
+        },
+        {
+          "id": "m12pacchetto_med",
+          "symId": "pacchetto_med",
+          "x": 5,
+          "y": 3,
+          "label": "Pacchetto di medicazione",
+          "seqLabel": "P12",
+          "labelColor": "#16202B",
+          "value": "",
+          "unit": "",
+          "measureType": ""
+        },
+        {
+          "id": "m13dae",
+          "symId": "dae",
+          "x": 7,
+          "y": 3,
+          "label": "DAE",
+          "seqLabel": "D13",
+          "labelColor": "#16202B",
+          "value": "",
+          "unit": "",
+          "measureType": ""
+        },
+        {
+          "id": "m14quadro",
+          "symId": "quadro",
+          "x": 9,
+          "y": 3,
+          "label": "Quadro elettrico generale",
+          "seqLabel": "Q14",
+          "labelColor": "#16202B",
+          "value": "",
+          "unit": "",
+          "measureType": ""
+        },
+        {
+          "id": "m15gas",
+          "symId": "gas",
+          "x": 11,
+          "y": 3,
+          "label": "Valvola di intercettazione gas",
+          "seqLabel": "G15",
+          "labelColor": "#16202B",
+          "value": "",
+          "unit": "",
+          "measureType": ""
+        },
+        {
+          "id": "m16coperta_antincendio",
+          "symId": "coperta_antincendio",
+          "x": 13,
+          "y": 3,
+          "label": "Coperta antifiamma",
+          "seqLabel": "C16",
+          "labelColor": "#16202B",
+          "value": "",
+          "unit": "",
+          "measureType": ""
+        },
+        {
+          "id": "m17sgancio",
+          "symId": "sgancio",
+          "x": 15,
+          "y": 3,
+          "label": "Sgancio elettrico",
+          "seqLabel": "S17",
+          "labelColor": "#16202B",
+          "value": "",
+          "unit": "",
+          "measureType": ""
+        }
+      ],
+      "routes": [
+        {
+          "points": [
+            {
+              "x": 1,
+              "y": 11
+            },
+            {
+              "x": 30,
+              "y": 6
+            },
+            {
+              "x": 34,
+              "y": 6
+            }
+          ]
+        }
+      ],
+      "photo": null,
+      "photoOpacity": 1,
+      "northDeg": 0,
+      "calibrated": false
+    }
+  ],
+  "header": {
+    "azienda": "Azienda Legenda S.r.l.",
+    "indirizzo": "Via Test 2, Milano",
+    "piano": "Piano lunga",
+    "revisione": "3",
+    "redattore": "Mario Rossi",
+    "qualifica": "Consulente sicurezza"
+  },
+  "instructions": "IN CASO DI EMERGENZA:\\nChiama il 112.",
+  "includeInstructions": false,
+  "includeDisclaimer": true,
+  "currentReiClass": "REI 60"
+}
