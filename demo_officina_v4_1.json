@@ -1,0 +1,102 @@
+{
+  "version": 4.1,
+  "ts": 1781769600000,
+  "meta": {
+    "name": "Officina Demo S.r.l."
+  },
+  "gridSizeM": 1,
+  "header": {
+    "azienda": "Officina Demo S.r.l.",
+    "indirizzo": "Via Demo 12, 00100 Roma",
+    "piano": "Piano Terra",
+    "revisione": "1",
+    "redattore": "Tecnico Demo",
+    "qualifica": "Consulente sicurezza"
+  },
+  "instructions": "IN CASO DI EMERGENZA:\nSeguire le vie di esodo indicate e raggiungere il punto di raccolta. Elaborato demo non utilizzabile come documento reale.",
+  "includeInstructions": true,
+  "includeDisclaimer": true,
+  "currentReiClass": "REI 60",
+  "activeFloorId": "f_demo_pt",
+  "floors": [
+    {
+      "id": "f_demo_pt",
+      "name": "Piano Terra",
+      "walls": [
+        {"x1":0,"y1":0,"x2":24,"y2":0},{"x1":24,"y1":0,"x2":24,"y2":14},{"x1":24,"y1":14,"x2":0,"y2":14},{"x1":0,"y1":14,"x2":0,"y2":0},{"x1":8,"y1":0,"x2":8,"y2":14},{"x1":16,"y1":0,"x2":16,"y2":8},{"x1":16,"y1":8,"x2":24,"y2":8}
+      ],
+      "reiWalls": [{"x1":16,"y1":8,"x2":24,"y2":8,"rei":"EI 60"}],
+      "windows": [
+        {"id":"w1","x1":2,"y1":0,"x2":4,"y2":0,"label":"Finestra"},{"id":"w2","x1":10,"y1":0,"x2":12,"y2":0,"label":"Finestra"},{"id":"w3","x1":24,"y1":3,"x2":24,"y2":5,"label":"Finestra"}
+      ],
+      "doors": [
+        {"id":"d1","x1":3,"y1":14,"x2":5,"y2":14,"label":"Porta ingresso","swing":1,"type":"normal","rei":"EI 60"},
+        {"id":"d2","x1":16,"y1":10,"x2":16,"y2":12,"label":"Porta locale tecnico","swing":-1,"type":"rei","rei":"EI 60"}
+      ],
+      "stairs": [{"id":"s1","x":18,"y":11,"w":1.8,"h":2.8,"label":"Scala A","direction":"both","rotation":0,"targetFloorId":"f_demo_p1"}],
+      "elevators": [{"id":"e1","x":21,"y":11,"w":1.5,"h":1.5,"label":"Ascensore A","elevatorType":"ordinary","serves":"PT, P1","notes":"","rotation":0}],
+      "areas": [
+        {"points":[{"x":0,"y":0},{"x":8,"y":0},{"x":8,"y":14},{"x":0,"y":14}],"label":"Officina","use":"officina","code":"L01","color":"#3DB6B8"},
+        {"points":[{"x":8,"y":0},{"x":16,"y":0},{"x":16,"y":14},{"x":8,"y":14}],"label":"Magazzino","use":"magazzino","code":"L02","color":"#8FBF5F"},
+        {"points":[{"x":16,"y":0},{"x":24,"y":0},{"x":24,"y":8},{"x":16,"y":8}],"label":"Ufficio","use":"ufficio","code":"L03","color":"#E8A33D"},
+        {"points":[{"x":16,"y":8},{"x":24,"y":8},{"x":24,"y":14},{"x":16,"y":14}],"label":"Locale tecnico / servizi","use":"locale tecnico","code":"L04","color":"#9AAAB8"}
+      ],
+      "texts": [{"id":"t1","x":12,"y":15.2,"text":"Area carico/scarico esterna","sizeM":0.35,"rotation":0,"align":"center","box":true,"color":"#16202B"}],
+      "markers": [
+        {"id":"m1","symId":"estintore","x":2,"y":2,"label":"Estintore E1","seqLabel":"E1","note":""},
+        {"id":"m2","symId":"estintore","x":14,"y":2,"label":"Estintore E2","seqLabel":"E2","note":""},
+        {"id":"m3","symId":"idrante","x":7,"y":13,"label":"Idrante","seqLabel":"I1","note":""},
+        {"id":"m4","symId":"quadro","x":20,"y":9,"label":"Quadro elettrico","seqLabel":"Q1","note":""},
+        {"id":"m5","symId":"sgancio","x":22,"y":9,"label":"Sgancio elettrico generale","seqLabel":"S1","note":""},
+        {"id":"m6","symId":"uscita","x":4,"y":14,"label":"Uscita principale","seqLabel":"U1","note":""},
+        {"id":"m7","symId":"raccolta","x":4,"y":18,"label":"Punto di raccolta","seqLabel":"R1","note":""},
+        {"id":"m8","symId":"sei_qui","x":5,"y":12,"label":"Sei qui","seqLabel":"","note":""},
+        {"id":"m9","symId":"macchina","x":2,"y":5,"label":"Tornio","seqLabel":"MCH1","note":""},
+        {"id":"m10","symId":"macchina","x":4,"y":8,"label":"Trapano a colonna","seqLabel":"MCH2","note":""},
+        {"id":"m11","symId":"macchina","x":6,"y":5,"label":"Fresa","seqLabel":"MCH3","note":""},
+        {"id":"m12","symId":"bombole","x":11,"y":12,"label":"Deposito bombole","seqLabel":"D1","note":""},
+        {"id":"m13","symId":"carrelli","x":13,"y":10,"label":"Percorso carrelli","seqLabel":"P1","note":""},
+        {"id":"m14","symId":"pedonale","x":10,"y":4,"label":"Percorso pedonale","seqLabel":"P2","note":""},
+        {"id":"m15","symId":"carico","x":12,"y":15,"label":"Zona carico/scarico","seqLabel":"C1","note":""},
+        {"id":"m16","symId":"misurazione","x":2,"y":10,"label":"Rumore postazione tornio","seqLabel":"M1","measureType":"rumore","value":"82","unit":"dB(A)","height":"1.5 m","duration":"15 min","date":"2026-06-18","note":""},
+        {"id":"m17","symId":"misurazione","x":5,"y":10,"label":"Rumore fresa","seqLabel":"M2","measureType":"rumore","value":"85","unit":"dB(A)","height":"1.5 m","duration":"15 min","date":"2026-06-18","note":""},
+        {"id":"m18","symId":"misurazione","x":7,"y":6,"label":"Rumore officina","seqLabel":"M3","measureType":"rumore","value":"79","unit":"dB(A)","height":"1.5 m","duration":"15 min","date":"2026-06-18","note":""},
+        {"id":"m19","symId":"misurazione","x":19,"y":3,"label":"Illuminamento ufficio","seqLabel":"M4","measureType":"illuminamento","value":"520","unit":"lux","height":"0.8 m","duration":"","date":"2026-06-18","note":""},
+        {"id":"m20","symId":"misurazione","x":12,"y":6,"label":"Illuminamento magazzino","seqLabel":"M5","measureType":"illuminamento","value":"310","unit":"lux","height":"0.8 m","duration":"","date":"2026-06-18","note":""}
+      ],
+      "routes": [{"points":[{"x":21,"y":11},{"x":16,"y":11},{"x":8,"y":11},{"x":4,"y":14},{"x":4,"y":18}],"routeType":"main","label":"Esodo principale"}],
+      "photo": null,
+      "photoOpacity": 1,
+      "northDeg": 0,
+      "calibrated": true
+    },
+    {
+      "id": "f_demo_p1",
+      "name": "Primo Piano",
+      "walls": [
+        {"x1":0,"y1":0,"x2":18,"y2":0},{"x1":18,"y1":0,"x2":18,"y2":10},{"x1":18,"y1":10,"x2":0,"y2":10},{"x1":0,"y1":10,"x2":0,"y2":0},{"x1":7,"y1":0,"x2":7,"y2":10},{"x1":12,"y1":0,"x2":12,"y2":10}
+      ],
+      "reiWalls": [],
+      "windows": [],
+      "doors": [{"id":"d3","x1":15,"y1":10,"x2":17,"y2":10,"label":"Uscita scala","swing":1,"type":"normal","rei":"EI 60"}],
+      "stairs": [{"id":"s2","x":16,"y":8,"w":1.8,"h":2.8,"label":"Scala A","direction":"both","rotation":180,"targetFloorId":"f_demo_pt"}],
+      "elevators": [],
+      "areas": [
+        {"points":[{"x":0,"y":0},{"x":7,"y":0},{"x":7,"y":10},{"x":0,"y":10}],"label":"Uffici","use":"ufficio","code":"P101","color":"#E8A33D"},
+        {"points":[{"x":7,"y":0},{"x":12,"y":0},{"x":12,"y":10},{"x":7,"y":10}],"label":"Sala riunioni","use":"sala riunioni","code":"P102","color":"#3DB6B8"},
+        {"points":[{"x":12,"y":0},{"x":18,"y":0},{"x":18,"y":10},{"x":12,"y":10}],"label":"Archivio","use":"archivio","code":"P103","color":"#9AAAB8"}
+      ],
+      "texts": [],
+      "markers": [
+        {"id":"p1m1","symId":"uscita","x":16,"y":10,"label":"Uscita scala","seqLabel":"U2","note":""},
+        {"id":"p1m2","symId":"estintore","x":8,"y":2,"label":"Estintore piano primo","seqLabel":"E3","note":""},
+        {"id":"p1m3","symId":"misurazione","x":4,"y":4,"label":"Microclima uffici","seqLabel":"M6","measureType":"microclima","value":"","unit":"","height":"1.1 m","duration":"","date":"2026-06-18","note":""}
+      ],
+      "routes": [{"points":[{"x":4,"y":4},{"x":10,"y":6},{"x":16,"y":10}],"routeType":"main","label":"Esodo piano primo"}],
+      "photo": null,
+      "photoOpacity": 1,
+      "northDeg": 0,
+      "calibrated": true
+    }
+  ]
+}

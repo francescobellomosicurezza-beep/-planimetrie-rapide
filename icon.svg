@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Planimetrie Rapide">
+  <rect width="512" height="512" rx="96" fill="#121821"/>
+  <path d="M112 128h288v256H112z" fill="#0B0F14" stroke="#3DB6B8" stroke-width="18"/>
+  <path d="M112 224h116v160M228 224h172M304 224v160" fill="none" stroke="#EDF1F5" stroke-width="18" stroke-linecap="square"/>
+  <path d="M146 160h70M146 190h70M334 288h42" stroke="#5FBF7A" stroke-width="18" stroke-linecap="round"/>
+  <path d="M326 288l30-30M326 288l30 30" fill="none" stroke="#5FBF7A" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="174" cy="304" r="24" fill="#C8102E"/>
+</svg>
