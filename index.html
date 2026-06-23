@@ -2088,17 +2088,83 @@
   }
   function pageOrientation(page){return page.pxW>page.pxH?"landscape":"portrait";}
   function buildPDF(pages){
-    var J=window.jspdf.jsPDF,fmt=document.getElementById("export-format").value,doc=new J({unit:"mm",format:fmt,orientation:pageOrientation(pages[0]),compress:true}),M=12,headerH=28,allMeasures=[];
-    pages.forEach(function(page,index){if(index>0)doc.addPage(fmt,pageOrientation(page));var pdfW=doc.internal.pageSize.getWidth(),pdfH=doc.internal.pageSize.getHeight();drawPdfHeader(doc,M,pdfW,headerH,page.floor.name);
-      var legendH=estimateLegendH(page.legendMarkers,page.floor),scaleBarH=10,availW=pdfW-2*M,availH=pdfH-2*M-headerH-legendH-scaleBarH-6,ratio=page.pxW/page.pxH,dW=availW,dH=availW/ratio;if(dH>availH){dH=availH;dW=availH*ratio;}var dX=M+(availW-dW)/2,dY=M+headerH;doc.addImage(page.imgDataUrl,"PNG",dX,dY,dW,dH,undefined,"FAST");var contentWm=page.bounds.maxX-page.bounds.minX,mmPerMeter=dW/contentWm,barM=pickScaleBarRealMM(mmPerMeter),scaleRatio=Math.round(1000/mmPerMeter);if(page.floor.calibrated)drawScaleBarMM(doc,dX+5,dY+dH-3,barM,mmPerMeter,scaleRatio);else drawIndicativeScale(doc,dX+5,dY+dH-3);drawLegendPDF(doc,M,dY+dH+8,pdfW-2*M,page.legendMarkers,page.floor);drawPdfFooter(doc,M,pdfW,pdfH);
+    var J=window.jspdf.jsPDF,fmt=document.getElementById("export-format").value,firstOrientation=pageOrientation(pages[0]);
+    var doc=new J({unit:"mm",format:fmt,orientation:firstOrientation,compress:true}),M=12,headerH=18,footerH=11,allMeasures=[];
+    pages.forEach(function(page,index){
+      var orientation=pageOrientation(page);
+      if(index>0)doc.addPage(fmt,orientation);
+      var pdfW=doc.internal.pageSize.getWidth(),pdfH=doc.internal.pageSize.getHeight();
+      var cartH=cartoucheHeight(fmt,orientation),cartY=pdfH-M-footerH-cartH;
+      drawPdfHeader(doc,M,pdfW,headerH,page.floor.name);
+      var legendH=estimateLegendH(page.legendMarkers,page.floor),scaleBarH=10,availW=pdfW-2*M,availH=Math.max(35,cartY-(M+headerH)-legendH-scaleBarH-8);
+      var ratio=page.pxW/page.pxH,dW=availW,dH=availW/ratio;
+      if(dH>availH){dH=availH;dW=availH*ratio;}
+      var dX=M+(availW-dW)/2,dY=M+headerH;
+      doc.addImage(page.imgDataUrl,"PNG",dX,dY,dW,dH,undefined,"FAST");
+      var contentWm=page.bounds.maxX-page.bounds.minX,mmPerMeter=dW/contentWm,barM=pickScaleBarRealMM(mmPerMeter),scaleRatio=Math.round(1000/mmPerMeter);
+      var scaleLabel=page.floor.calibrated?"Scala 1 : "+roundScale(scaleRatio):"Scala indicativa";
+      if(page.floor.calibrated)drawScaleBarMM(doc,dX+5,dY+dH-3,barM,mmPerMeter,scaleRatio);else drawIndicativeScale(doc,dX+5,dY+dH-3);
+      drawLegendPDF(doc,M,dY+dH+8,pdfW-2*M,page.legendMarkers,page.floor);
+      drawProfessionalCartouche(doc,resolveCartoucheData(page.floor,fmt,orientation,scaleLabel),{x:M,y:cartY,w:pdfW-2*M,h:cartH});
+      drawPdfFooter(doc,M,pdfW,pdfH);
       page.legendMarkers.filter(function(m){return symById(m.symId).hasValue;}).forEach(function(m){allMeasures.push({floorName:page.floor.name,marker:m});});
     });
     if((exportType==="misure"||exportType==="completo")&&allMeasures.length){doc.addPage(fmt,"portrait");drawMeasureTable(doc,M,M+headerH+6,doc.internal.pageSize.getWidth()-2*M,allMeasures,fmt,headerH);drawPdfFooter(doc,M,doc.internal.pageSize.getWidth(),doc.internal.pageSize.getHeight());}
     if((exportType==="pee"||exportType==="completo")&&state.includeInstructions!==false&&state.instructions&&state.instructions.trim()){doc.addPage(fmt,"portrait");drawPdfHeader(doc,M,doc.internal.pageSize.getWidth(),headerH,"Istruzioni");drawInstructionsPage(doc,M,M+headerH+6,doc.internal.pageSize.getWidth()-2*M,fmt,headerH);drawPdfFooter(doc,M,doc.internal.pageSize.getWidth(),doc.internal.pageSize.getHeight());}
     var fn=safeBaseName()+"_rev"+(state.header.revisione||"1")+"_"+dateStamp()+"_"+exportType+".pdf";doc.save(fn);toast("PDF multipiano esportato");
   }
-  function drawPdfHeader(doc,M,pdfW,headerH,floorLabel){var brand="Planimetrie Rapide",projectName=document.getElementById("meta-name").value||state.header.azienda||"",typeLabel={pee:"Planimetria di emergenza allegabile al PEE",misure:"Piano dei punti di misurazione",dvr:"Layout di supporto al DVR",completo:"Documento completo"}[exportType];doc.setFont("helvetica","bold");doc.setFontSize(14);doc.setTextColor(20,30,40);doc.text(projectName||brand,M,M+5);doc.setFont("helvetica","normal");doc.setFontSize(9.5);doc.setTextColor(70,80,95);doc.text((projectName?brand+" - ":"")+typeLabel+(floorLabel&&floorLabel!=="Istruzioni"?" — "+floorLabel:""),M,M+10.5);var rightX=pdfW-M;doc.setFontSize(8.5);doc.setTextColor(110,120,130);var dt=new Date().toLocaleDateString("it-IT"),lines=[];if(state.header.indirizzo)lines.push(state.header.indirizzo);if(floorLabel)lines.push("Sezione: "+floorLabel);lines.push("Rev.: "+(state.header.revisione||"1")+"  -  "+dt);if(state.header.redattore)lines.push("Redattore: "+state.header.redattore+(state.header.qualifica?" ("+state.header.qualifica+")":""));var y=M+5;lines.forEach(function(line){doc.text(line,rightX,y,{align:"right"});y+=4;});doc.setDrawColor(220,224,228);doc.setLineWidth(.3);doc.line(M,M+headerH-3,pdfW-M,M+headerH-3);}
-  function drawPdfFooter(doc,M,pdfW,pdfH){var page=doc.internal.getCurrentPageInfo().pageNumber;doc.setFont("helvetica","normal");doc.setFontSize(6.8);doc.setTextColor(135,145,156);var footerW=pdfW-2*M-24;var l1="Elaborato redatto dall'utilizzatore con Planimetrie Rapide, piattaforma locale di editing grafico.";var l2="Contenuti, misure, simboli, classificazioni e conformita dell'elaborato restano sotto responsabilita del redattore/committente.";doc.text(doc.splitTextToSize(l1,footerW),M,pdfH-9);if(state.includeDisclaimer){doc.setFontSize(6.5);doc.setTextColor(160,166,174);doc.text(doc.splitTextToSize(l2,footerW),M,pdfH-5);}doc.setFontSize(7.2);doc.setTextColor(140,148,158);doc.text("Pagina "+page,pdfW-M,pdfH-5,{align:"right"});}
+  function exportTitle(kind){return{pee:"Planimetria di emergenza",dvr:"Layout dei luoghi di lavoro",misure:"Planimetria dei punti di misura",completo:"Planimetria generale"}[kind]||"Planimetria";}
+  function cartoucheHeight(fmt,orientation){return fmt==="a3"?(orientation==="landscape"?28:30):(orientation==="landscape"?30:34);}
+  function formatLabel(fmt,orientation){return String(fmt||"").toUpperCase()+" "+(orientation==="landscape"?"orizzontale":"verticale");}
+  function present(v){v=String(v==null?"":v).trim();return v||"-";}
+  function revisionLabel(){var r=String(state.header.revisione||"").trim();return r?("Rev. "+r):"Rev. 00";}
+  function resolveCartoucheData(floor,fmt,orientation,scaleLabel){
+    var metaName=document.getElementById("meta-name").value||state.meta.name||"";
+    return{brand:"Planimetrie Rapide",title:exportTitle(exportType),azienda:present(state.header.azienda||metaName),indirizzo:present(state.header.indirizzo),piano:present(state.header.piano||floor.name),data:new Date().toLocaleDateString("it-IT"),revisione:revisionLabel(),redattore:present(state.header.redattore),qualifica:present(state.header.qualifica),formato:formatLabel(fmt,orientation),scala:scaleLabel||"Scala indicativa"};
+  }
+  function fitPdfText(doc,text,x,y,w,opt){
+    opt=opt||{};var maxLines=opt.maxLines||1,lh=opt.lineHeight||3.5,min=opt.minSize||7,size=opt.size||8,bold=opt.bold?"bold":"normal",color=opt.color||[35,42,52],lines=[];
+    while(size>=min){doc.setFont("helvetica",bold);doc.setFontSize(size);lines=doc.splitTextToSize(present(text),w);if(lines.length<=maxLines)break;size-=.5;}
+    doc.setFont("helvetica",bold);doc.setFontSize(Math.max(min,size));doc.setTextColor(color[0],color[1],color[2]);lines=doc.splitTextToSize(present(text),w).slice(0,maxLines);
+    lines.forEach(function(line,i){doc.text(line,x,y+i*lh);});
+    return y+lines.length*lh;
+  }
+  function drawFieldCell(doc,label,value,x,y,w,h,opt){
+    opt=opt||{};doc.setDrawColor(198,205,214);doc.setLineWidth(.25);doc.rect(x,y,w,h);
+    doc.setFont("helvetica","bold");doc.setFontSize(6.3);doc.setTextColor(96,108,122);doc.text(label,x+2,y+3.3);
+    fitPdfText(doc,value,x+2,y+7,w-4,{size:opt.size||7.5,minSize:7,maxLines:opt.maxLines||1,lineHeight:3.4,bold:!!opt.bold});
+  }
+  function drawProfessionalCartouche(doc,data,box){
+    var x=box.x,y=box.y,w=box.w,h=box.h,titleH=Math.min(11,Math.max(9,h*.32)),bodyY=y+titleH,bodyH=h-titleH,leftW=w*.42,techW=w-leftW;
+    doc.setDrawColor(35,45,58);doc.setLineWidth(.45);doc.rect(x,y,w,h);
+    doc.setFillColor(22,32,43);doc.rect(x,y,w,titleH,"F");
+    doc.setFont("helvetica","bold");doc.setFontSize(w>260?15:12);doc.setTextColor(255,255,255);doc.text(data.title,x+3,y+titleH*.66);
+    doc.setFont("helvetica","normal");doc.setFontSize(8);doc.setTextColor(210,218,226);doc.text(data.brand,x+w-3,y+titleH*.66,{align:"right"});
+    drawFieldCell(doc,"Ragione sociale",data.azienda,x,bodyY,leftW,bodyH/2,{size:8.6,maxLines:2,bold:true});
+    drawFieldCell(doc,"Indirizzo sede",data.indirizzo,x,bodyY+bodyH/2,leftW,bodyH/2,{size:8,maxLines:2});
+    var colW=techW/4,rowH=bodyH/2,tx=x+leftW;
+    drawFieldCell(doc,"Piano / area",data.piano,tx,bodyY,colW,rowH,{size:7.8,maxLines:2,bold:true});
+    drawFieldCell(doc,"Data",data.data,tx+colW,bodyY,colW,rowH,{size:7.8});
+    drawFieldCell(doc,"Revisione",data.revisione,tx+colW*2,bodyY,colW,rowH,{size:7.8});
+    drawFieldCell(doc,"Formato",data.formato,tx+colW*3,bodyY,colW,rowH,{size:7.5,maxLines:2});
+    drawFieldCell(doc,"Redattore",data.redattore,tx,bodyY+rowH,colW,rowH,{size:7.6,maxLines:2});
+    drawFieldCell(doc,"Qualifica",data.qualifica,tx+colW,bodyY+rowH,colW,rowH,{size:7.4,maxLines:2});
+    drawFieldCell(doc,"Scala",data.scala,tx+colW*2,bodyY+rowH,colW*2,rowH,{size:7.8,maxLines:2,bold:true});
+  }
+  function drawPdfHeader(doc,M,pdfW,headerH,floorLabel){
+    var title=exportTitle(exportType),projectName=document.getElementById("meta-name").value||state.header.azienda||"";
+    doc.setFont("helvetica","bold");doc.setFontSize(10.5);doc.setTextColor(20,30,40);doc.text("Planimetrie Rapide",M,M+4.8);
+    doc.setFont("helvetica","normal");doc.setFontSize(8.2);doc.setTextColor(85,96,110);doc.text(title+(floorLabel&&floorLabel!=="Istruzioni"?" - "+floorLabel:""),M,M+9.3);
+    if(projectName){doc.setFontSize(8);doc.setTextColor(110,120,130);doc.text(projectName,pdfW-M,M+4.8,{align:"right"});}
+    doc.setDrawColor(220,224,228);doc.setLineWidth(.3);doc.line(M,M+headerH-3,pdfW-M,M+headerH-3);
+  }
+  function drawPdfFooter(doc,M,pdfW,pdfH){
+    var page=doc.internal.getCurrentPageInfo().pageNumber;doc.setFont("helvetica","normal");doc.setFontSize(6.5);doc.setTextColor(135,145,156);
+    var footerW=pdfW-2*M-24,l1="Elaborato redatto dall'utilizzatore con Planimetrie Rapide, piattaforma locale di editing grafico.",l2="Contenuti, misure, simboli, classificazioni e conformita dell'elaborato restano sotto responsabilita del redattore/committente.";
+    doc.text(doc.splitTextToSize(l1,footerW),M,pdfH-8.2);
+    if(state.includeDisclaimer){doc.setFontSize(6.2);doc.setTextColor(160,166,174);doc.text(doc.splitTextToSize(l2,footerW),M,pdfH-4.6);}
+    doc.setFontSize(7.2);doc.setTextColor(140,148,158);doc.text("Pagina "+page,pdfW-M,pdfH-4.8,{align:"right"});
+  }
   function pickScaleBarRealMM(mmPerMeter){var opts=[.5,1,2,5,10,20,50,100],ideal=30/mmPerMeter;return opts.reduce(function(a,b){return Math.abs(b-ideal)<Math.abs(a-ideal)?b:a;});}
   function drawScaleBarMM(doc,x,y,barMeters,mmPerMeter,scaleRatio){var barMM=barMeters*mmPerMeter,seg=barMM/4;doc.setDrawColor(20,30,40);doc.setLineWidth(.4);doc.setFillColor(20,30,40);for(var i=0;i<4;i++){if(i%2===0)doc.rect(x+i*seg,y-1.2,seg,2.4,"F");else doc.rect(x+i*seg,y-1.2,seg,2.4,"S");}doc.setFontSize(7.5);doc.setTextColor(40,50,60);doc.setFont("helvetica","normal");doc.text("0",x,y+5.5);doc.text(barMeters+" m",x+barMM,y+5.5,{align:"right"});doc.setFont("helvetica","bold");doc.setFontSize(8);doc.text("Scala 1 : "+roundScale(scaleRatio),x+barMM/2,y-3.5,{align:"center"});}
   function drawIndicativeScale(doc,x,y){doc.setFont("helvetica","bold");doc.setFontSize(8);doc.setTextColor(200,120,30);doc.text("Scala indicativa - progetto non calibrato",x,y);}
