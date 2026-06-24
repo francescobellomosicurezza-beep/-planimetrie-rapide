@@ -2749,7 +2749,7 @@
   document.getElementById("btn-preflight-back").addEventListener("click",function(){closeSheet("preflight");});
   document.getElementById("btn-preflight-go").addEventListener("click",function(){closeSheet("preflight");setTimeout(doExport,120);});
 
-  function layerVisible(layer){if(exportType==="completo")return true;if(exportType==="pee")return layer==="emergency";if(exportType==="misure")return layer==="measure"||layer==="dvr";if(exportType==="dvr")return true;return true;}
+  function layerVisible(layer){if(exportType==="completo")return true;if(exportType==="pee"){if(peeLayerMode==="completa")return true;return layer==="emergency";}if(exportType==="misure")return layer==="measure"||layer==="dvr";if(exportType==="dvr")return true;return true;}
   function routesVisible(){return exportType==="pee"||exportType==="completo";}
   function reiVisible(){return exportType==="pee"||exportType==="completo"||exportType==="dvr";}
   function areasVisible(){return true;}
@@ -3024,6 +3024,7 @@
 
   function doExport(){
     if(!window.jspdf||!window.jspdf.jsPDF){alert("La libreria PDF non è disponibile. Verifica che il file locale vendor/jspdf.umd.min.js sia presente e ricarica la pagina.");return;}
+    var layerModeEl=document.querySelector('input[name="pee-layer-mode"]:checked');if(layerModeEl)peeLayerMode=layerModeEl.value;
     toast("Generazione PDF multipiano...");var floors=state.floors.filter(floorHasContent);Promise.all(floors.map(renderFloorToCanvas)).then(buildPDF).catch(function(err){console.error(err);alert("Errore durante l’esportazione: "+err.message);});
   }
   function pageOrientation(page){return page.pxW>page.pxH?"landscape":"portrait";}
