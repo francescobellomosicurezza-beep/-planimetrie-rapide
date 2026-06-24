@@ -406,16 +406,48 @@
     </div>
     <div id="pee-options" style="border:1px solid var(--line);border-radius:var(--radius-sm);padding:12px;margin-bottom:12px;background:var(--bg-2);">
       <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-2);margin-bottom:10px;">Opzioni layout PEE professionale</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
-        <div class="field" style="margin:0;"><label style="font-size:11px;">Colore titolo colonna</label>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+        <div class="field" style="margin:0;"><label style="font-size:11px;">Colore colonna destra</label>
           <select id="pee-color-sel"><option value="green">Verde (#00A651)</option><option value="red">Rosso (#C8102E)</option></select>
         </div>
-        <div class="field" style="margin:0;display:flex;flex-direction:column;justify-content:flex-end;">
-          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;font-weight:600;">
-            <input type="checkbox" id="pee-show112" checked style="width:16px;height:16px;accent-color:var(--danger);">
-            Mostra "112" in fondo
+        <div class="field" style="margin:0;display:flex;flex-direction:column;justify-content:flex-end;gap:6px;">
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;font-weight:600;">
+            <input type="checkbox" id="pee-show112" checked style="width:15px;height:15px;accent-color:var(--danger);">
+            Mostra "112" grande in fondo
+          </label>
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;font-weight:600;">
+            <input type="checkbox" id="pee-show-normativi" checked style="width:15px;height:15px;accent-color:var(--accent);">
+            Riferimenti normativi
           </label>
         </div>
+      </div>
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-2);margin-bottom:8px;border-top:1px solid var(--line);padding-top:10px;">Immagini colonna sinistra</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+        <div class="field" style="margin:0;">
+          <label style="font-size:11px;">Logo studio (PNG/JPG)</label>
+          <div style="display:flex;align-items:center;gap:6px;margin-top:6px;">
+            <div id="pee-logo-preview" style="width:44px;height:34px;border:1px solid var(--line);border-radius:4px;background:var(--bg-0);display:flex;align-items:center;justify-content:center;font-size:7px;color:var(--text-2);overflow:hidden;flex:0 0 44px;"></div>
+            <label style="flex:1;padding:6px 8px;background:var(--bg-0);border:1px dashed var(--line);border-radius:var(--radius-sm);font-size:11px;color:var(--text-1);cursor:pointer;text-align:center;display:block;">Carica<input type="file" id="pee-logo-input" accept="image/*" style="display:none;"></label>
+            <span id="pee-logo-clear" style="cursor:pointer;color:var(--text-2);font-size:14px;padding:2px 4px;user-select:none;" title="Rimuovi">×</span>
+          </div>
+        </div>
+        <div class="field" style="margin:0;">
+          <label style="font-size:11px;">Foto aerea edificio (PNG/JPG)</label>
+          <div style="display:flex;align-items:center;gap:6px;margin-top:6px;">
+            <div id="pee-aerial-preview" style="width:44px;height:34px;border:1px solid var(--line);border-radius:4px;background:var(--bg-0);display:flex;align-items:center;justify-content:center;font-size:7px;color:var(--text-2);overflow:hidden;flex:0 0 44px;"></div>
+            <label style="flex:1;padding:6px 8px;background:var(--bg-0);border:1px dashed var(--line);border-radius:var(--radius-sm);font-size:11px;color:var(--text-1);cursor:pointer;text-align:center;display:block;">Carica<input type="file" id="pee-aerial-input" accept="image/*" style="display:none;"></label>
+            <span id="pee-aerial-clear" style="cursor:pointer;color:var(--text-2);font-size:14px;padding:2px 4px;user-select:none;" title="Rimuovi">×</span>
+          </div>
+        </div>
+      </div>
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-2);margin-bottom:8px;border-top:1px solid var(--line);padding-top:10px;">Dati committente e redattore</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
+        <div class="field" style="margin:0;"><label style="font-size:11px;">Committente / Ragione sociale</label><input type="text" id="pee-committente" placeholder="Es. ACME S.r.l." style="-webkit-user-select:text;user-select:text;touch-action:auto;"></div>
+        <div class="field" style="margin:0;"><label style="font-size:11px;">Indirizzo committente</label><input type="text" id="pee-ind-comm" placeholder="Via, n. civico, città" style="-webkit-user-select:text;user-select:text;touch-action:auto;"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div class="field" style="margin:0;"><label style="font-size:11px;">Attività / settore (opzionale)</label><input type="text" id="pee-settore" placeholder="Es. Manifatturiero" style="-webkit-user-select:text;user-select:text;touch-action:auto;"></div>
+        <div class="field" style="margin:0;"><label style="font-size:11px;">Qualifica redattore</label><input type="text" id="pee-qualifica-red" placeholder="Es. RSPP, Consulente HSE" style="-webkit-user-select:text;user-select:text;touch-action:auto;"></div>
       </div>
     </div>
     <div class="conformity-index" id="export-conformity-index" aria-label="Indice di conformità PEE"></div>
@@ -2511,14 +2543,42 @@
   /* ===================== EXPORT ===================== */
   var exportType="pee",pxPerMeterExport=80;
   function floorHasContent(f){return !!(f.walls.length||f.reiWalls.length||f.windows.length||f.doors.length||f.stairs.length||f.elevators.length||f.areas.length||f.texts.length||f.markers.length||f.routes.length||(f.atexZones&&f.atexZones.length)||f.photo);}
-  document.getElementById("btn-export").addEventListener("click",function(){if(!state.floors.some(floorHasContent)){toast("Niente da esportare");return;}updateExportConformityIndex();document.getElementById("pee-options").style.display=exportType==="pee"?"block":"none";document.getElementById("pee-color-sel").value=state.peeColor||"green";document.getElementById("pee-show112").checked=state.show112!==false;openSheet("export");});
+
+  /* ===== PEE SETTINGS (localStorage) ===== */
+  var PEE_SETTINGS_KEY="planimetrie_rapide_settings";
+  var peeSettings={logoBase64:null,aerialBase64:null,committente:"",indirizzoCommittente:"",settore:"",qualificaRedattore:"",showNormativi:true};
+  (function(){try{var r=localStorage.getItem(PEE_SETTINGS_KEY);if(r){var p=JSON.parse(r);Object.keys(peeSettings).forEach(function(k){if(p[k]!==undefined)peeSettings[k]=p[k];});}}catch(e){}})();
+  function savePeeSettings(){try{localStorage.setItem(PEE_SETTINGS_KEY,JSON.stringify(peeSettings));}catch(e){}}
+  function imgFileToJpeg(file,done){var rd=new FileReader();rd.onload=function(ev){var img=new Image();img.onload=function(){var mx=800,sc=Math.min(mx/img.naturalWidth,mx/img.naturalHeight,1),cv=document.createElement("canvas");cv.width=Math.round(img.naturalWidth*sc);cv.height=Math.round(img.naturalHeight*sc);cv.getContext("2d").drawImage(img,0,0,cv.width,cv.height);done(cv.toDataURL("image/jpeg",.88));};img.src=ev.target.result;};rd.readAsDataURL(file);}
+  function setPeePreview(type,dataUrl){var el=document.getElementById("pee-"+type+"-preview");if(!el)return;el.innerHTML="";if(dataUrl){var img=document.createElement("img");img.src=dataUrl;img.style.cssText="width:100%;height:100%;object-fit:contain;";el.appendChild(img);}else{el.textContent=type==="logo"?"LOGO":"MAP";}}
+  function syncPeeFieldsFromSettings(){
+    document.getElementById("pee-color-sel").value=state.peeColor||"green";
+    document.getElementById("pee-show112").checked=state.show112!==false;
+    document.getElementById("pee-show-normativi").checked=peeSettings.showNormativi!==false;
+    document.getElementById("pee-committente").value=peeSettings.committente||"";
+    document.getElementById("pee-ind-comm").value=peeSettings.indirizzoCommittente||"";
+    document.getElementById("pee-settore").value=peeSettings.settore||"";
+    document.getElementById("pee-qualifica-red").value=peeSettings.qualificaRedattore||"";
+    setPeePreview("logo",peeSettings.logoBase64);
+    setPeePreview("aerial",peeSettings.aerialBase64);
+  }
+  document.getElementById("pee-logo-input").addEventListener("change",function(e){var f=e.target.files[0];if(!f)return;imgFileToJpeg(f,function(url){peeSettings.logoBase64=url;setPeePreview("logo",url);savePeeSettings();});e.target.value="";});
+  document.getElementById("pee-logo-clear").addEventListener("click",function(){peeSettings.logoBase64=null;setPeePreview("logo",null);savePeeSettings();});
+  document.getElementById("pee-aerial-input").addEventListener("change",function(e){var f=e.target.files[0];if(!f)return;imgFileToJpeg(f,function(url){peeSettings.aerialBase64=url;setPeePreview("aerial",url);savePeeSettings();});e.target.value="";});
+  document.getElementById("pee-aerial-clear").addEventListener("click",function(){peeSettings.aerialBase64=null;setPeePreview("aerial",null);savePeeSettings();});
+  document.getElementById("pee-committente").addEventListener("input",function(){peeSettings.committente=this.value;savePeeSettings();});
+  document.getElementById("pee-ind-comm").addEventListener("input",function(){peeSettings.indirizzoCommittente=this.value;savePeeSettings();});
+  document.getElementById("pee-settore").addEventListener("input",function(){peeSettings.settore=this.value;savePeeSettings();});
+  document.getElementById("pee-qualifica-red").addEventListener("input",function(){peeSettings.qualificaRedattore=this.value;savePeeSettings();});
+  document.getElementById("pee-color-sel").addEventListener("change",function(){state.peeColor=this.value;savePeeSettings();});
+  document.getElementById("pee-show112").addEventListener("change",function(){state.show112=this.checked;savePeeSettings();});
+  document.getElementById("pee-show-normativi").addEventListener("change",function(){peeSettings.showNormativi=this.checked;savePeeSettings();});
+
+  document.getElementById("btn-export").addEventListener("click",function(){if(!state.floors.some(floorHasContent)){toast("Niente da esportare");return;}syncPeeFieldsFromSettings();updateExportConformityIndex();document.getElementById("pee-options").style.display=exportType==="pee"?"block":"none";openSheet("export");});
   document.getElementById("export-close").addEventListener("click",function(){closeSheet("export");});
   document.getElementById("ov-export").addEventListener("click",function(){closeSheet("export");});
   document.querySelectorAll("#export-type-grid .opt-card").forEach(function(card){card.addEventListener("click",function(){document.querySelectorAll("#export-type-grid .opt-card").forEach(function(c){c.classList.remove("active");});card.classList.add("active");exportType=card.getAttribute("data-type");if(exportType==="pee")document.getElementById("export-format").value="a3";document.getElementById("pee-options").style.display=exportType==="pee"?"block":"none";updateExportConformityIndex();});});
-  document.getElementById("pee-color-sel").value=state.peeColor||"green";
-  document.getElementById("pee-show112").checked=state.show112!==false;
-  document.getElementById("pee-color-sel").addEventListener("change",function(){state.peeColor=this.value;});
-  document.getElementById("pee-show112").addEventListener("change",function(){state.show112=this.checked;});
+  syncPeeFieldsFromSettings();
   document.getElementById("btn-do-export").addEventListener("click",function(){closeSheet("export");var validationResult=preflightCheck(exportType);if(hasValidationIssues(validationResult)){showPreflight(validationResult);return;}setTimeout(doExport,120);});
   document.getElementById("btn-export-png").addEventListener("click",function(){closeSheet("export");toast("Generazione PNG...");renderFloorToCanvas(currentFloor()).then(function(page){var a=document.createElement("a");a.href=page.imgDataUrl;a.download=safeBaseName()+"_"+slug(currentFloor().name)+"_"+exportType+".png";document.body.appendChild(a);a.click();document.body.removeChild(a);toast("PNG esportato");}).catch(function(err){alert("Errore PNG: "+err.message);});});
 
@@ -2706,37 +2766,117 @@
 
     function drawPEELeftColumn(page){
       var x=leftX,y=bodyY,w=leftW,h=bodyH,pad=3;
-      doc.setDrawColor(198,205,214);doc.setLineWidth(0.25);doc.rect(x,y,w,h);
-      var titleBh=peeFontSz(8,7);
-      doc.setFillColor(titleRGB[0],titleRGB[1],titleRGB[2]);doc.rect(x,y,w,titleBh,"F");
-      doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(7,6.5));doc.setTextColor(255,255,255);
-      doc.text("STUDIO / CONSULENTE",x+pad,y+titleBh*.75);
-      var cy=y+titleBh+pad+1;
-      doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(8.5,7.5));doc.setTextColor(20,30,40);
-      doc.text(doc.splitTextToSize(present(state.header.redattore),w-2*pad),x+pad,cy);
-      cy+=peeFontSz(5,4.5);
-      doc.setFont("helvetica","normal");doc.setFontSize(peeFontSz(7.5,6.8));doc.setTextColor(75,90,106);
-      doc.text(doc.splitTextToSize(present(state.header.qualifica),w-2*pad),x+pad,cy);
-      cy+=peeFontSz(9,8);
-      var locH=Math.max(35,Math.floor((h-titleBh-70)*0.55));
-      doc.setFillColor(242,244,247);doc.setDrawColor(200,208,218);doc.setLineWidth(0.2);
-      doc.rect(x+pad,cy,w-2*pad,locH,"FD");
-      doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(7,6.5));doc.setTextColor(140,152,166);
-      doc.text("LOCALIZZAZIONE",x+w/2,cy+locH/2-3,{align:"center"});
-      doc.text("EDIFICIO",x+w/2,cy+locH/2+3,{align:"center"});
-      doc.setFont("helvetica","normal");doc.setFontSize(peeFontSz(6.5,6));doc.setTextColor(160,170,182);
-      doc.text("(foto aerea)",x+w/2,cy+locH/2+8,{align:"center"});
-      cy+=locH+pad;
-      var racH=h-(cy-y)-pad;
-      if(racH>14){
-        doc.setFillColor(titleRGB[0],titleRGB[1],titleRGB[2]);doc.rect(x,cy,w,8,"F");
-        doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(7,6.5));doc.setTextColor(255,255,255);
-        doc.text("PUNTO DI RACCOLTA",x+pad,cy+5.5);cy+=8+pad;
-        var raccolta=page.legendMarkers.filter(function(m){return m.symId==="raccolta";});
-        doc.setFont("helvetica","normal");doc.setFontSize(peeFontSz(7.5,7));doc.setTextColor(20,30,40);
-        if(raccolta.length){raccolta.forEach(function(m,i){if(cy+5<y+h){doc.text((m.seqLabel||("R"+(i+1)))+(m.note?" — "+m.note:""),x+pad,cy+4);cy+=5;}});}
-        else{doc.setTextColor(140,152,166);doc.text("Indicato sulla planimetria",x+pad,cy+4);}
+      var acR=titleRGB[0],acG=titleRGB[1],acB=titleRGB[2];
+      var tintR=Math.round(acR*0.08+255*0.92),tintG=Math.round(acG*0.08+255*0.92),tintB=Math.round(acB*0.08+255*0.92);
+      var noNorm=peeSettings.showNormativi===false;
+      var sbH=peeFontSz(7,6.5);
+      var studioH=Math.round(h*0.15),committH=Math.round(h*0.10),datiH=Math.round(h*0.15),normH=noNorm?0:Math.round(h*0.10),emerH=Math.round(h*0.14);
+      var locH=h-studioH-committH-datiH-normH-emerH;
+
+      // Column bg + border
+      doc.setFillColor(250,250,250);doc.rect(x,y,w,h,"F");
+      doc.setDrawColor(210,215,222);doc.setLineWidth(0.3);doc.rect(x,y,w,h);
+
+      var cy=y;
+      var sepLine=function(){doc.setDrawColor(221,221,221);doc.setLineWidth(0.25);doc.line(x,cy,x+w,cy);};
+      var secBar=function(label,r,g,b){doc.setFillColor(r,g,b);doc.rect(x,cy,w,sbH,"F");doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(6.5,6));doc.setTextColor(255,255,255);doc.text(label,x+pad,cy+sbH*0.76);cy+=sbH;};
+
+      /* ---- [1] STUDIO ---- */
+      secBar("STUDIO / CONSULENTE",22,32,43);
+      var sContentH=studioH-sbH,logoW=Math.min(w*0.40,sContentH*1.6),logoH=sContentH-2;
+      if(peeSettings.logoBase64){
+        doc.addImage(peeSettings.logoBase64,"JPEG",x+pad,cy+1,logoW,logoH);
+      }else{
+        doc.setFillColor(238,241,246);doc.setDrawColor(200,208,220);doc.setLineWidth(0.2);doc.rect(x+pad,cy+1,logoW,logoH,"FD");
+        doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(6,5.5));doc.setTextColor(170,180,194);
+        doc.text("LOGO",x+pad+logoW/2,cy+sContentH/2-1.5,{align:"center"});
+        doc.text("STUDIO",x+pad+logoW/2,cy+sContentH/2+peeFontSz(4,3.5),{align:"center"});
       }
+      var nameX=x+pad+logoW+peeFontSz(4,3);
+      doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(8.5,7.5));doc.setTextColor(15,22,34);
+      doc.text(doc.splitTextToSize(present(state.header.redattore),w-logoW-2*pad-peeFontSz(4,3)),nameX,cy+peeFontSz(5,4.5));
+      var qualRed=peeSettings.qualificaRedattore||present(state.header.qualifica);
+      if(qualRed&&qualRed!=="-"){doc.setFont("helvetica","normal");doc.setFontSize(peeFontSz(7,6.3));doc.setTextColor(80,95,112);doc.text(doc.splitTextToSize(qualRed,w-logoW-2*pad-peeFontSz(4,3)),nameX,cy+peeFontSz(11,9.5));}
+      cy+=studioH;sepLine();
+
+      /* ---- [2] COMMITTENTE ---- */
+      secBar("COMMITTENTE",acR,acG,acB);
+      var comm=peeSettings.committente||present(state.header.azienda);
+      doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(9,8));doc.setTextColor(15,20,30);
+      doc.text(doc.splitTextToSize(comm,w-2*pad),x+pad,cy+peeFontSz(5.5,5));
+      var indComm=peeSettings.indirizzoCommittente||present(state.header.indirizzo);
+      doc.setFont("helvetica","normal");doc.setFontSize(peeFontSz(7.5,6.8));doc.setTextColor(75,88,106);
+      doc.text(doc.splitTextToSize(indComm,w-2*pad),x+pad,cy+peeFontSz(12,10.5));
+      if(peeSettings.settore){doc.setFontSize(peeFontSz(7,6.3));doc.setTextColor(110,122,138);doc.text(doc.splitTextToSize(peeSettings.settore,w-2*pad),x+pad,cy+peeFontSz(18,15.5));}
+      cy+=committH;sepLine();
+
+      /* ---- [3] LOCALIZZAZIONE EDIFICIO ---- */
+      secBar("LOCALIZZAZIONE EDIFICIO",acR,acG,acB);
+      var locContentH=locH-sbH;
+      if(peeSettings.aerialBase64){
+        doc.addImage(peeSettings.aerialBase64,"JPEG",x+1,cy,w-2,locContentH);
+      }else{
+        doc.setFillColor(234,239,246);doc.rect(x+1,cy,w-2,locContentH,"F");
+        var mx=x+w/2,my=cy+locContentH/2,bw=w*0.35,bh=locContentH*0.28;
+        doc.setDrawColor(200,212,226);doc.setLineWidth(3);
+        doc.line(x+2,my,x+w-2,my);doc.line(mx,cy+2,mx,cy+locContentH-2);
+        doc.setFillColor(185,200,218);doc.setDrawColor(158,178,200);doc.setLineWidth(0.4);
+        doc.rect(mx-bw/2,my-bh/2,bw,bh,"FD");
+        var naX=x+w-peeFontSz(10,8),naY=cy+peeFontSz(10,8);
+        doc.setFillColor(acR,acG,acB);
+        doc.lines([[peeFontSz(4,3),peeFontSz(6,5)],[peeFontSz(-8,-6),0]],naX-peeFontSz(2,1.5),naY-peeFontSz(6,5),[1,1],"F",true);
+        doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(7,6.5));doc.setTextColor(acR,acG,acB);doc.text("N",naX,naY-peeFontSz(7,6.5),{align:"center"});
+        doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(7,6.3));doc.setTextColor(140,155,170);
+        doc.text("Foto aerea / Vista satellite",mx,cy+locContentH-peeFontSz(4,3.5),{align:"center"});
+      }
+      cy+=locH;sepLine();
+
+      /* ---- [4] DATI DOCUMENTO ---- */
+      secBar("DATI DOCUMENTO",22,32,43);
+      var datiContentH=datiH-sbH;
+      var contentWm=page.bounds.maxX-page.bounds.minX||1;
+      var approxMmPerM=centerW/contentWm,approxScale=roundScale(Math.round(1000/approxMmPerM));
+      var datiRows=[
+        ["Piano/Area",present(state.header.piano||page.floor.name)],
+        ["Data",new Date().toLocaleDateString("it-IT")],
+        ["Revisione",revisionLabel()],
+        ["Redattore",present(state.header.redattore)],
+        ["Qualifica",peeSettings.qualificaRedattore||present(state.header.qualifica)],
+        ["Scala",page.floor.calibrated?"1 : "+approxScale:"Indicativa"]
+      ];
+      var rH=datiContentH/datiRows.length,labelFrac=0.42;
+      datiRows.forEach(function(row,i){
+        var ry=cy+i*rH;
+        if(i%2===0){doc.setFillColor(245,245,245);}else{doc.setFillColor(255,255,255);}
+        doc.rect(x,ry,w,rH,"F");
+        doc.setDrawColor(221,221,221);doc.setLineWidth(0.15);
+        doc.line(x,ry+rH,x+w,ry+rH);doc.line(x+w*labelFrac,ry,x+w*labelFrac,ry+rH);
+        doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(6.2,5.7));doc.setTextColor(110,125,140);
+        doc.text(row[0].toUpperCase(),x+pad,ry+rH*0.68);
+        doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(7,6.3));doc.setTextColor(12,20,32);
+        doc.text(doc.splitTextToSize(row[1],w*(1-labelFrac)-pad),x+w*labelFrac+pad,ry+rH*0.68);
+      });
+      cy+=datiH;
+
+      /* ---- [5] RIFERIMENTI NORMATIVI ---- */
+      if(!noNorm){
+        sepLine();
+        doc.setFillColor(248,249,251);doc.rect(x,cy,w,normH,"F");
+        doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(6.2,5.7));doc.setTextColor(120,133,148);
+        doc.text("RIF. NORMATIVI",x+pad,cy+peeFontSz(5,4.5));
+        doc.setFont("helvetica","normal");doc.setFontSize(peeFontSz(6.5,6));doc.setTextColor(75,90,108);
+        doc.text(doc.splitTextToSize("D.Lgs. 81/08  —  D.M. 10/03/1998  —  UNI ISO 23601",w-2*pad),x+pad,cy+peeFontSz(11,10));
+        cy+=normH;
+      }
+
+      /* ---- [6] 112 MINI ---- */
+      sepLine();
+      doc.setFillColor(tintR,tintG,tintB);doc.setDrawColor(acR,acG,acB);doc.setLineWidth(0.5);doc.rect(x,cy,w,emerH,"FD");
+      var sz112=peeFontSz(22,17);
+      doc.setFont("helvetica","bold");doc.setFontSize(sz112);doc.setTextColor(acR,acG,acB);
+      doc.text("112",x+w/2,cy+emerH*0.5+sz112*0.2,{align:"center"});
+      doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(6.2,5.7));doc.setTextColor(acR,acG,acB);
+      doc.text("NUMERO UNICO DI EMERGENZA",x+w/2,cy+emerH-peeFontSz(3.5,3),{align:"center"});
     }
 
     function drawPEECenter(page){
