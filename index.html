@@ -2326,7 +2326,7 @@
     drawFieldCell(doc,"Redattore",data.redattore,tx,bodyY+rowH,colW,rowH,{size:7.6,maxLines:2});
     drawFieldCell(doc,"Qualifica",data.qualifica,tx+colW,bodyY+rowH,colW,rowH,{size:7.4,maxLines:2});
     drawFieldCell(doc,"Scala",data.scala,tx+colW*2,bodyY+rowH,colW,rowH,{size:7.8,maxLines:2,bold:true});
-    drawFieldCell(doc,"Indice PEE","Indice di conformità: "+data.conformityScore+"/100 - "+data.conformityStatus,tx+colW*3,bodyY+rowH,colW,rowH,{size:7.1,maxLines:2,bold:true});
+    doc.setDrawColor(198,205,214);doc.setLineWidth(.25);doc.rect(tx+colW*3,bodyY+rowH,colW,rowH);
   }
   function drawPdfHeader(doc,M,pdfW,headerH,floorLabel){
     var title=exportTitle(exportType),projectName=document.getElementById("meta-name").value||state.header.azienda||"";
