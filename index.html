@@ -3017,11 +3017,11 @@
 
     function drawPEERightColumn(page){
       var x=rightX,y=bodyY,w=rightW,h=bodyH;
-      doc.setDrawColor(198,205,214);doc.setLineWidth(0.25);doc.rect(x,y,w,h);
-      doc.setFillColor(titleRGB[0],titleRGB[1],titleRGB[2]);doc.rect(x,y,8,h,"F");
-      doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(20,15));
-      doc.setTextColor(titleRGB[0],titleRGB[1],titleRGB[2]);
-      doc.text("PIANO DI EVACUAZIONE",x+w/2+4,y+h/2,{angle:90,align:"center"});
+      doc.setFillColor(titleRGB[0],titleRGB[1],titleRGB[2]);
+      doc.rect(x,y,w,h,"F");
+      doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(14,11));
+      doc.setTextColor(255,255,255);
+      doc.text("PIANO DI EVACUAZIONE",x+w/2,y+h/2,{angle:270,align:"center"});
     }
 
     function drawPEEBottomBand(page){
