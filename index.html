@@ -332,6 +332,7 @@
       </div>
       <div class="tool-group" data-title="Elaborati">
         <div class="mode-btn" data-mode="symbol" data-tool-context="emergenza misurazioni dvr completo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.5-7-11.5A7 7 0 0 1 19 9.5C19 14.5 12 21 12 21z"/><circle cx="12" cy="9" r="2.5"/></svg>Elementi</div>
+        <div class="mode-btn" data-mode="iosqui" data-tool-context="emergenza completo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 16v-6M10 12l2-3 2 3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="18" r="1" fill="currentColor"/></svg>Io sono qui</div>
         <div class="mode-btn" data-mode="esodo" data-tool-context="emergenza completo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>Vie di esodo</div>
         <div class="mode-btn" data-mode="atex" data-tool-context="dvr completo"><svg viewBox="0 0 24 24" fill="none" stroke="#FF7A00" stroke-width="2" stroke-dasharray="4 3"><polygon points="12 2 22 20 2 20"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Zone ATEX</div>
         <div class="mode-btn" data-mode="pan" data-tool-context="all"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 9l-3 3 3 3"/><path d="M9 5l3-3 3 3"/><path d="M15 19l-3 3-3-3"/><path d="M19 9l3 3-3 3"/></svg>Sposta vista</div>
@@ -406,7 +407,31 @@
     </div>
     <div id="pee-options" style="border:1px solid var(--line);border-radius:var(--radius-sm);padding:12px;margin-bottom:12px;background:var(--bg-2);">
       <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-2);margin-bottom:10px;">Opzioni layout PEE professionale</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-2);margin-bottom:8px;">Contenuto planimetria</div>
+      <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:12px;">
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;font-weight:600;">
+          <input type="radio" name="pee-layer-mode" id="pee-layer-struttura" value="struttura" checked style="width:14px;height:14px;accent-color:var(--accent);">
+          Solo struttura + vie di esodo <small style="color:var(--text-2);font-weight:400;margin-left:2px;">(consigliato)</small>
+        </label>
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;font-weight:600;">
+          <input type="radio" name="pee-layer-mode" id="pee-layer-completa" value="completa" style="width:14px;height:14px;accent-color:var(--accent);">
+          Planimetria completa (tutti gli elementi)
+        </label>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:10px;">
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;font-weight:600;">
+          <input type="checkbox" id="pee-show-scale-warning" checked style="width:15px;height:15px;accent-color:var(--warn);">
+          Mostra avviso "scala indicativa" se non calibrata
+        </label>
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;font-weight:600;">
+          <input type="checkbox" id="pee-show-dati" checked style="width:15px;height:15px;accent-color:var(--accent);">
+          Includi sezione Redattore / Qualifica / Scala
+        </label>
+      </div>
+      <div style="margin-bottom:12px;">
+        <div id="btn-calib-from-export" style="padding:8px 12px;background:var(--bg-0);border:1px dashed var(--line);border-radius:var(--radius-sm);font-size:11.5px;color:var(--text-1);cursor:pointer;text-align:center;">⊹ Calibra scala — definisci due punti sulla planimetria</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;border-top:1px solid var(--line);padding-top:10px;">
         <div class="field" style="margin:0;"><label style="font-size:11px;">Colore colonna destra</label>
           <select id="pee-color-sel"><option value="green">Verde (#00A651)</option><option value="red">Rosso (#C8102E)</option></select>
         </div>
@@ -800,6 +825,7 @@
     {id:"doccia_emerg", label:"Doccia emerg.",   glyph:"generic",      bg:"#0F8A3C", fg:"#FFFFFF", layer:"emergency"},
     {id:"lavaocchi",    label:"Lavaocchi",       glyph:"generic",      bg:"#0F8A3C", fg:"#FFFFFF", layer:"emergency"},
     {id:"sei_qui",      label:"Voi siete qui",   glyph:"youarehere",   bg:"#1E5BB8", fg:"#FFFFFF", layer:"emergency"},
+    {id:"io_sono_qui",  label:"Io sono qui",     glyph:"iosqui",       bg:"#00A651", fg:"#FFFFFF", layer:"emergency"},
     {id:"quadro",       label:"Quadro elettrico generale",glyph:"electric",bg:"#F2B500",fg:"#16202B",layer:"emergency",iso:"W012"},
     {id:"sgancio",      label:"Sgancio elettr.", glyph:"electric",     bg:"#F2B500", fg:"#16202B", layer:"emergency"},
     {id:"gas",          label:"Valvola di intercettazione gas",glyph:"gas",bg:"#F2B500",fg:"#16202B",layer:"emergency"},
@@ -1000,7 +1026,7 @@
 
   /* ===================== SYMBOL GLYPH RENDERING ===================== */
   // Draws a rounded-square badge with ISO-style pictogram. cx,cy center, r half-size.
-  function drawGlyph(c,sym,cx,cy,r){
+  function drawGlyph(c,sym,cx,cy,r,rotation){
     c.save();
     // badge
     roundRect(c,cx-r,cy-r,2*r,2*r,r*0.28);
@@ -1008,8 +1034,9 @@
     c.lineWidth=Math.max(1.5,r*0.1); c.strokeStyle="rgba(0,0,0,0.35)"; c.stroke();
     c.fillStyle=sym.fg; c.strokeStyle=sym.fg;
     c.lineWidth=Math.max(1.6,r*0.13); c.lineCap="round"; c.lineJoin="round";
-    var s=r*0.62; // glyph radius
-    drawPictogram(c,sym.glyph,cx,cy,s);
+    var s=r*0.62;
+    if(rotation){c.save();c.translate(cx,cy);c.rotate(rotation*Math.PI/180);drawPictogram(c,sym.glyph,0,0,s);c.restore();}
+    else drawPictogram(c,sym.glyph,cx,cy,s);
     c.restore();
   }
   function roundRect(c,x,y,w,h,rad){
@@ -1264,6 +1291,14 @@
         c.beginPath(); c.moveTo(cx-s*0.18,cy+s*0.2); c.lineTo(cx,cy+s*0.55); c.lineTo(cx+s*0.18,cy+s*0.2); c.closePath(); c.fill();
         c.fillStyle=SYMBOLS.find(function(x){return x.glyph==="youarehere";}).bg;
         c.beginPath(); c.arc(cx,cy-s*0.05,s*0.12,0,Math.PI*2); c.fill();
+        c.restore();
+        break;
+      case "iosqui":
+        c.save(); c.fillStyle=fg; c.strokeStyle=fg; c.lineCap="round"; c.lineJoin="round";
+        c.lineWidth=s*0.18; c.beginPath(); c.arc(cx,cy,s*0.88,0,Math.PI*2); c.stroke();
+        c.lineWidth=s*0.2; c.beginPath(); c.moveTo(cx,cy+s*0.52); c.lineTo(cx,cy-s*0.32); c.stroke();
+        c.beginPath(); c.moveTo(cx-s*0.35,cy-s*0.05); c.lineTo(cx,cy-s*0.58); c.lineTo(cx+s*0.35,cy-s*0.05); c.stroke();
+        c.beginPath(); c.arc(cx,cy,s*0.16,0,Math.PI*2); c.fill();
         c.restore();
         break;
       case "electric":
@@ -1655,7 +1690,7 @@
     var r=Math.max(13,Math.min(22,pxPerMeter()*0.24));
     state.markers.forEach(function(m){
       var sym=symById(m.symId),p=worldToScreen(m.x,m.y);
-      drawGlyph(ctx,sym,p.x,p.y,r);
+      drawGlyph(ctx,sym,p.x,p.y,r,m.rotation||0);
       if(m.seqLabel){
         ctx.fillStyle=m.labelColor||"#16202B"; ctx.font="700 10px "+fontFam();
         ctx.textAlign="center"; ctx.textBaseline="alphabetic";
@@ -1713,6 +1748,7 @@
     else if(mode==="esodo") setHint('Tocca i punti del <b>percorso di esodo</b>. Tieni <b>Shift</b> per snap 45°. "Termina ✓" per concludere.');
     else if(mode==="atex") setHint('Tocca i <b>vertici della zona ATEX</b>. Chiudi sul primo punto o "Termina ✓".');
     else if(mode==="erase") setHint('Tocca un elemento per <b>eliminarlo</b>.');
+    else if(mode==="iosqui") setHint('Tocca sulla mappa per posizionare <b>Io sono qui</b>. Selezionalo per ruotare la freccia.');
     else setHint('');
   }
 
@@ -1887,6 +1923,10 @@
       if(dragMarker){var moved=tapStart&&(Math.abs(cpos(e).x-tapStart.x)>6||Math.abs(cpos(e).y-tapStart.y)>6),was=dragMarker;dragMarker=null;if(!moved)openEdit(was);if(moved){pushHistory(dragSnapshot);scheduleAutosave();}dragSnapshot=null;return;}
       if(tapStart){var pos=cpos(e),dt=Date.now()-tapStart.t,d=Math.hypot(pos.x-tapStart.x,pos.y-tapStart.y);if(d<8&&dt<600){var w=screenToWorld(pos.x,pos.y),sn=snap(w.x,w.y);pushHistory();if(activeSym==="scala"){var st={id:uid("s"),x:sn.x,y:sn.y,w:1.6,h:2.6,label:"Vano scala",direction:"up",rotation:0,targetFloorId:""};state.stairs.push(st);lastPlacedMarker=null;selected={kind:"stairs",item:st};draw();scheduleAutosave();openStairSheet(st);}else if(activeSym==="ascensore"){var el={id:uid("e"),x:sn.x,y:sn.y,w:1.4,h:1.4,label:"Ascensore",elevatorType:"ordinary",serves:"",notes:"",rotation:0};state.elevators.push(el);lastPlacedMarker=null;selected={kind:"elevators",item:el};draw();scheduleAutosave();openElevatorSheet(el);}else{var m=createMarker(activeSym,sn.x,sn.y);state.markers.push(m);lastPlacedMarker=m;draw();scheduleAutosave();openEdit(m);}}}
     }
+    if(mode==="iosqui"){
+      if(tapStart){var iqPos=cpos(e),iqDt=Date.now()-tapStart.t,iqD=Math.hypot(iqPos.x-tapStart.x,iqPos.y-tapStart.y);
+        if(iqD<12&&iqDt<600){var iqW=screenToWorld(iqPos.x,iqPos.y),iqSn=snap(iqW.x,iqW.y);pushHistory();var iqM=createMarker("io_sono_qui",iqSn.x,iqSn.y);state.markers.push(iqM);draw();scheduleAutosave();toast("Io sono qui posizionato");}}
+    }
   }
   function commitRoute(){if(pendingRoute&&pendingRoute.points.length>=2){pushHistory();state.routes.push({points:pendingRoute.points.slice(),color:pendingEsodoColor,arrow:pendingEsodoArrow||"single"});toast("Via di esodo aggiunta");scheduleAutosave();}pendingRoute=null;draw();}
   function commitArea(){if(pendingArea&&pendingArea.points.length>=3){pushHistory();var area={points:pendingArea.points.slice(),label:"",color:"#3DB6B8"};state.areas.push(area);pendingArea=null;draw();openAreaSheet(area);scheduleAutosave();}else{pendingArea=null;draw();}}
@@ -1957,7 +1997,7 @@
     if(!selected)return;
     var k=selected.kind,it=selected.item,box=document.getElementById("props-fields"),title="Elemento";
     var html="";
-    if(k==="markers"){var sym=symById(it.symId);title=sym.label+" "+(it.seqLabel||"");html+=propField("p-label","Etichetta",it.label);html+=propField("p-code","Codice",it.seqLabel||"");html+=propField("p-label-color","Colore codice/testo",it.labelColor||"#16202B","color");if(sym.hasValue||it.symId==="misurazione"){html+='<div class="prop-grid">'+propField("p-type","Tipo misurazione",it.measureType||"")+propField("p-value","Valore",it.value||"")+propField("p-unit","Unita'",it.unit||"")+propField("p-height","Altezza",it.height||"")+propField("p-duration","Durata",it.duration||"")+propField("p-date","Data",it.date||"","date")+propField("p-time","Ora",it.time||"","time")+propField("p-instr","Strumento",it.instrument||"")+'</div>';html+=propField("p-operator","Operatore",it.operator||"");}html+=propText("p-note","Note",it.note||"");}
+    if(k==="markers"){var sym=symById(it.symId);title=sym.label+" "+(it.seqLabel||"");html+=propField("p-label","Etichetta",it.label);html+=propField("p-code","Codice",it.seqLabel||"");html+=propField("p-label-color","Colore codice/testo",it.labelColor||"#16202B","color");if(it.symId==="io_sono_qui"){html+=propField("p-rot","Rotazione freccia (°)",it.rotation||0,"number",'step="15" min="0" max="359"');}if(sym.hasValue||it.symId==="misurazione"){html+='<div class="prop-grid">'+propField("p-type","Tipo misurazione",it.measureType||"")+propField("p-value","Valore",it.value||"")+propField("p-unit","Unita'",it.unit||"")+propField("p-height","Altezza",it.height||"")+propField("p-duration","Durata",it.duration||"")+propField("p-date","Data",it.date||"","date")+propField("p-time","Ora",it.time||"","time")+propField("p-instr","Strumento",it.instrument||"")+'</div>';html+=propField("p-operator","Operatore",it.operator||"");}html+=propText("p-note","Note",it.note||"");}
     else if(k==="stairs"){title="Vano scala";html+=propField("p-label","Etichetta",it.label||"Vano scala");html+='<div class="prop-grid">'+propField("p-w","Larghezza m",it.w||1.6,"number",'step="0.1"')+propField("p-h","Profondita m",it.h||2.6,"number",'step="0.1"')+propField("p-rot","Rotazione",it.rotation||0,"number",'step="15"')+'</div>';html+='<div class="field"><label>Direzione</label><select id="p-direction"><option value="up">Salita</option><option value="down">Discesa</option><option value="both">Salita e discesa</option></select></div>';}
     else if(k==="elevators"){title="Ascensore";html+=propField("p-label","Etichetta",it.label||"Ascensore");html+='<div class="field"><label>Tipologia</label><select id="p-elevator-type"><option value="ordinary">Ascensore ordinario</option><option value="fire">Ascensore antincendio</option><option value="egress">Ascensore utilizzabile per l esodo</option><option value="goods">Montacarichi</option></select></div>';html+='<div class="prop-grid">'+propField("p-w","Larghezza m",it.w||1.4,"number",'step="0.1"')+propField("p-h","Profondita m",it.h||1.4,"number",'step="0.1"')+propField("p-rot","Rotazione",it.rotation||0,"number",'step="15"')+propField("p-serves","Piani serviti",it.serves||"")+'</div>'+propText("p-note","Note",it.notes||"");}
     else if(k==="areas"){title="Area/locale";html+=propField("p-label","Nome locale",it.label||"");html+=propField("p-use","Destinazione d'uso",it.use||it.label||"");html+=propField("p-code","Codice locale",it.code||"");html+=propField("p-risk","Rischio facoltativo",it.risk||"");html+=propText("p-note","Note",it.note||"");}
@@ -1974,7 +2014,7 @@
     if(!selected)return;var k=selected.kind,it=selected.item;pushHistory();
     function val(id){var e=document.getElementById(id);return e?e.value:"";}
     function num(id,fallback){var n=parseFloat(val(id));return isFinite(n)?n:fallback;}
-    if(k==="markers"){it.label=val("p-label")||it.label;it.seqLabel=val("p-code")||it.seqLabel;it.labelColor=val("p-label-color")||"#16202B";it.measureType=val("p-type");it.value=val("p-value");it.unit=val("p-unit");it.height=val("p-height");it.duration=val("p-duration");it.date=val("p-date");it.time=val("p-time");it.instrument=val("p-instr");it.operator=val("p-operator");it.note=val("p-note");}
+    if(k==="markers"){it.label=val("p-label")||it.label;it.seqLabel=val("p-code")||it.seqLabel;it.labelColor=val("p-label-color")||"#16202B";if(it.symId==="io_sono_qui"&&document.getElementById("p-rot"))it.rotation=num("p-rot",it.rotation||0);it.measureType=val("p-type");it.value=val("p-value");it.unit=val("p-unit");it.height=val("p-height");it.duration=val("p-duration");it.date=val("p-date");it.time=val("p-time");it.instrument=val("p-instr");it.operator=val("p-operator");it.note=val("p-note");}
     else if(k==="stairs"){it.label=val("p-label")||"Vano scala";it.w=num("p-w",it.w||1.6);it.h=num("p-h",it.h||2.6);it.rotation=num("p-rot",it.rotation||0);it.direction=val("p-direction")||"up";}
     else if(k==="elevators"){it.label=val("p-label")||"Ascensore";it.elevatorType=val("p-elevator-type")||"ordinary";it.w=num("p-w",it.w||1.4);it.h=num("p-h",it.h||1.4);it.rotation=num("p-rot",it.rotation||0);it.serves=val("p-serves");it.notes=val("p-note");}
     else if(k==="areas"){it.label=val("p-label");it.use=val("p-use");it.code=val("p-code");it.risk=val("p-risk");it.note=val("p-note");}
@@ -2541,12 +2581,12 @@
   document.getElementById("meta-name").addEventListener("input",scheduleAutosave);
 
   /* ===================== EXPORT ===================== */
-  var exportType="pee",pxPerMeterExport=80;
+  var exportType="pee",pxPerMeterExport=80,peeLayerMode="struttura";
   function floorHasContent(f){return !!(f.walls.length||f.reiWalls.length||f.windows.length||f.doors.length||f.stairs.length||f.elevators.length||f.areas.length||f.texts.length||f.markers.length||f.routes.length||(f.atexZones&&f.atexZones.length)||f.photo);}
 
   /* ===== PEE SETTINGS (localStorage) ===== */
   var PEE_SETTINGS_KEY="planimetrie_rapide_settings";
-  var peeSettings={logoBase64:null,aerialBase64:null,committente:"",indirizzoCommittente:"",settore:"",qualificaRedattore:"",showNormativi:true};
+  var peeSettings={logoBase64:null,aerialBase64:null,committente:"",indirizzoCommittente:"",settore:"",qualificaRedattore:"",showNormativi:true,showScaleWarning:true,showDatiDocumento:true};
   (function(){try{var r=localStorage.getItem(PEE_SETTINGS_KEY);if(r){var p=JSON.parse(r);Object.keys(peeSettings).forEach(function(k){if(p[k]!==undefined)peeSettings[k]=p[k];});}}catch(e){}})();
   function savePeeSettings(){try{localStorage.setItem(PEE_SETTINGS_KEY,JSON.stringify(peeSettings));}catch(e){}}
   function imgFileToJpeg(file,done){var rd=new FileReader();rd.onload=function(ev){var img=new Image();img.onload=function(){var mx=800,sc=Math.min(mx/img.naturalWidth,mx/img.naturalHeight,1),cv=document.createElement("canvas");cv.width=Math.round(img.naturalWidth*sc);cv.height=Math.round(img.naturalHeight*sc);cv.getContext("2d").drawImage(img,0,0,cv.width,cv.height);done(cv.toDataURL("image/jpeg",.88));};img.src=ev.target.result;};rd.readAsDataURL(file);}
@@ -2555,6 +2595,10 @@
     document.getElementById("pee-color-sel").value=state.peeColor||"green";
     document.getElementById("pee-show112").checked=state.show112!==false;
     document.getElementById("pee-show-normativi").checked=peeSettings.showNormativi!==false;
+    document.getElementById("pee-show-scale-warning").checked=peeSettings.showScaleWarning!==false;
+    document.getElementById("pee-show-dati").checked=peeSettings.showDatiDocumento!==false;
+    var lsEl=document.getElementById("pee-layer-struttura"),lcEl=document.getElementById("pee-layer-completa");
+    if(lsEl)lsEl.checked=(peeLayerMode!=="completa");if(lcEl)lcEl.checked=(peeLayerMode==="completa");
     document.getElementById("pee-committente").value=peeSettings.committente||"";
     document.getElementById("pee-ind-comm").value=peeSettings.indirizzoCommittente||"";
     document.getElementById("pee-settore").value=peeSettings.settore||"";
@@ -2573,6 +2617,10 @@
   document.getElementById("pee-color-sel").addEventListener("change",function(){state.peeColor=this.value;savePeeSettings();});
   document.getElementById("pee-show112").addEventListener("change",function(){state.show112=this.checked;savePeeSettings();});
   document.getElementById("pee-show-normativi").addEventListener("change",function(){peeSettings.showNormativi=this.checked;savePeeSettings();});
+  document.getElementById("pee-show-scale-warning").addEventListener("change",function(){peeSettings.showScaleWarning=this.checked;savePeeSettings();});
+  document.getElementById("pee-show-dati").addEventListener("change",function(){peeSettings.showDatiDocumento=this.checked;savePeeSettings();});
+  document.querySelectorAll('input[name="pee-layer-mode"]').forEach(function(r){r.addEventListener("change",function(){peeLayerMode=this.value;});});
+  document.getElementById("btn-calib-from-export").addEventListener("click",function(){closeSheet("export");calibLine={a:null,b:null,collecting:true};setHint('Tocca <b>due punti</b> su una distanza nota per calibrare la scala.');toast("Tocca due punti su una misura nota");});
 
   document.getElementById("btn-export").addEventListener("click",function(){if(!state.floors.some(floorHasContent)){toast("Niente da esportare");return;}syncPeeFieldsFromSettings();updateExportConformityIndex();document.getElementById("pee-options").style.display=exportType==="pee"?"block":"none";openSheet("export");});
   document.getElementById("export-close").addEventListener("click",function(){closeSheet("export");});
@@ -2713,16 +2761,18 @@
       pxPerMeterExport=Math.max(35,Math.min(90,maxPx/Math.max(Wm,Hm)));
       var ex=document.createElement("canvas");ex.width=Math.max(600,Math.ceil(Wm*pxPerMeterExport));ex.height=Math.max(600,Math.ceil(Hm*pxPerMeterExport));var c=ex.getContext("2d");
       c.fillStyle="#FFFFFF";c.fillRect(0,0,ex.width,ex.height);function w2s(wx,wy){return{x:(wx-b.minX)*pxPerMeterExport,y:(wy-b.minY)*pxPerMeterExport};}
+      var peePureStruct=exportType==="pee"&&peeLayerMode==="struttura";
       c.strokeStyle="#ECEEF1";c.lineWidth=1;var g=state.gridSizeM;c.beginPath();for(var gx=Math.ceil(b.minX/g)*g;gx<=b.maxX;gx+=g){var sx=w2s(gx,0).x;c.moveTo(sx,0);c.lineTo(sx,ex.height);}for(var gy=Math.ceil(b.minY/g)*g;gy<=b.maxY;gy+=g){var sy=w2s(0,gy).y;c.moveTo(0,sy);c.lineTo(ex.width,sy);}c.stroke();
       if(img&&floor.photo){var ph=floor.photo,tl=w2s(ph.x,ph.y),br=w2s(ph.x+ph.w,ph.y+ph.h);c.save();c.globalAlpha=floor.photoOpacity;c.drawImage(img,tl.x,tl.y,br.x-tl.x,br.y-tl.y);c.restore();}
-      if(areasVisible())floor.areas.forEach(function(area){if(area.points.length<3)return;var col=area.color||"#3DB6B8";c.save();c.fillStyle=col+"22";c.strokeStyle=col;c.lineWidth=1.8;c.setLineDash([8,5]);c.beginPath();var p0=w2s(area.points[0].x,area.points[0].y);c.moveTo(p0.x,p0.y);for(var i=1;i<area.points.length;i++){var pp=w2s(area.points[i].x,area.points[i].y);c.lineTo(pp.x,pp.y);}c.closePath();c.fill();c.stroke();c.setLineDash([]);if(area.label){var cx=0,cy=0;area.points.forEach(function(pt){var sp=w2s(pt.x,pt.y);cx+=sp.x;cy+=sp.y;});cx/=area.points.length;cy/=area.points.length;c.fillStyle="rgba(255,255,255,.92)";c.font="700 16px Arial";var tw=c.measureText(area.label).width+16;c.fillRect(cx-tw/2,cy-13,tw,26);c.fillStyle="#16202B";c.textAlign="center";c.textBaseline="middle";c.fillText(area.label,cx,cy);}c.restore();});
+      if(areasVisible()&&!peePureStruct)floor.areas.forEach(function(area){if(area.points.length<3)return;var col=area.color||"#3DB6B8";c.save();c.fillStyle=col+"22";c.strokeStyle=col;c.lineWidth=1.8;c.setLineDash([8,5]);c.beginPath();var p0=w2s(area.points[0].x,area.points[0].y);c.moveTo(p0.x,p0.y);for(var i=1;i<area.points.length;i++){var pp=w2s(area.points[i].x,area.points[i].y);c.lineTo(pp.x,pp.y);}c.closePath();c.fill();c.stroke();c.setLineDash([]);if(area.label){var cx=0,cy=0;area.points.forEach(function(pt){var sp=w2s(pt.x,pt.y);cx+=sp.x;cy+=sp.y;});cx/=area.points.length;cy/=area.points.length;c.fillStyle="rgba(255,255,255,.92)";c.font="700 16px Arial";var tw=c.measureText(area.label).width+16;c.fillRect(cx-tw/2,cy-13,tw,26);c.fillStyle="#16202B";c.textAlign="center";c.textBaseline="middle";c.fillText(area.label,cx,cy);}c.restore();});
       c.strokeStyle="#16202B";c.lineCap="square";c.lineWidth=Math.max(2,pxPerMeterExport*.06);floor.walls.forEach(function(x){var a=w2s(x.x1,x.y1),bb=w2s(x.x2,x.y2);c.beginPath();c.moveTo(a.x,a.y);c.lineTo(bb.x,bb.y);c.stroke();});
       if(reiVisible()){c.save();c.strokeStyle="#C8102E";c.lineCap="square";c.lineWidth=Math.max(2.5,pxPerMeterExport*.08);floor.reiWalls.forEach(function(x){var a=w2s(x.x1,x.y1),bb=w2s(x.x2,x.y2);c.setLineDash([Math.max(10,pxPerMeterExport*.3),Math.max(6,pxPerMeterExport*.18)]);c.beginPath();c.moveTo(a.x,a.y);c.lineTo(bb.x,bb.y);c.stroke();if(x.rei){var mx=(a.x+bb.x)/2,my=(a.y+bb.y)/2,ang=Math.atan2(bb.y-a.y,bb.x-a.x);c.save();c.setLineDash([]);c.translate(mx,my);c.rotate(Math.abs(ang)>Math.PI/2?ang+Math.PI:ang);c.fillStyle="#FFFFFF";c.font="700 13px Arial";var tw=c.measureText(x.rei).width+10;c.fillRect(-tw/2,-10,tw,20);c.strokeStyle="#C8102E";c.lineWidth=1;c.strokeRect(-tw/2,-10,tw,20);c.fillStyle="#C8102E";c.textAlign="center";c.textBaseline="middle";c.fillText(x.rei,0,0);c.restore();}});c.restore();}
-      floor.windows.forEach(function(x){drawWindowElement(c,x,w2s,pxPerMeterExport,true);});floor.doors.forEach(function(x){drawDoorElement(c,x,w2s,pxPerMeterExport,true);});floor.stairs.forEach(function(x){drawStairElement(c,x,w2s,pxPerMeterExport,true);});floor.elevators.forEach(function(x){drawElevatorElement(c,x,w2s,pxPerMeterExport,true);});
+      floor.windows.forEach(function(x){drawWindowElement(c,x,w2s,pxPerMeterExport,true);});floor.doors.forEach(function(x){drawDoorElement(c,x,w2s,pxPerMeterExport,true);});
+      if(!peePureStruct){floor.stairs.forEach(function(x){drawStairElement(c,x,w2s,pxPerMeterExport,true);});floor.elevators.forEach(function(x){drawElevatorElement(c,x,w2s,pxPerMeterExport,true);});}
       if(routesVisible())floor.routes.forEach(function(r){var rc=r.color==="orange"?ESODO_ORANGE:ESODO_GREEN;drawRoutePath(c,r.points,w2s,true,rc,r.arrow||"single");});
       if(floor.atexZones&&floor.atexZones.length){floor.atexZones.forEach(function(z){if(!z.points||z.points.length<3)return;var atex=ATEX_TYPES[z.type]||ATEX_TYPES.zona1,col=atex.color;c.save();c.fillStyle=col+"66";c.strokeStyle=col;c.lineWidth=Math.max(1.5,pxPerMeterExport*.04);c.setLineDash([Math.max(8,pxPerMeterExport*.18),Math.max(4,pxPerMeterExport*.1)]);c.beginPath();var zp0=w2s(z.points[0].x,z.points[0].y);c.moveTo(zp0.x,zp0.y);for(var zi=1;zi<z.points.length;zi++){var zpi=w2s(z.points[zi].x,z.points[zi].y);c.lineTo(zpi.x,zpi.y);}c.closePath();c.fill();c.stroke();c.setLineDash([]);var zcx=0,zcy=0;z.points.forEach(function(p){var sp=w2s(p.x,p.y);zcx+=sp.x;zcy+=sp.y;});zcx/=z.points.length;zcy/=z.points.length;var zlb=z.label||(atex.label);c.font="700 "+Math.max(14,pxPerMeterExport*.18)+"px Arial";var ztw=c.measureText(zlb).width+16;c.fillStyle="rgba(255,255,255,.92)";c.fillRect(zcx-ztw/2,zcy-13,ztw,26);c.fillStyle=col;c.textAlign="center";c.textBaseline="middle";c.fillText(zlb,zcx,zcy);c.restore();});}
-      var rr=Math.max(15,pxPerMeterExport*.2),legendMarkers=[];floor.markers.forEach(function(m){var sym=symById(m.symId);if(!layerVisible(sym.layer))return;var p2=w2s(m.x,m.y);drawGlyph(c,sym,p2.x,p2.y,rr);c.fillStyle=m.labelColor||"#16202B";c.font="700 "+Math.round(rr*.6)+"px Arial";c.textAlign="center";c.textBaseline="alphabetic";if(m.seqLabel){c.lineWidth=4;c.strokeStyle=(c.fillStyle==="#FFFFFF"||c.fillStyle==="#fff")?"#16202B":"rgba(255,255,255,.88)";c.strokeText(m.seqLabel,p2.x,p2.y+rr+Math.round(rr*.7));c.fillText(m.seqLabel,p2.x,p2.y+rr+Math.round(rr*.7));}if(sym.hasValue&&m.value){c.fillStyle=m.labelColor||"#0A7E80";c.fillText(m.value,p2.x,p2.y-rr-4);}legendMarkers.push(m);});
-      floor.texts.forEach(function(t){var p=w2s(t.x,t.y),fs=Math.max(12,pxPerMeterExport*(t.sizeM||.28));c.save();c.translate(p.x,p.y);c.rotate((t.rotation||0)*Math.PI/180);c.font="700 "+fs+"px Arial";c.textAlign=t.align||"center";c.textBaseline="middle";var lines=String(t.text||"Nota").split(/\n/),mw=0;lines.forEach(function(line){mw=Math.max(mw,c.measureText(line).width);});if(t.box){c.fillStyle="rgba(255,255,255,.9)";c.fillRect(-mw/2-8,-fs*lines.length/2-6,mw+16,fs*lines.length+12);c.strokeStyle=t.color||"#16202B";c.strokeRect(-mw/2-8,-fs*lines.length/2-6,mw+16,fs*lines.length+12);}c.fillStyle=t.color||"#16202B";lines.forEach(function(line,i){c.fillText(line,0,(i-(lines.length-1)/2)*fs*1.15);});c.restore();});
+      var rr=Math.max(15,pxPerMeterExport*.2),legendMarkers=[];floor.markers.forEach(function(m){var sym=symById(m.symId);if(!layerVisible(sym.layer))return;var p2=w2s(m.x,m.y);drawGlyph(c,sym,p2.x,p2.y,rr,m.rotation||0);c.fillStyle=m.labelColor||"#16202B";c.font="700 "+Math.round(rr*.6)+"px Arial";c.textAlign="center";c.textBaseline="alphabetic";if(m.seqLabel){c.lineWidth=4;c.strokeStyle=(c.fillStyle==="#FFFFFF"||c.fillStyle==="#fff")?"#16202B":"rgba(255,255,255,.88)";c.strokeText(m.seqLabel,p2.x,p2.y+rr+Math.round(rr*.7));c.fillText(m.seqLabel,p2.x,p2.y+rr+Math.round(rr*.7));}if(sym.hasValue&&m.value){c.fillStyle=m.labelColor||"#0A7E80";c.fillText(m.value,p2.x,p2.y-rr-4);}legendMarkers.push(m);});
+      if(!peePureStruct)floor.texts.forEach(function(t){var p=w2s(t.x,t.y),fs=Math.max(12,pxPerMeterExport*(t.sizeM||.28));c.save();c.translate(p.x,p.y);c.rotate((t.rotation||0)*Math.PI/180);c.font="700 "+fs+"px Arial";c.textAlign=t.align||"center";c.textBaseline="middle";var lines=String(t.text||"Nota").split(/\n/),mw=0;lines.forEach(function(line){mw=Math.max(mw,c.measureText(line).width);});if(t.box){c.fillStyle="rgba(255,255,255,.9)";c.fillRect(-mw/2-8,-fs*lines.length/2-6,mw+16,fs*lines.length+12);c.strokeStyle=t.color||"#16202B";c.strokeRect(-mw/2-8,-fs*lines.length/2-6,mw+16,fs*lines.length+12);}c.fillStyle=t.color||"#16202B";lines.forEach(function(line,i){c.fillText(line,0,(i-(lines.length-1)/2)*fs*1.15);});c.restore();});
       if(showQuotes)floor.walls.concat(floor.reiWalls).forEach(function(x){var a=w2s(x.x1,x.y1),bb=w2s(x.x2,x.y2),len=Math.hypot(x.x2-x.x1,x.y2-x.y1);drawDimensionLabel(c,a,bb,len.toFixed(2)+" m",true);});
       drawNorthExport(c,ex.width,floor,pxPerMeterExport);
       return{floor:floor,imgDataUrl:ex.toDataURL("image/png",.92),pxW:ex.width,pxH:ex.height,legendMarkers:legendMarkers,bounds:b};
@@ -2769,8 +2819,9 @@
       var x=leftX,y=bodyY,w=leftW,h=bodyH,pad=3;
       var acR=titleRGB[0],acG=titleRGB[1],acB=titleRGB[2];
       var noNorm=peeSettings.showNormativi===false;
+      var noDati=peeSettings.showDatiDocumento===false;
       var sbH=peeFontSz(7,6.5);
-      var studioH=Math.round(h*0.15),committH=Math.round(h*0.10),datiH=Math.round(h*0.17),normH=noNorm?0:Math.round(h*0.15);
+      var studioH=Math.round(h*0.15),committH=Math.round(h*0.10),datiH=noDati?0:Math.round(h*0.17),normH=noNorm?0:Math.round(h*0.15);
       var locH=h-studioH-committH-datiH-normH;
 
       doc.setFillColor(250,250,250);doc.rect(x,y,w,h,"F");
@@ -2810,46 +2861,48 @@
       if(peeSettings.aerialBase64){
         doc.addImage(peeSettings.aerialBase64,"JPEG",x+1,cy,w-2,locContentH);
       }else{
-        doc.setFillColor(234,239,246);doc.rect(x+1,cy,w-2,locContentH,"F");
-        var mx=x+w/2,my=cy+locContentH/2,bw=w*0.35,bh=locContentH*0.28;
-        doc.setDrawColor(200,212,226);doc.setLineWidth(3);
-        doc.line(x+2,my,x+w-2,my);doc.line(mx,cy+2,mx,cy+locContentH-2);
-        doc.setFillColor(185,200,218);doc.setDrawColor(158,178,200);doc.setLineWidth(0.4);
-        doc.rect(mx-bw/2,my-bh/2,bw,bh,"FD");
-        var naX=x+w-peeFontSz(10,8),naY=cy+peeFontSz(10,8);
-        doc.setFillColor(acR,acG,acB);
-        doc.lines([[peeFontSz(4,3),peeFontSz(6,5)],[peeFontSz(-8,-6),0]],naX-peeFontSz(2,1.5),naY-peeFontSz(6,5),[1,1],"F",true);
-        doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(7,6.5));doc.setTextColor(acR,acG,acB);doc.text("N",naX,naY-peeFontSz(7,6.5),{align:"center"});
-        doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(7,6.3));doc.setTextColor(140,155,170);
-        doc.text("Foto aerea / Vista satellite",mx,cy+locContentH-peeFontSz(4,3.5),{align:"center"});
+        var lx=x+1,lw2=w-2;
+        doc.setFillColor(245,245,245);doc.rect(lx,cy,lw2,locContentH,"F");
+        var pmx=lx+lw2/2,pmy=cy+locContentH*0.42;
+        var pinR=Math.min(lw2*0.14,locContentH*0.18);
+        doc.setFillColor(170,170,170);doc.circle(pmx,pmy-pinR,pinR,"F");
+        var bRectW=pinR*2.4,bRectH=pinR*1.6;
+        doc.setFillColor(170,170,170);doc.rect(pmx-bRectW/2,pmy-pinR*0.2,bRectW,bRectH,"F");
+        doc.setFillColor(245,245,245);doc.circle(pmx,pmy-pinR,pinR*0.5,"F");
+        doc.setDrawColor(170,170,170);doc.setLineWidth(Math.max(0.4,pinR*0.12));
+        doc.line(pmx,pmy+bRectH*0.8,pmx,pmy+bRectH+pinR*0.8);
+        doc.setFont("helvetica","normal");doc.setFontSize(peeFontSz(7,6.3));doc.setTextColor(170,170,170);
+        doc.text("Foto aerea non caricata",pmx,cy+locContentH-peeFontSz(5,4),{align:"center"});
       }
       cy+=locH;sepLine();
 
       /* ---- [4] DATI DOCUMENTO ---- */
-      secBar("DATI DOCUMENTO",22,32,43);
-      var datiContentH=datiH-sbH;
-      var contentWm=page.bounds.maxX-page.bounds.minX||1;
-      var approxMmPerM=centerW/contentWm,approxScale=roundScale(Math.round(1000/approxMmPerM));
-      var datiRows=[
-        ["Redattore",state.header.redattore],
-        ["Qualifica",peeSettings.qualificaRedattore||state.header.qualifica],
-        ["Scala",page.floor.calibrated?"1 : "+approxScale:"Indicativa"]
-      ];
-      var rH=datiContentH/datiRows.length,labelFrac=0.42;
-      datiRows.forEach(function(row,i){
-        var ry=cy+i*rH;
-        if(i%2===0){doc.setFillColor(245,245,245);}else{doc.setFillColor(255,255,255);}
-        doc.rect(x,ry,w,rH,"F");
-        doc.setDrawColor(221,221,221);doc.setLineWidth(0.15);
-        doc.line(x,ry+rH,x+w,ry+rH);doc.line(x+w*labelFrac,ry,x+w*labelFrac,ry+rH);
-        doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(6.2,5.7));doc.setTextColor(110,125,140);
-        doc.text(row[0].toUpperCase(),x+pad,ry+rH*0.68);
-        var pf=peeField(row[1]);
-        if(pf.empty){doc.setFont("helvetica","italic");doc.setFontSize(peeFontSz(6.2,5.7));doc.setTextColor(170,175,185);}
-        else{doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(7,6.3));doc.setTextColor(12,20,32);}
-        doc.text(doc.splitTextToSize(pf.text,w*(1-labelFrac)-pad),x+w*labelFrac+pad,ry+rH*0.68);
-      });
-      cy+=datiH;
+      if(!noDati){
+        secBar("DATI DOCUMENTO",22,32,43);
+        var datiContentH=datiH-sbH;
+        var contentWm=page.bounds.maxX-page.bounds.minX||1;
+        var approxMmPerM=centerW/contentWm,approxScale=roundScale(Math.round(1000/approxMmPerM));
+        var datiRows=[
+          ["Redattore",state.header.redattore],
+          ["Qualifica",peeSettings.qualificaRedattore||state.header.qualifica],
+          ["Scala",page.floor.calibrated?"1 : "+approxScale:"Indicativa"]
+        ];
+        var rH=datiContentH/datiRows.length,labelFrac=0.42;
+        datiRows.forEach(function(row,i){
+          var ry=cy+i*rH;
+          if(i%2===0){doc.setFillColor(245,245,245);}else{doc.setFillColor(255,255,255);}
+          doc.rect(x,ry,w,rH,"F");
+          doc.setDrawColor(221,221,221);doc.setLineWidth(0.15);
+          doc.line(x,ry+rH,x+w,ry+rH);doc.line(x+w*labelFrac,ry,x+w*labelFrac,ry+rH);
+          doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(6.2,5.7));doc.setTextColor(110,125,140);
+          doc.text(row[0].toUpperCase(),x+pad,ry+rH*0.68);
+          var pf=peeField(row[1]);
+          if(pf.empty){doc.setFont("helvetica","italic");doc.setFontSize(peeFontSz(6.2,5.7));doc.setTextColor(170,175,185);}
+          else{doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(7,6.3));doc.setTextColor(12,20,32);}
+          doc.text(doc.splitTextToSize(pf.text,w*(1-labelFrac)-pad),x+w*labelFrac+pad,ry+rH*0.68);
+        });
+        cy+=datiH;
+      }
 
       /* ---- [5] RIFERIMENTI NORMATIVI ---- */
       if(!noNorm){
@@ -2877,7 +2930,7 @@
       var scaleBarY=imgAreaY+imgAreaH+2;
       var contentWm=page.bounds.maxX-page.bounds.minX,mmPerMeter=dW/contentWm,scaleRatio=Math.round(1000/mmPerMeter);
       if(page.floor.calibrated){var barM=pickScaleBarRealMM(mmPerMeter);drawScaleBarMM(doc,dX+3,scaleBarY,barM,mmPerMeter,scaleRatio);}
-      else drawIndicativeScale(doc,dX+3,scaleBarY);
+      else if(peeSettings.showScaleWarning!==false) drawIndicativeScale(doc,dX+3,scaleBarY);
     }
 
     function drawPEERightColumn(page){
