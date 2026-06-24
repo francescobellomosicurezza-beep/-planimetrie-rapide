@@ -2868,7 +2868,7 @@
     var bottomY=pdfH-M-footerH-bottomH;
     var bodyH=bottomY-GAP-bodyY;
     var bodyW=pdfW-2*M;
-    var leftW=isA3?85:60,rightW=isA3?75:52;
+    var leftW=isA3?85:60,rightW=isA3?20:18;
     var centerW=bodyW-leftW-rightW-2*GAP;
     var leftX=M,centerX=M+leftW+GAP,rightX=M+leftW+GAP+centerW+GAP;
     var titleRGB=state.peeColor==="red"?[192,0,32]:[0,166,81];
@@ -3007,6 +3007,7 @@
       var dW=imgAreaW,dH=dW/ratio;
       if(dH>imgAreaH){dH=imgAreaH;dW=dH*ratio;}
       var dX=imgAreaX+(imgAreaW-dW)/2,dY=imgAreaY+(imgAreaH-dH)/2;
+      console.log("PEE area:",{areaX:imgAreaX,areaW:imgAreaW,areaY:imgAreaY,areaH:imgAreaH,scala:(Math.min(imgAreaW/rw,imgAreaH/rh)).toFixed(3),bboxW:rw.toFixed(2),bboxH:rh.toFixed(2),dW:dW.toFixed(2),dH:dH.toFixed(2)});
       doc.addImage(page.imgDataUrl,"PNG",dX,dY,dW,dH,undefined,"FAST");
       var mmPerMeter=dW/rw,scaleRatio=Math.round(1000/mmPerMeter);
       var scaleBarX=dX+PAD,scaleBarY=dY+dH-11;
@@ -3015,15 +3016,12 @@
     }
 
     function drawPEERightColumn(page){
-      var x=rightX,y=bodyY,w=rightW,h=bodyH,pad=3;
+      var x=rightX,y=bodyY,w=rightW,h=bodyH;
       doc.setDrawColor(198,205,214);doc.setLineWidth(0.25);doc.rect(x,y,w,h);
       doc.setFillColor(titleRGB[0],titleRGB[1],titleRGB[2]);doc.rect(x,y,8,h,"F");
       doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(20,15));
       doc.setTextColor(titleRGB[0],titleRGB[1],titleRGB[2]);
       doc.text("PIANO DI EVACUAZIONE",x+w/2+4,y+h/2,{angle:90,align:"center"});
-      doc.setFont("helvetica","normal");doc.setFontSize(peeFontSz(7.5,6.8));doc.setTextColor(75,90,106);
-      var az=present(state.header.azienda);
-      if(az!=="-"){doc.text(doc.splitTextToSize(az,w-14),x+10,y+h-pad-peeFontSz(8,7));}
     }
 
     function drawPEEBottomBand(page){
