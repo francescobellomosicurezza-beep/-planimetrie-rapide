@@ -128,6 +128,63 @@
   .sheet-actions{display:flex;gap:10px;margin-top:6px;}
   .sheet-actions .action-btn{padding:12px 8px;}
   .danger-text{color:var(--danger);}
+  .validation-note{margin-bottom:12px;padding:10px 12px;border:1px solid var(--line-soft);border-radius:var(--radius-sm);background:var(--bg-2);font-size:12px;line-height:1.45;color:var(--text-1);}
+  .validation-group{margin-bottom:14px;border:1px solid var(--line-soft);border-radius:var(--radius);overflow:hidden;background:var(--bg-1);}
+  .validation-group-head{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:var(--bg-2);border-bottom:1px solid var(--line-soft);}
+  .validation-group-dot{width:10px;height:10px;border-radius:50%;margin-top:4px;flex:0 0 auto;}
+  .validation-group-title{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--text-0);}
+  .validation-group-desc{margin-top:2px;font-size:11px;line-height:1.35;color:var(--text-2);font-weight:500;}
+  .validation-row{padding:9px 12px;border-bottom:1px solid var(--line-soft);font-size:13px;line-height:1.4;color:var(--text-0);}
+  .validation-row:last-child{border-bottom:0;}
+  .conformity-index{margin:4px 0 14px 0;padding:14px;border:1px solid var(--line-soft);border-radius:var(--radius);background:linear-gradient(180deg,var(--bg-1),var(--bg-2));}
+  .conformity-index-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px;}
+  .conformity-index-title{font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.06em;color:var(--text-2);margin-bottom:5px;}
+  .conformity-score{font-size:34px;line-height:1;font-weight:900;color:var(--text-0);letter-spacing:0;}
+  .conformity-score span{font-size:15px;color:var(--text-2);font-weight:800;}
+  .conformity-badge{flex:0 0 auto;padding:7px 10px;border-radius:999px;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.04em;color:#fff;background:#3DB6B8;}
+  .conformity-badge.status-check{background:#E8A33D;color:#16202B;}
+  .conformity-badge.status-critical{background:#E2574C;}
+  .conformity-breakdown{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:10px;}
+  .conformity-breakdown-item{min-width:0;border:1px solid var(--line-soft);border-radius:var(--radius-sm);background:rgba(255,255,255,.03);padding:8px;}
+  .conformity-breakdown-item strong{display:block;font-size:13px;line-height:1.1;color:var(--text-0);}
+  .conformity-breakdown-item span{display:block;margin-top:3px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--text-2);}
+  .conformity-text{font-size:12px;line-height:1.45;color:var(--text-1);}
+  @media (max-width:520px){.conformity-index-head{flex-direction:column;}.conformity-breakdown{grid-template-columns:1fr;}.conformity-score{font-size:30px;}}
+  .pee-emergency-box{margin-top:6px;padding:14px;border:1px solid rgba(42,52,65,.85);border-radius:var(--radius);background:#F7F8FA;}
+  .pee-emergency-head{margin-bottom:12px;}
+  .pee-emergency-head h4{font-size:14px;line-height:1.2;font-weight:800;color:#16202B;text-transform:uppercase;letter-spacing:.03em;}
+  .pee-emergency-head p{margin-top:4px;font-size:11.5px;line-height:1.4;color:var(--text-2);}
+  .pee-emergency-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
+  .pee-emergency-card{min-width:0;border:1px solid rgba(42,52,65,.18);border-radius:8px;background:#FFFFFF;padding:12px 12px 11px 12px;box-shadow:0 1px 0 rgba(11,15,20,.03);}
+  .pee-emergency-number-card{border-color:rgba(226,87,76,.35);background:linear-gradient(180deg,#FFF7F6 0%,#FFFFFF 100%);}
+  .pee-emergency-card h5{font-size:12px;line-height:1.2;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:#16202B;margin-bottom:8px;}
+  .pee-emergency-label{display:block;font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:#A32E28;margin-bottom:6px;}
+  .pee-emergency-number{display:block;font-size:34px;line-height:1;font-weight:900;color:#E2574C;letter-spacing:.01em;}
+  .pee-emergency-number-card p{margin-top:8px;font-size:11.5px;line-height:1.45;color:var(--text-2);}
+  .pee-emergency-card ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;}
+  .pee-emergency-card li{position:relative;padding-left:16px;font-size:11.5px;line-height:1.4;color:#2C3641;}
+  .pee-emergency-card li::before{content:"";position:absolute;left:0;top:.55em;width:7px;height:7px;border-radius:50%;background:#3DB6B8;}
+  .pee-emergency-card-warning{border-color:rgba(226,87,76,.28);}
+  .pee-emergency-card-warning li::before{background:#E2574C;}
+  @media (max-width:720px){
+    .pee-emergency-grid{grid-template-columns:1fr;}
+    .pee-emergency-number{font-size:30px;}
+  }
+  @media print {
+    .pee-emergency-box {
+      box-shadow: none !important;
+      break-inside: avoid;
+    }
+
+    .pee-emergency-card {
+      box-shadow: none !important;
+      background: #fff !important;
+    }
+
+    .pee-emergency-number-card {
+      background: #fff !important;
+    }
+  }
 
   .menu-item{display:flex;align-items:center;gap:12px;padding:13px 18px;font-size:14.5px;font-weight:500;color:var(--text-0);cursor:pointer;}
   .menu-item:active{background:var(--bg-2);}
@@ -317,6 +374,7 @@
     <div class="field"><label>Formato</label>
       <select id="export-format"><option value="a3">A3 orizzontale/verticale automatico</option><option value="a4">A4 orizzontale/verticale automatico</option></select>
     </div>
+    <div class="conformity-index" id="export-conformity-index" aria-label="Indice di conformità PEE"></div>
     <div class="sheet-actions">
       <div class="action-btn" id="btn-export-png">PNG piano attivo</div>
       <div class="action-btn primary" id="btn-do-export" style="flex:1">Genera PDF</div>
@@ -359,6 +417,37 @@
   <div class="sheet-body">
     <p style="font-size:12px;color:var(--text-2);line-height:1.5;margin-bottom:12px;">Testo di supporto alla planimetria di emergenza allegabile al PEE. Puoi personalizzarlo per l'azienda.</p>
     <div class="field"><label>Testo istruzioni</label><textarea id="instr-text" style="min-height:240px;font-family:var(--font-mono);font-size:12px;"></textarea></div>
+    <div class="pee-emergency-box" aria-label="Comportamenti in caso di emergenza">
+      <div class="pee-emergency-head">
+        <h4>Comportamenti in caso di emergenza</h4>
+        <p>Blocco di riferimento per il PEE e per la stampa in formato A4.</p>
+      </div>
+      <div class="pee-emergency-grid">
+        <div class="pee-emergency-card pee-emergency-number-card">
+          <span class="pee-emergency-label">Numero unico emergenze</span>
+          <strong class="pee-emergency-number">112</strong>
+          <p>Attivo 24 ore su 24 per le emergenze.</p>
+        </div>
+        <div class="pee-emergency-card">
+          <h5>Cosa fare</h5>
+          <ul>
+            <li>Mantieni la calma.</li>
+            <li>Attiva l'allarme se presente.</li>
+            <li>Segui le vie di esodo.</li>
+            <li>Raggiungi il punto di raccolta.</li>
+          </ul>
+        </div>
+        <div class="pee-emergency-card pee-emergency-card-warning">
+          <h5>Cosa non fare</h5>
+          <ul>
+            <li>Non usare gli ascensori.</li>
+            <li>Non tornare indietro.</li>
+            <li>Non raccogliere oggetti.</li>
+            <li>Non creare panico.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
     <div class="sheet-actions">
       <div class="action-btn" id="btn-instr-default">Ripristina standard</div>
       <div class="action-btn primary" id="btn-save-instr" style="flex:1">Salva</div>
@@ -481,6 +570,7 @@
   <div class="grip"></div>
   <div class="sheet-head"><h3 id="preflight-title">Verifica pre-esportazione</h3><div class="icon-btn" id="preflight-close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div></div>
   <div class="sheet-body">
+    <div class="conformity-index" id="preflight-conformity-index" aria-label="Indice di conformità PEE"></div>
     <div id="preflight-list" style="margin-bottom:14px;"></div>
     <div class="sheet-actions">
       <div class="action-btn" id="btn-preflight-back">Torna a modificare</div>
@@ -2007,48 +2097,127 @@
   /* ===================== EXPORT ===================== */
   var exportType="pee",pxPerMeterExport=80;
   function floorHasContent(f){return !!(f.walls.length||f.reiWalls.length||f.windows.length||f.doors.length||f.stairs.length||f.elevators.length||f.areas.length||f.texts.length||f.markers.length||f.routes.length||f.photo);}
-  document.getElementById("btn-export").addEventListener("click",function(){if(!state.floors.some(floorHasContent)){toast("Niente da esportare");return;}openSheet("export");});
+  document.getElementById("btn-export").addEventListener("click",function(){if(!state.floors.some(floorHasContent)){toast("Niente da esportare");return;}updateExportConformityIndex();openSheet("export");});
   document.getElementById("export-close").addEventListener("click",function(){closeSheet("export");});
   document.getElementById("ov-export").addEventListener("click",function(){closeSheet("export");});
-  document.querySelectorAll("#export-type-grid .opt-card").forEach(function(card){card.addEventListener("click",function(){document.querySelectorAll("#export-type-grid .opt-card").forEach(function(c){c.classList.remove("active");});card.classList.add("active");exportType=card.getAttribute("data-type");if(exportType==="pee")document.getElementById("export-format").value="a3";});});
-  document.getElementById("btn-do-export").addEventListener("click",function(){closeSheet("export");var issues=preflightCheck(exportType);if(issues.length){showPreflight(issues);return;}setTimeout(doExport,120);});
+  document.querySelectorAll("#export-type-grid .opt-card").forEach(function(card){card.addEventListener("click",function(){document.querySelectorAll("#export-type-grid .opt-card").forEach(function(c){c.classList.remove("active");});card.classList.add("active");exportType=card.getAttribute("data-type");if(exportType==="pee")document.getElementById("export-format").value="a3";updateExportConformityIndex();});});
+  document.getElementById("btn-do-export").addEventListener("click",function(){closeSheet("export");var validationResult=preflightCheck(exportType);if(hasValidationIssues(validationResult)){showPreflight(validationResult);return;}setTimeout(doExport,120);});
   document.getElementById("btn-export-png").addEventListener("click",function(){closeSheet("export");toast("Generazione PNG...");renderFloorToCanvas(currentFloor()).then(function(page){var a=document.createElement("a");a.href=page.imgDataUrl;a.download=safeBaseName()+"_"+slug(currentFloor().name)+"_"+exportType+".png";document.body.appendChild(a);a.click();document.body.removeChild(a);toast("PNG esportato");}).catch(function(err){alert("Errore PNG: "+err.message);});});
 
   function slug(v){return String(v||"").trim().replace(/[^a-z0-9àèéìòù_-]+/gi,"_").replace(/^_+|_+$/g,"")||"piano";}
-  function preflightCheck(kind){
-    var issues=[];state.floors.filter(floorHasContent).forEach(function(f){
+  var VALIDATION_CATEGORIES={
+    critical:{label:"Critico",title:"Sicurezza normativa",desc:"Presidi o riferimenti essenziali da verificare prima di usare l'elaborato.",color:"#E2574C"},
+    structural:{label:"Strutturale",title:"Layout e geometria",desc:"Problemi di costruzione grafica della planimetria o di coerenza dei percorsi.",color:"#E8A33D"},
+    quality:{label:"Qualità",title:"Stampa e leggibilità",desc:"Aspetti non critici che possono ridurre chiarezza o resa del PDF.",color:"#3DB6B8"}
+  };
+  var CONFORMITY_PENALTIES={
+    missing_exit:{category:"critical",points:25},
+    missing_extinguisher:{category:"critical",points:25},
+    missing_assembly:{category:"critical",points:20},
+    overlap:{category:"structural",points:10},
+    broken_route:{category:"structural",points:10},
+    outside_map:{category:"structural",points:10},
+    poor_readability:{category:"quality",points:5},
+    symbol_small:{category:"quality",points:5},
+    calibration:{category:"quality",points:5}
+  };
+  var FIRE_EXTINGUISHER_IDS=["estintore","estintore_carrellato"];
+  function createValidationResult(){return{critical:[],structural:[],quality:[]};}
+  function validationIssue(html,text,code){var issue=html?{html:html}:{text:text};if(code)issue.code=code;return issue;}
+  function pushValidation(result,category,html,text,code){result[category].push(validationIssue(html,text,code));}
+  function hasValidationIssues(result){return !!(result.critical.length||result.structural.length||result.quality.length);}
+  function preflightCheck(kind){return runValidationEngine(kind);}
+  function runValidationEngine(kind){
+    var validationResult=createValidationResult();state.floors.filter(floorHasContent).forEach(function(f){
       var prefix='<b>'+escapeHtml(f.name)+':</b> ';
       var has=function(id){return f.markers.some(function(m){return m.symId===id;});};
       if(kind==="pee"||kind==="completo"){
-        if(!has("sei_qui"))issues.push({lvl:"basso",html:prefix+"manca il punto Voi siete qui."});
-        if(!has("uscita")&&!has("uscita_emerg"))issues.push({lvl:"alto",html:prefix+"nessuna uscita indicata."});
-        if(!f.routes.length)issues.push({lvl:"medio",html:prefix+"nessuna via di esodo tracciata."});
-        if(!f.markers.some(function(m){return symById(m.symId).layer==="emergency";}))issues.push({lvl:"medio",html:prefix+"nessun presidio o simbolo di emergenza."});
-        f.stairs.forEach(function(st){if(!st.targetFloorId)issues.push({lvl:"basso",html:prefix+"vano scala non collegato: "+escapeHtml(st.label||"Vano scala")});});
-        f.elevators.forEach(function(el){if(!el.elevatorType)issues.push({lvl:"basso",html:prefix+"ascensore non classificato: "+escapeHtml(el.label||"Ascensore")});});
+        var seiHereCount=f.markers.filter(function(m){return m.symId==="sei_qui";}).length;
+        var hasExtinguisher=f.markers.some(function(m){return FIRE_EXTINGUISHER_IDS.indexOf(m.symId)>=0;});
+        if(!has("uscita")&&!has("uscita_emerg"))pushValidation(validationResult,"critical",prefix+"manca un'uscita di emergenza o uscita indicata.",null,"missing_exit");
+        if(!hasExtinguisher)pushValidation(validationResult,"critical",prefix+"manca un estintore indicato.",null,"missing_extinguisher");
+        if(!f.routes.length)pushValidation(validationResult,"structural",prefix+"nessuna via di esodo tracciata.",null,"broken_route");
+        f.routes.forEach(function(r,ri){if((r.points||[]).length<2)pushValidation(validationResult,"structural",prefix+"via di esodo "+(ri+1)+" con meno di due punti.",null,"broken_route");});
+        if(!has("sei_qui"))pushValidation(validationResult,"quality",prefix+"manca il marcatore <b>Voi siete qui</b>.");
+        if(seiHereCount>1)pushValidation(validationResult,"quality",prefix+"sono presenti piu' marcatori <b>Voi siete qui</b>: verificare il punto di esposizione.");
+        var legendItems=collectLegendItems(f.markers,f);
+        if(!legendItems.length)pushValidation(validationResult,"quality",prefix+"legenda vuota: nessun simbolo esportabile trovato.");
+        f.stairs.forEach(function(st){if(!st.targetFloorId)pushValidation(validationResult,"structural",prefix+"vano scala non collegato: "+escapeHtml(st.label||"Vano scala"));});
+        f.elevators.forEach(function(el){if(!el.elevatorType)pushValidation(validationResult,"structural",prefix+"ascensore non classificato: "+escapeHtml(el.label||"Ascensore"));});
+        var xs=[],ys=[];f.walls.concat(f.reiWalls).forEach(function(w){xs.push(w.x1,w.x2);ys.push(w.y1,w.y2);});
+        if(xs.length&&ys.length){
+          var minX=Math.min.apply(Math,xs),maxX=Math.max.apply(Math,xs),minY=Math.min.apply(Math,ys),maxY=Math.max.apply(Math,ys),pad=1.5;
+          f.markers.forEach(function(m){if(m.x<minX-pad||m.x>maxX+pad||m.y<minY-pad||m.y>maxY+pad)pushValidation(validationResult,"structural",prefix+"simbolo fuori dall'area principale: "+escapeHtml(m.label||symById(m.symId).label),null,"outside_map");});
+          f.texts.forEach(function(t){if(t.x<minX-pad||t.x>maxX+pad||t.y<minY-pad||t.y>maxY+pad)pushValidation(validationResult,"structural",prefix+"testo fuori dall'area principale: "+escapeHtml(t.text||"Testo"),null,"outside_map");});
+        }
+        var overlapKeys={};
+        f.markers.forEach(function(m){var k=Math.round(m.x*10)+":"+Math.round(m.y*10);overlapKeys[k]=(overlapKeys[k]||0)+1;});
+        f.texts.forEach(function(t){var k=Math.round(t.x*10)+":"+Math.round(t.y*10);overlapKeys[k]=(overlapKeys[k]||0)+1;});
+        Object.keys(overlapKeys).forEach(function(k){if(overlapKeys[k]>1)pushValidation(validationResult,"structural",prefix+"possibile sovrapposizione di testi o simboli nella stessa posizione.",null,"overlap");});
       }
       if(kind==="misure"||kind==="completo"){
         var ms=f.markers.filter(function(m){return m.symId==="misurazione";}),seen={};
-        if(!ms.length)issues.push({lvl:"medio",html:prefix+"nessun punto di misura."});
-        ms.forEach(function(m){if(seen[m.seqLabel])issues.push({lvl:"alto",html:prefix+"codice misura duplicato: "+escapeHtml(m.seqLabel)});seen[m.seqLabel]=true;if(!m.measureType)issues.push({lvl:"basso",html:prefix+"punto "+escapeHtml(m.seqLabel||"")+" senza tipologia."});});
+        if(!ms.length)pushValidation(validationResult,"quality",prefix+"nessun punto di misura.");
+        ms.forEach(function(m){if(seen[m.seqLabel])pushValidation(validationResult,"structural",prefix+"codice misura duplicato: "+escapeHtml(m.seqLabel));seen[m.seqLabel]=true;if(!m.measureType)pushValidation(validationResult,"quality",prefix+"punto "+escapeHtml(m.seqLabel||"")+" senza tipologia.");});
       }
       if(kind==="dvr"||kind==="completo"){
         var dvr=f.markers.filter(function(m){return symById(m.symId).layer==="dvr";});
-        if(!f.areas.length)issues.push({lvl:"medio",html:prefix+"nessuna area/locale definita."});
-        if(!dvr.length&&!f.texts.length)issues.push({lvl:"medio",html:prefix+"nessuna macchina, postazione, deposito o annotazione DVR."});
-        f.markers.forEach(function(m){if((m.symId==="rischio"||m.symId==="atex"||m.symId==="confinato")&&!m.label)issues.push({lvl:"basso",html:prefix+"zona di rischio senza etichetta."});});
+        if(!f.areas.length)pushValidation(validationResult,"structural",prefix+"nessuna area/locale definita.");
+        if(!dvr.length&&!f.texts.length)pushValidation(validationResult,"quality",prefix+"nessuna macchina, postazione, deposito o annotazione DVR.");
+        f.markers.forEach(function(m){if((m.symId==="rischio"||m.symId==="atex"||m.symId==="confinato")&&!m.label)pushValidation(validationResult,"quality",prefix+"zona di rischio senza etichetta.");});
       }
-      if(f.photo&&!f.calibrated)issues.push({lvl:"medio",html:prefix+"foto base non calibrata."});
-      if(!f.calibrated)issues.push({lvl:"basso",html:prefix+"progetto non calibrato: scala indicativa."});
+      if(f.photo&&!f.calibrated)pushValidation(validationResult,"quality",prefix+"immagine base non calibrata: la scala resta indicativa.",null,"calibration");
+      else if(!f.calibrated)pushValidation(validationResult,"quality",prefix+"progetto non calibrato: scala indicativa.",null,"calibration");
+      f.markers.forEach(function(m){if(typeof m.size==="number"&&m.size<.85)pushValidation(validationResult,"quality",prefix+"simbolo probabilmente troppo piccolo per la stampa: "+escapeHtml(m.label||symById(m.symId).label),null,"symbol_small");});
+      f.texts.forEach(function(t){if(typeof t.sizeM==="number"&&t.sizeM<.22)pushValidation(validationResult,"quality",prefix+"testo probabilmente poco leggibile in PDF: "+escapeHtml(t.text||"Testo"),null,"poor_readability");});
     });
     var hasRaccoltaProject=state.floors.some(function(f){return f.markers.some(function(m){return m.symId==="raccolta";});});
-    if((kind==="pee"||kind==="completo")&&!hasRaccoltaProject)issues.push({lvl:"medio",text:"Nessun punto di raccolta presente nel progetto."});
-    if(!state.header.azienda)issues.push({lvl:"basso",text:"Intestazione documento incompleta: manca l’azienda."});
-    if(!state.header.redattore)issues.push({lvl:"basso",text:"Manca il nome del redattore nell’intestazione."});
-    return issues;
+    if((kind==="pee"||kind==="completo")&&!hasRaccoltaProject)pushValidation(validationResult,"critical",null,"Manca un punto di raccolta nel progetto.","missing_assembly");
+    if(!state.header.azienda)pushValidation(validationResult,"quality",null,"Intestazione documento incompleta: manca l'azienda.");
+    if(!state.header.redattore)pushValidation(validationResult,"quality",null,"Manca il nome del redattore nell'intestazione.");
+    return validationResult;
+  }
+  function conformityStatus(score){
+    if(score>=85)return{label:"CONFORME",css:"status-ok",color:"#3DB6B8",rgb:[61,182,184],text:"Il progetto è conforme ma presenta elementi migliorabili."};
+    if(score>=60)return{label:"DA VERIFICARE",css:"status-check",color:"#E8A33D",rgb:[232,163,61],text:"Il progetto presenta alcune criticità da risolvere prima dell'export finale."};
+    return{label:"CRITICO",css:"status-critical",color:"#E2574C",rgb:[226,87,76],text:"Il progetto richiede interventi prioritari prima dell'utilizzo operativo."};
+  }
+  function calculateConformityIndex(validationResult){
+    var penalties={critical:0,structural:0,quality:0},total=0;
+    ["critical","structural","quality"].forEach(function(category){
+      (validationResult[category]||[]).forEach(function(issue){
+        var rule=CONFORMITY_PENALTIES[issue.code];if(!rule)return;
+        penalties[rule.category]+=rule.points;total+=rule.points;
+      });
+    });
+    var score=Math.max(0,100-total),status=conformityStatus(score);
+    return{score:score,status:status,totalPenalties:total,penalties:penalties};
+  }
+  function renderConformityIndex(target,conformity){
+    if(!target)return;
+    target.innerHTML="";
+    var head=document.createElement("div");head.className="conformity-index-head";
+    var left=document.createElement("div"),title=document.createElement("div"),score=document.createElement("div"),den=document.createElement("span");
+    title.className="conformity-index-title";title.textContent="Indice di conformità PEE";
+    score.className="conformity-score";score.textContent=conformity.score+" ";den.textContent="/ 100";score.appendChild(den);
+    left.appendChild(title);left.appendChild(score);
+    var badge=document.createElement("div");badge.className="conformity-badge "+conformity.status.css;badge.textContent=conformity.status.label;
+    head.appendChild(left);head.appendChild(badge);target.appendChild(head);
+    var breakdown=document.createElement("div");breakdown.className="conformity-breakdown";
+    [["critical","Critiche"],["structural","Strutturali"],["quality","Qualità"]].forEach(function(pair){
+      var item=document.createElement("div"),value=document.createElement("strong"),label=document.createElement("span");
+      item.className="conformity-breakdown-item";value.textContent="-"+conformity.penalties[pair[0]];label.textContent=pair[1]+" penalità";
+      item.appendChild(value);item.appendChild(label);breakdown.appendChild(item);
+    });
+    target.appendChild(breakdown);
+    var text=document.createElement("div");text.className="conformity-text";text.textContent=conformity.status.text+" L'indice è consultivo e non blocca l'esportazione.";
+    target.appendChild(text);
+  }
+  function updateExportConformityIndex(){
+    renderConformityIndex(document.getElementById("export-conformity-index"),calculateConformityIndex(preflightCheck(exportType)));
   }
   function escapeHtml(v){var d=document.createElement("div");d.textContent=v;return d.innerHTML;}
-  function showPreflight(issues){var box=document.getElementById("preflight-list");box.innerHTML="";document.getElementById("preflight-title").textContent="Verifica "+({pee:"Planimetria di emergenza",misure:"Piano misurazioni",dvr:"Layout DVR",completo:"Documento completo"}[exportType]||"pre-esportazione");var col={alto:"#E2574C",medio:"#E8A33D",basso:"#9AAAB8"},lab={alto:"ALTO",medio:"MEDIO",basso:"BASSO"};issues.forEach(function(it){var row=document.createElement("div");row.style.cssText="display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--line-soft);font-size:13px;line-height:1.4;";var badge=document.createElement("span");badge.style.cssText="flex:0 0 50px;font-weight:800;font-size:10px;color:"+col[it.lvl]+";align-self:center;";badge.textContent=lab[it.lvl];var txt=document.createElement("span");txt.style.cssText="flex:1 1 auto;color:var(--text-0);";if(it.html)txt.innerHTML=it.html;else txt.textContent=it.text;row.appendChild(badge);row.appendChild(txt);box.appendChild(row);});openSheet("preflight");}
+  function showPreflight(validationResult){var box=document.getElementById("preflight-list");box.innerHTML="";renderConformityIndex(document.getElementById("preflight-conformity-index"),calculateConformityIndex(validationResult));document.getElementById("preflight-title").textContent="Validation Engine - "+({pee:"Planimetria di emergenza",misure:"Piano misurazioni",dvr:"Layout DVR",completo:"Documento completo"}[exportType]||"pre-esportazione");var note=document.createElement("div");note.className="validation-note";note.textContent="Gli avvisi sono una verifica operativa non bloccante: l'export resta consentito e la responsabilita' tecnica resta del redattore.";box.appendChild(note);["critical","structural","quality"].forEach(function(key){var items=validationResult[key]||[];if(!items.length)return;var meta=VALIDATION_CATEGORIES[key],group=document.createElement("section");group.className="validation-group";var head=document.createElement("div");head.className="validation-group-head";var dot=document.createElement("span");dot.className="validation-group-dot";dot.style.background=meta.color;var text=document.createElement("div");var title=document.createElement("div");title.className="validation-group-title";title.textContent=meta.label+" - "+meta.title;var desc=document.createElement("div");desc.className="validation-group-desc";desc.textContent=meta.desc;text.appendChild(title);text.appendChild(desc);head.appendChild(dot);head.appendChild(text);group.appendChild(head);items.forEach(function(it){var row=document.createElement("div");row.className="validation-row";if(it.html)row.innerHTML=it.html;else row.textContent=it.text;group.appendChild(row);});box.appendChild(group);});openSheet("preflight");}
   document.getElementById("preflight-close").addEventListener("click",function(){closeSheet("preflight");});
   document.getElementById("ov-preflight").addEventListener("click",function(){closeSheet("preflight");});
   document.getElementById("btn-preflight-back").addEventListener("click",function(){closeSheet("preflight");});
@@ -2090,6 +2259,7 @@
   function buildPDF(pages){
     var J=window.jspdf.jsPDF,fmt=document.getElementById("export-format").value,firstOrientation=pageOrientation(pages[0]);
     var doc=new J({unit:"mm",format:fmt,orientation:firstOrientation,compress:true}),M=12,headerH=18,footerH=11,allMeasures=[],legendPageQueue=[];
+    var conformity=calculateConformityIndex(preflightCheck(exportType));
     pages.forEach(function(page,index){
       var orientation=pageOrientation(page);
       if(index>0)doc.addPage(fmt,orientation);
@@ -2109,7 +2279,7 @@
       if(page.floor.calibrated)drawScaleBarMM(doc,dX+5,dY+dH-3,barM,mmPerMeter,scaleRatio);else drawIndicativeScale(doc,dX+5,dY+dH-3);
       if(legendLayout.onMain)drawLegendPDF(doc,M,dY+dH+8,pdfW-2*M,legendItems,legendLayout);
       else if(legendItems.length)legendPageQueue.push({floor:page.floor,items:legendItems,fmt:fmt});
-      drawProfessionalCartouche(doc,resolveCartoucheData(page.floor,fmt,orientation,scaleLabel),{x:M,y:cartY,w:pdfW-2*M,h:cartH});
+      drawProfessionalCartouche(doc,resolveCartoucheData(page.floor,fmt,orientation,scaleLabel,conformity),{x:M,y:cartY,w:pdfW-2*M,h:cartH});
       drawPdfFooter(doc,M,pdfW,pdfH);
       page.legendMarkers.filter(function(m){return symById(m.symId).hasValue;}).forEach(function(m){allMeasures.push({floorName:page.floor.name,marker:m});});
     });
@@ -2123,9 +2293,10 @@
   function formatLabel(fmt,orientation){return String(fmt||"").toUpperCase()+" "+(orientation==="landscape"?"orizzontale":"verticale");}
   function present(v){v=String(v==null?"":v).trim();return v||"-";}
   function revisionLabel(){var r=String(state.header.revisione||"").trim();return r?("Rev. "+r):"Rev. 00";}
-  function resolveCartoucheData(floor,fmt,orientation,scaleLabel){
+  function resolveCartoucheData(floor,fmt,orientation,scaleLabel,conformity){
     var metaName=document.getElementById("meta-name").value||state.meta.name||"";
-    return{brand:"Planimetrie Rapide",title:exportTitle(exportType),azienda:present(state.header.azienda||metaName),indirizzo:present(state.header.indirizzo),piano:present(state.header.piano||floor.name),data:new Date().toLocaleDateString("it-IT"),revisione:revisionLabel(),redattore:present(state.header.redattore),qualifica:present(state.header.qualifica),formato:formatLabel(fmt,orientation),scala:scaleLabel||"Scala indicativa"};
+    conformity=conformity||calculateConformityIndex(preflightCheck(exportType));
+    return{brand:"Planimetrie Rapide",title:exportTitle(exportType),azienda:present(state.header.azienda||metaName),indirizzo:present(state.header.indirizzo),piano:present(state.header.piano||floor.name),data:new Date().toLocaleDateString("it-IT"),revisione:revisionLabel(),redattore:present(state.header.redattore),qualifica:present(state.header.qualifica),formato:formatLabel(fmt,orientation),scala:scaleLabel||"Scala indicativa",conformityScore:conformity.score,conformityStatus:conformity.status.label,conformityColor:conformity.status.rgb};
   }
   function fitPdfText(doc,text,x,y,w,opt){
     opt=opt||{};var maxLines=opt.maxLines||1,lh=opt.lineHeight||3.5,min=opt.minSize||7,size=opt.size||8,bold=opt.bold?"bold":"normal",color=opt.color||[35,42,52],lines=[];
@@ -2154,7 +2325,8 @@
     drawFieldCell(doc,"Formato",data.formato,tx+colW*3,bodyY,colW,rowH,{size:7.5,maxLines:2});
     drawFieldCell(doc,"Redattore",data.redattore,tx,bodyY+rowH,colW,rowH,{size:7.6,maxLines:2});
     drawFieldCell(doc,"Qualifica",data.qualifica,tx+colW,bodyY+rowH,colW,rowH,{size:7.4,maxLines:2});
-    drawFieldCell(doc,"Scala",data.scala,tx+colW*2,bodyY+rowH,colW*2,rowH,{size:7.8,maxLines:2,bold:true});
+    drawFieldCell(doc,"Scala",data.scala,tx+colW*2,bodyY+rowH,colW,rowH,{size:7.8,maxLines:2,bold:true});
+    drawFieldCell(doc,"Indice PEE","Indice di conformità: "+data.conformityScore+"/100 - "+data.conformityStatus,tx+colW*3,bodyY+rowH,colW,rowH,{size:7.1,maxLines:2,bold:true});
   }
   function drawPdfHeader(doc,M,pdfW,headerH,floorLabel){
     var title=exportTitle(exportType),projectName=document.getElementById("meta-name").value||state.header.azienda||"";
@@ -2244,7 +2416,55 @@
     }
   }
   function drawMeasureTable(doc,x,y,width,items,fmt,headerH){drawPdfHeader(doc,12,doc.internal.pageSize.getWidth(),headerH,"Riepilogo misurazioni");doc.setFont("helvetica","bold");doc.setFontSize(13);doc.setTextColor(20,30,40);doc.text("Tabella dei punti di misurazione",x,y);y+=8;var cols=[{t:"Piano",w:width*.14},{t:"Cod.",w:13},{t:"Tipo",w:width*.15},{t:"Valore",w:width*.12},{t:"Unita",w:14},{t:"H",w:12},{t:"Durata",w:width*.10},{t:"Data",w:width*.12},{t:"Note",w:width*.35-51}];function header(){doc.setFillColor(240,242,245);doc.rect(x,y-4,width,8,"F");doc.setFont("helvetica","bold");doc.setFontSize(7.4);doc.setTextColor(40,50,60);var cx=x+2;cols.forEach(function(col){doc.text(col.t,cx,y+1);cx+=col.w;});y+=8;}header();doc.setFont("helvetica","normal");doc.setFontSize(7.2);items.forEach(function(item){var m=item.marker,cx=x+2,note=doc.splitTextToSize(m.note||"",Math.max(12,cols[8].w-2)),rowH=Math.max(7,note.length*3.8);if(y+rowH>doc.internal.pageSize.getHeight()-22){drawPdfFooter(doc,12,doc.internal.pageSize.getWidth(),doc.internal.pageSize.getHeight());doc.addPage(fmt,"portrait");drawPdfHeader(doc,12,doc.internal.pageSize.getWidth(),headerH,"Riepilogo misurazioni");y=12+headerH+6;header();doc.setFont("helvetica","normal");doc.setFontSize(7.2);}var vals=[item.floorName,m.seqLabel||"",m.measureType||m.label||"",m.value||"-",m.unit||"",m.height||"",m.duration||"",m.date||"",note];vals.forEach(function(v,i){if(Array.isArray(v))doc.text(v,cx,y);else doc.text(doc.splitTextToSize(String(v),cols[i].w-2),cx,y);cx+=cols[i].w;});y+=rowH+2;doc.setDrawColor(228,231,234);doc.line(x,y-3,x+width,y-3);});}
-  function drawInstructionsPage(doc,x,y,width,fmt,headerH){doc.setFont("helvetica","bold");doc.setFontSize(13);doc.setTextColor(20,30,40);doc.text("Istruzioni di comportamento in caso di emergenza",x,y);y+=9;doc.setFont("helvetica","normal");doc.setFontSize(10.5);doc.setTextColor(35,42,52);var lines=doc.splitTextToSize(state.instructions||DEFAULT_INSTRUCTIONS,width),lh=5.2;lines.forEach(function(line){if(y>doc.internal.pageSize.getHeight()-22){drawPdfFooter(doc,12,doc.internal.pageSize.getWidth(),doc.internal.pageSize.getHeight());doc.addPage(fmt,"portrait");drawPdfHeader(doc,12,doc.internal.pageSize.getWidth(),headerH,"Istruzioni");y=12+headerH+10;doc.setFont("helvetica","normal");doc.setFontSize(10.5);doc.setTextColor(35,42,52);}if(/^[A-ZÀ-Ý\s]+:$/.test(line.trim())){doc.setFont("helvetica","bold");doc.setTextColor(200,16,46);doc.text(line,x,y);doc.setFont("helvetica","normal");doc.setTextColor(35,42,52);}else doc.text(line,x,y);y+=lh;});}
+  function normalizeInstructionText(v){return String(v||"").replace(/\s+/g," ").trim();}
+  function isDefaultInstructionText(v){return normalizeInstructionText(v)===normalizeInstructionText(DEFAULT_INSTRUCTIONS);}
+  function drawInstructionCard(doc,x,y,w,h,opt){
+    opt=opt||{};var titleH=8.6,pad=4.5,accent=opt.accent||[22,32,43],bg=opt.bg||[255,255,255],border=opt.border||[214,220,227];
+    doc.setFillColor(bg[0],bg[1],bg[2]);doc.setDrawColor(border[0],border[1],border[2]);doc.setLineWidth(.35);doc.roundedRect(x,y,w,h,2,2,"FD");
+    doc.setFillColor(accent[0],accent[1],accent[2]);doc.roundedRect(x,y,w,titleH,2,2,"F");
+    doc.setFont("helvetica","bold");doc.setFontSize(opt.titleSize||8.6);doc.setTextColor(255,255,255);doc.text(opt.title||"",x+pad,y+5.6);
+    return{titleH:titleH,pad:pad};
+  }
+  function drawInstructionList(doc,x,y,w,items,opt){
+    opt=opt||{};var lh=opt.lineHeight||4.3,bulletW=opt.bulletW||3.2,fs=opt.fontSize||8.2,textColor=opt.textColor||[34,42,51],bulletColor=opt.bulletColor||[61,182,184];
+    doc.setFont("helvetica","normal");doc.setFontSize(fs);doc.setTextColor(textColor[0],textColor[1],textColor[2]);
+    items.forEach(function(item,i){var yy=y+i*lh;doc.setFillColor(bulletColor[0],bulletColor[1],bulletColor[2]);doc.circle(x+1.6,yy-1.2,0.9,"F");doc.text(doc.splitTextToSize(item,w-bulletW-2),x+bulletW,yy);});
+    return y+items.length*lh;
+  }
+  function drawEmergencyBehaviorModule(doc,x,y,width){
+    var gap=5,colW=(width-2*gap)/3,cardY=y,cardH=44;
+    doc.setFont("helvetica","bold");doc.setFontSize(12);doc.setTextColor(20,30,40);doc.text("Comportamenti in caso di emergenza",x,cardY);
+    cardY+=8;
+    var left=drawInstructionCard(doc,x,cardY,colW,cardH,{title:"Numero unico emergenze",accent:[226,87,76],bg:[255,248,247],border:[226,87,76]});
+    doc.setFont("helvetica","bold");doc.setFontSize(30);doc.setTextColor(226,87,76);doc.text("112",x+left.pad,cardY+22);
+    doc.setFont("helvetica","bold");doc.setFontSize(7.8);doc.setTextColor(163,46,40);doc.text("Numero unico emergenze",x+left.pad,cardY+13.5);
+    doc.setFont("helvetica","normal");doc.setFontSize(8.1);doc.setTextColor(77,87,99);doc.text("Attivo 24 ore su 24 per le emergenze.",x+left.pad,cardY+33,{maxWidth:colW-9});
+    var fareX=x+colW+gap;
+    drawInstructionCard(doc,fareX,cardY,colW,cardH,{title:"Cosa fare",accent:[22,32,43],bg:[255,255,255],border:[214,220,227]});
+    drawInstructionList(doc,fareX+4.8,cardY+13,colW-9,["Mantieni la calma.","Attiva l'allarme se presente.","Segui le vie di esodo.","Raggiungi il punto di raccolta."],{bulletColor:[61,182,184]});
+    var noX=x+(colW+gap)*2;
+    drawInstructionCard(doc,noX,cardY,colW,cardH,{title:"Cosa non fare",accent:[226,87,76],bg:[255,255,255],border:[226,87,76]});
+    drawInstructionList(doc,noX+4.8,cardY+13,colW-9,["Non usare gli ascensori.","Non tornare indietro.","Non raccogliere oggetti.","Non creare panico."],{bulletColor:[226,87,76]});
+    return cardY+cardH;
+  }
+  function drawInstructionTextBlock(doc,x,y,width,fmt,headerH,text,title){
+    var lines=doc.splitTextToSize(text,width),lh=5.2;
+    doc.setFont("helvetica","bold");doc.setFontSize(10.5);doc.setTextColor(20,30,40);doc.text(title,x,y);y+=8;
+    doc.setFont("helvetica","normal");doc.setFontSize(9.7);doc.setTextColor(35,42,52);
+    lines.forEach(function(line){
+      if(y>doc.internal.pageSize.getHeight()-22){drawPdfFooter(doc,12,doc.internal.pageSize.getWidth(),doc.internal.pageSize.getHeight());doc.addPage(fmt,"portrait");drawPdfHeader(doc,12,doc.internal.pageSize.getWidth(),headerH,"Istruzioni");y=12+headerH+10;doc.setFont("helvetica","normal");doc.setFontSize(9.7);doc.setTextColor(35,42,52);}
+      if(/^[A-ZÀ-Ý\s]+:$/.test(line.trim())){doc.setFont("helvetica","bold");doc.setTextColor(200,16,46);doc.text(line,x,y);doc.setFont("helvetica","normal");doc.setTextColor(35,42,52);}
+      else doc.text(line,x,y);y+=lh;
+    });
+    return y;
+  }
+  function drawInstructionsPage(doc,x,y,width,fmt,headerH){
+    var moduleBottom=drawEmergencyBehaviorModule(doc,x,y,width);
+    var currentText=state.instructions||DEFAULT_INSTRUCTIONS;
+    if(!isDefaultInstructionText(currentText)){
+      drawInstructionTextBlock(doc,x,moduleBottom+10,width,fmt,headerH,currentText,"Istruzioni personalizzate");
+    }
+  }
 
   /* ===================== TOAST ===================== */
   var toastTimer=null;
