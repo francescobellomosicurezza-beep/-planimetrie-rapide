@@ -2747,6 +2747,7 @@
     var titleRGB=state.peeColor==="red"?[192,0,32]:[0,166,81];
 
     function peeFontSz(a3,a4){return isA3?a3:a4;}
+    function peeField(v){var s=String(v==null?"":v).trim();return(s&&s!=="-")?{text:s,empty:false}:{text:"Non compilato",empty:true};}
 
     function drawPEEHeader(page){
       doc.setFillColor(22,32,43);doc.rect(M,M,pdfW-2*M,headerH,"F");
@@ -2767,21 +2768,20 @@
     function drawPEELeftColumn(page){
       var x=leftX,y=bodyY,w=leftW,h=bodyH,pad=3;
       var acR=titleRGB[0],acG=titleRGB[1],acB=titleRGB[2];
-      var tintR=Math.round(acR*0.08+255*0.92),tintG=Math.round(acG*0.08+255*0.92),tintB=Math.round(acB*0.08+255*0.92);
       var noNorm=peeSettings.showNormativi===false;
       var sbH=peeFontSz(7,6.5);
-      var studioH=Math.round(h*0.15),committH=Math.round(h*0.10),datiH=Math.round(h*0.15),normH=noNorm?0:Math.round(h*0.10),emerH=Math.round(h*0.14);
-      var locH=h-studioH-committH-datiH-normH-emerH;
+      var studioH=Math.round(h*0.15),committH=Math.round(h*0.10),datiH=Math.round(h*0.17),normH=noNorm?0:Math.round(h*0.15);
+      var locH=h-studioH-committH-datiH-normH;
 
-      // Column bg + border
       doc.setFillColor(250,250,250);doc.rect(x,y,w,h,"F");
       doc.setDrawColor(210,215,222);doc.setLineWidth(0.3);doc.rect(x,y,w,h);
 
       var cy=y;
       var sepLine=function(){doc.setDrawColor(221,221,221);doc.setLineWidth(0.25);doc.line(x,cy,x+w,cy);};
       var secBar=function(label,r,g,b){doc.setFillColor(r,g,b);doc.rect(x,cy,w,sbH,"F");doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(6.5,6));doc.setTextColor(255,255,255);doc.text(label,x+pad,cy+sbH*0.76);cy+=sbH;};
+      var drawField=function(v,fx,fy,fw,fsz,bold){var pf=peeField(v);if(pf.empty){doc.setFont("helvetica","italic");doc.setFontSize(fsz);doc.setTextColor(170,175,185);}else{doc.setFont("helvetica",bold?"bold":"normal");doc.setFontSize(fsz);doc.setTextColor(12,20,32);}doc.text(doc.splitTextToSize(pf.text,fw),fx,fy);};
 
-      /* ---- [1] STUDIO ---- */
+      /* ---- [1] STUDIO / CONSULENTE ---- */
       secBar("STUDIO / CONSULENTE",22,32,43);
       var sContentH=studioH-sbH,logoW=Math.min(w*0.40,sContentH*1.6),logoH=sContentH-2;
       if(peeSettings.logoBase64){
@@ -2792,22 +2792,16 @@
         doc.text("LOGO",x+pad+logoW/2,cy+sContentH/2-1.5,{align:"center"});
         doc.text("STUDIO",x+pad+logoW/2,cy+sContentH/2+peeFontSz(4,3.5),{align:"center"});
       }
-      var nameX=x+pad+logoW+peeFontSz(4,3);
-      doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(8.5,7.5));doc.setTextColor(15,22,34);
-      doc.text(doc.splitTextToSize(present(state.header.redattore),w-logoW-2*pad-peeFontSz(4,3)),nameX,cy+peeFontSz(5,4.5));
-      var qualRed=peeSettings.qualificaRedattore||present(state.header.qualifica);
-      if(qualRed&&qualRed!=="-"){doc.setFont("helvetica","normal");doc.setFontSize(peeFontSz(7,6.3));doc.setTextColor(80,95,112);doc.text(doc.splitTextToSize(qualRed,w-logoW-2*pad-peeFontSz(4,3)),nameX,cy+peeFontSz(11,9.5));}
+      var nameX=x+pad+logoW+peeFontSz(4,3),nameW=w-logoW-2*pad-peeFontSz(4,3);
+      drawField(state.header.redattore,nameX,cy+peeFontSz(5,4.5),nameW,peeFontSz(8.5,7.5),true);
+      drawField(peeSettings.qualificaRedattore||state.header.qualifica,nameX,cy+peeFontSz(11,9.5),nameW,peeFontSz(7,6.3),false);
       cy+=studioH;sepLine();
 
       /* ---- [2] COMMITTENTE ---- */
       secBar("COMMITTENTE",acR,acG,acB);
-      var comm=peeSettings.committente||present(state.header.azienda);
-      doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(9,8));doc.setTextColor(15,20,30);
-      doc.text(doc.splitTextToSize(comm,w-2*pad),x+pad,cy+peeFontSz(5.5,5));
-      var indComm=peeSettings.indirizzoCommittente||present(state.header.indirizzo);
-      doc.setFont("helvetica","normal");doc.setFontSize(peeFontSz(7.5,6.8));doc.setTextColor(75,88,106);
-      doc.text(doc.splitTextToSize(indComm,w-2*pad),x+pad,cy+peeFontSz(12,10.5));
-      if(peeSettings.settore){doc.setFontSize(peeFontSz(7,6.3));doc.setTextColor(110,122,138);doc.text(doc.splitTextToSize(peeSettings.settore,w-2*pad),x+pad,cy+peeFontSz(18,15.5));}
+      drawField(peeSettings.committente||state.header.azienda,x+pad,cy+peeFontSz(5.5,5),w-2*pad,peeFontSz(9,8),true);
+      drawField(peeSettings.indirizzoCommittente||state.header.indirizzo,x+pad,cy+peeFontSz(12,10.5),w-2*pad,peeFontSz(7.5,6.8),false);
+      if(peeSettings.settore){doc.setFont("helvetica","normal");doc.setFontSize(peeFontSz(7,6.3));doc.setTextColor(110,122,138);doc.text(doc.splitTextToSize(peeSettings.settore,w-2*pad),x+pad,cy+peeFontSz(18,15.5));}
       cy+=committH;sepLine();
 
       /* ---- [3] LOCALIZZAZIONE EDIFICIO ---- */
@@ -2837,11 +2831,8 @@
       var contentWm=page.bounds.maxX-page.bounds.minX||1;
       var approxMmPerM=centerW/contentWm,approxScale=roundScale(Math.round(1000/approxMmPerM));
       var datiRows=[
-        ["Piano/Area",present(state.header.piano||page.floor.name)],
-        ["Data",new Date().toLocaleDateString("it-IT")],
-        ["Revisione",revisionLabel()],
-        ["Redattore",present(state.header.redattore)],
-        ["Qualifica",peeSettings.qualificaRedattore||present(state.header.qualifica)],
+        ["Redattore",state.header.redattore],
+        ["Qualifica",peeSettings.qualificaRedattore||state.header.qualifica],
         ["Scala",page.floor.calibrated?"1 : "+approxScale:"Indicativa"]
       ];
       var rH=datiContentH/datiRows.length,labelFrac=0.42;
@@ -2853,30 +2844,23 @@
         doc.line(x,ry+rH,x+w,ry+rH);doc.line(x+w*labelFrac,ry,x+w*labelFrac,ry+rH);
         doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(6.2,5.7));doc.setTextColor(110,125,140);
         doc.text(row[0].toUpperCase(),x+pad,ry+rH*0.68);
-        doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(7,6.3));doc.setTextColor(12,20,32);
-        doc.text(doc.splitTextToSize(row[1],w*(1-labelFrac)-pad),x+w*labelFrac+pad,ry+rH*0.68);
+        var pf=peeField(row[1]);
+        if(pf.empty){doc.setFont("helvetica","italic");doc.setFontSize(peeFontSz(6.2,5.7));doc.setTextColor(170,175,185);}
+        else{doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(7,6.3));doc.setTextColor(12,20,32);}
+        doc.text(doc.splitTextToSize(pf.text,w*(1-labelFrac)-pad),x+w*labelFrac+pad,ry+rH*0.68);
       });
       cy+=datiH;
 
       /* ---- [5] RIFERIMENTI NORMATIVI ---- */
       if(!noNorm){
         sepLine();
-        doc.setFillColor(248,249,251);doc.rect(x,cy,w,normH,"F");
-        doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(6.2,5.7));doc.setTextColor(120,133,148);
-        doc.text("RIF. NORMATIVI",x+pad,cy+peeFontSz(5,4.5));
-        doc.setFont("helvetica","normal");doc.setFontSize(peeFontSz(6.5,6));doc.setTextColor(75,90,108);
-        doc.text(doc.splitTextToSize("D.Lgs. 81/08  —  D.M. 10/03/1998  —  UNI ISO 23601",w-2*pad),x+pad,cy+peeFontSz(11,10));
-        cy+=normH;
+        secBar("RIF. NORMATIVI",27,42,74);
+        var normContentH=normH-sbH-1;
+        doc.setFillColor(248,249,251);doc.setDrawColor(210,220,235);doc.setLineWidth(0.2);doc.rect(x+2,cy,w-4,normContentH,"FD");
+        doc.setFont("helvetica","normal");doc.setFontSize(peeFontSz(6.2,5.8));doc.setTextColor(55,75,100);
+        doc.text(doc.splitTextToSize("D.Lgs. 81/08  —  D.M. 10/03/1998  —  UNI ISO 23601",w-2*pad-4),x+pad+2,cy+normContentH/2+peeFontSz(2.2,2));
+        cy+=normH-sbH;
       }
-
-      /* ---- [6] 112 MINI ---- */
-      sepLine();
-      doc.setFillColor(tintR,tintG,tintB);doc.setDrawColor(acR,acG,acB);doc.setLineWidth(0.5);doc.rect(x,cy,w,emerH,"FD");
-      var sz112=peeFontSz(22,17);
-      doc.setFont("helvetica","bold");doc.setFontSize(sz112);doc.setTextColor(acR,acG,acB);
-      doc.text("112",x+w/2,cy+emerH*0.5+sz112*0.2,{align:"center"});
-      doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(6.2,5.7));doc.setTextColor(acR,acG,acB);
-      doc.text("NUMERO UNICO DI EMERGENZA",x+w/2,cy+emerH-peeFontSz(3.5,3),{align:"center"});
     }
 
     function drawPEECenter(page){
@@ -2910,33 +2894,38 @@
 
     function drawPEEBottomBand(page){
       var x=M,y=bottomY,w=bodyW,h=bottomH,pad=4,g=peeFontSz(6,5);
+      var botBarH=8;
       doc.setFillColor(248,249,251);doc.setDrawColor(198,205,214);doc.setLineWidth(0.3);doc.rect(x,y,w,h,"FD");
       var legendW=w*0.42,procW=w*0.33,emergW=w-legendW-procW-2*g;
       var legendX=x,procX=x+legendW+g,emergX=x+legendW+g+procW+g;
-      // Legend header
-      doc.setFillColor(22,32,43);doc.rect(legendX,y,legendW,8,"F");
+
+      // --- LEGENDA ---
+      doc.setFillColor(27,42,74);doc.rect(legendX,y,legendW,botBarH,"F");
       doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(7.5,7));doc.setTextColor(255,255,255);
-      doc.text("LEGENDA SIMBOLI",legendX+pad,y+5.5);
-      // Legend items
+      doc.text("LEGENDA SIMBOLI",legendX+pad,y+botBarH*0.76);
       var legendItems=collectLegendItems(page.legendMarkers,page.floor);
-      var iconSz=peeFontSz(6,5.5),rowH=peeFontSz(7.2,6.8),cols=legendW>100?2:1;
-      var itemsPerCol=Math.floor((h-10-2)/rowH),colW=(legendW-pad-(cols>1?g:0))/cols;
+      var iconSz=peeFontSz(6,5.5),rowH=peeFontSz(7.2,6.8),itemFontSz=peeFontSz(6.8,6.3),cols=legendW>100?2:1;
+      var itemsPerCol=Math.floor((h-botBarH-2)/rowH),colW=(legendW-pad-(cols>1?g:0))/cols;
       legendItems.slice(0,itemsPerCol*cols).forEach(function(item,i){
         var col=Math.floor(i/itemsPerCol),row=i%itemsPerCol;
-        var ix=legendX+pad+col*(colW+g),iy=y+10+row*rowH;
+        var ix=legendX+pad+col*(colW+g);
+        var rowCenterY=y+botBarH+2+(row+0.5)*rowH;
+        var iy=rowCenterY+iconSz/2-1;
         drawLegendIcon(doc,item,ix,iy,iconSz);
-        doc.setFont("helvetica","normal");doc.setFontSize(peeFontSz(6.8,6.3));doc.setTextColor(30,40,52);
-        doc.text(doc.splitTextToSize(legendText(item),colW-iconSz-3),ix+iconSz+2.5,iy+0.5);
+        doc.setFont("helvetica","normal");doc.setFontSize(itemFontSz);doc.setTextColor(30,40,52);
+        doc.text(doc.splitTextToSize(legendText(item),colW-iconSz-3),ix+iconSz+2.5,rowCenterY+itemFontSz*0.127);
       });
-      // Dividers
+
+      // --- DIVISORI ---
       doc.setDrawColor(198,205,214);doc.setLineWidth(0.25);
       doc.line(procX-g/2,y+1,procX-g/2,y+h-1);
       doc.line(emergX-g/2,y+1,emergX-g/2,y+h-1);
-      // Procedures header
-      doc.setFillColor(22,32,43);doc.rect(procX,y,procW,8,"F");
+
+      // --- PROCEDURE ---
+      doc.setFillColor(27,42,74);doc.rect(procX,y,procW,botBarH,"F");
       doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(7.5,7));doc.setTextColor(255,255,255);
-      doc.text("PROCEDURE DI EMERGENZA",procX+pad,y+5.5);
-      var pY=y+10,halfH=(h-11)/2-1;
+      doc.text("PROCEDURE DI EMERGENZA",procX+pad,y+botBarH*0.76);
+      var pY=y+botBarH+2,halfH=(h-botBarH-4)/2;
       doc.setFillColor(240,249,244);doc.setDrawColor(0,166,81);doc.setLineWidth(0.3);doc.rect(procX+2,pY,procW-4,halfH,"FD");
       doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(7,6.5));doc.setTextColor(0,120,58);
       doc.text("Cosa fare:",procX+pad+1,pY+4.5);
@@ -2946,18 +2935,23 @@
       doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(7,6.5));doc.setTextColor(190,40,30);
       doc.text("Cosa non fare:",procX+pad+1,pY+4.5);
       drawInstructionList(doc,procX+pad+1,pY+7.5,procW-9,["Non usare gli ascensori.","Non tornare indietro.","Non raccogliere oggetti.","Non creare panico."],{fontSize:peeFontSz(6.5,6),lineHeight:peeFontSz(4,3.8),bulletColor:[226,87,76],bulletW:2.6});
-      // 112
+
+      // --- 112 ---
       if(state.show112!==false){
-        doc.setFillColor(22,32,43);doc.rect(emergX,y,emergW,8,"F");
+        doc.setFillColor(27,42,74);doc.rect(emergX,y,emergW,botBarH,"F");
         doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(7.5,7));doc.setTextColor(255,255,255);
-        doc.text("EMERGENZA",emergX+emergW/2,y+5.5,{align:"center"});
-        var bigSz=Math.min(isA3?42:34,emergW*0.72);
-        doc.setFont("helvetica","bold");doc.setFontSize(bigSz);doc.setTextColor(226,87,76);
-        doc.text("112",emergX+emergW/2,y+8+bigSz*0.72,{align:"center"});
-        doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(7.5,7));doc.setTextColor(40,50,62);
-        doc.text("Numero Unico di Emergenza",emergX+emergW/2,y+h-12,{align:"center"});
-        doc.setFont("helvetica","normal");doc.setFontSize(peeFontSz(6.5,6));doc.setTextColor(100,112,126);
-        doc.text("Attivo 24 ore su 24 per tutte le emergenze",emergX+emergW/2,y+h-7,{align:"center"});
+        doc.text("EMERGENZA",emergX+emergW/2,y+botBarH*0.76,{align:"center"});
+        var bigSz=Math.min(isA3?52:44,emergW*0.80);
+        var subtSz=peeFontSz(7.5,7),subsubSz=peeFontSz(6.5,6);
+        var numH=bigSz*0.352,subtH=subtSz*0.352,subsubH=subsubSz*0.352;
+        var totalBlockH=numH+peeFontSz(4,3)+subtH+peeFontSz(3,2.5)+subsubH;
+        var availH=h-botBarH,bsY=y+botBarH+(availH-totalBlockH)/2;
+        doc.setFont("helvetica","bold");doc.setFontSize(bigSz);doc.setTextColor(204,0,0);
+        doc.text("112",emergX+emergW/2,bsY+numH,{align:"center"});
+        doc.setFont("helvetica","bold");doc.setFontSize(subtSz);doc.setTextColor(40,50,62);
+        doc.text("Numero Unico di Emergenza",emergX+emergW/2,bsY+numH+peeFontSz(4,3)+subtH,{align:"center"});
+        doc.setFont("helvetica","normal");doc.setFontSize(subsubSz);doc.setTextColor(100,112,126);
+        doc.text("Attivo 24 ore su 24",emergX+emergW/2,bsY+numH+peeFontSz(4,3)+subtH+peeFontSz(3,2.5)+subsubH,{align:"center"});
       }
     }
 
@@ -2972,10 +2966,6 @@
       drawPEEBottomBand(page);
       drawPdfFooter(doc,M,pdfW,pdfH);
     });
-    if(state.includeInstructions!==false&&state.instructions&&state.instructions.trim()){
-      doc.addPage(fmt,"portrait");var pw=doc.internal.pageSize.getWidth(),ph=doc.internal.pageSize.getHeight();
-      drawPdfHeader(doc,M,pw,18,"Istruzioni");drawInstructionsPage(doc,M,M+18+6,pw-2*M,fmt,18);drawPdfFooter(doc,M,pw,ph);
-    }
     var fn=safeBaseName()+"_rev"+(state.header.revisione||"1")+"_"+dateStamp()+"_PEE.pdf";doc.save(fn);toast("PEE professionale esportato");
   }
 
@@ -3065,10 +3055,10 @@
     doc.setDrawColor(220,224,228);doc.setLineWidth(.3);doc.line(M,M+headerH-3,pdfW-M,M+headerH-3);
   }
   function drawPdfFooter(doc,M,pdfW,pdfH){
-    var page=doc.internal.getCurrentPageInfo().pageNumber;doc.setFont("helvetica","normal");doc.setFontSize(6.5);doc.setTextColor(135,145,156);
+    var page=doc.internal.getCurrentPageInfo().pageNumber;doc.setFont("helvetica","normal");doc.setFontSize(6);doc.setTextColor(170,170,170);
     var footerW=pdfW-2*M-24,l1="Elaborato redatto dall'utilizzatore con Planimetrie Rapide, piattaforma locale di editing grafico.",l2="Contenuti, misure, simboli, classificazioni e conformita dell'elaborato restano sotto responsabilita del redattore/committente.";
     doc.text(doc.splitTextToSize(l1,footerW),M,pdfH-8.2);
-    if(state.includeDisclaimer){doc.setFontSize(6.2);doc.setTextColor(160,166,174);doc.text(doc.splitTextToSize(l2,footerW),M,pdfH-4.6);}
+    if(state.includeDisclaimer){doc.setFontSize(5.8);doc.setTextColor(170,170,170);doc.text(doc.splitTextToSize(l2,footerW),M,pdfH-4.6);}
     doc.setFontSize(7.2);doc.setTextColor(140,148,158);doc.text("Pagina "+page,pdfW-M,pdfH-4.8,{align:"right"});
   }
   function pickScaleBarRealMM(mmPerMeter){var opts=[.5,1,2,5,10,20,50,100],ideal=30/mmPerMeter;return opts.reduce(function(a,b){return Math.abs(b-ideal)<Math.abs(a-ideal)?b:a;});}
@@ -3161,7 +3151,7 @@
   function drawInstructionList(doc,x,y,w,items,opt){
     opt=opt||{};var lh=opt.lineHeight||4.3,bulletW=opt.bulletW||3.2,fs=opt.fontSize||8.2,textColor=opt.textColor||[34,42,51],bulletColor=opt.bulletColor||[61,182,184];
     doc.setFont("helvetica","normal");doc.setFontSize(fs);doc.setTextColor(textColor[0],textColor[1],textColor[2]);
-    items.forEach(function(item,i){var yy=y+i*lh;doc.setFillColor(bulletColor[0],bulletColor[1],bulletColor[2]);doc.circle(x+1.6,yy-1.2,0.9,"F");doc.text(doc.splitTextToSize(item,w-bulletW-2),x+bulletW,yy);});
+    items.forEach(function(item,i){var yy=y+i*lh;doc.setFillColor(bulletColor[0],bulletColor[1],bulletColor[2]);doc.circle(x+1.6,yy-fs*0.127,0.9,"F");doc.text(doc.splitTextToSize(item,w-bulletW-2),x+bulletW,yy);});
     return y+items.length*lh;
   }
   function drawEmergencyBehaviorModule(doc,x,y,width){
