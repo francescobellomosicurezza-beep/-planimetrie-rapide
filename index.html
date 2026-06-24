@@ -2828,9 +2828,15 @@
 
   function renderFloorToCanvas(floor){
     return ensureFloorImage(floor).then(function(img){
-      var b=contentBoundsFor(floor)||{minX:-5,minY:-5,maxX:5,maxY:5},Wm=Math.max(.5,b.maxX-b.minX),Hm=Math.max(.5,b.maxY-b.minY),maxPx=4200;
-      pxPerMeterExport=Math.max(35,Math.min(90,maxPx/Math.max(Wm,Hm)));
-      var ex=document.createElement("canvas");ex.width=Math.max(600,Math.ceil(Wm*pxPerMeterExport));ex.height=Math.max(600,Math.ceil(Hm*pxPerMeterExport));var c=ex.getContext("2d");
+      var bPad=contentBoundsFor(floor)||{minX:-5,minY:-5,maxX:5,maxY:5};
+      var padM=state.gridSizeM*2;
+      var rawMinX=bPad.minX+padM,rawMinY=bPad.minY+padM,rawMaxX=bPad.maxX-padM,rawMaxY=bPad.maxY-padM;
+      var rawWm=Math.max(.5,rawMaxX-rawMinX),rawHm=Math.max(.5,rawMaxY-rawMinY),maxPx=4200;
+      pxPerMeterExport=Math.max(35,Math.min(90,maxPx/Math.max(rawWm,rawHm)));
+      var cpadM=80/pxPerMeterExport; // 80px canvas padding — room for north arrow
+      var b={minX:rawMinX-cpadM,minY:rawMinY-cpadM,maxX:rawMaxX+cpadM,maxY:rawMaxY+cpadM};
+      var Wm=Math.max(.5,b.maxX-b.minX),Hm=Math.max(.5,b.maxY-b.minY);
+      var ex=document.createElement("canvas");ex.width=Math.max(200,Math.ceil(Wm*pxPerMeterExport));ex.height=Math.max(200,Math.ceil(Hm*pxPerMeterExport));var c=ex.getContext("2d");
       c.fillStyle="#FFFFFF";c.fillRect(0,0,ex.width,ex.height);function w2s(wx,wy){return{x:(wx-b.minX)*pxPerMeterExport,y:(wy-b.minY)*pxPerMeterExport};}
       var peePureStruct=exportType==="pee"&&peeLayerMode==="struttura";
       c.strokeStyle="#ECEEF1";c.lineWidth=1;var g=state.gridSizeM;c.beginPath();for(var gx=Math.ceil(b.minX/g)*g;gx<=b.maxX;gx+=g){var sx=w2s(gx,0).x;c.moveTo(sx,0);c.lineTo(sx,ex.height);}for(var gy=Math.ceil(b.minY/g)*g;gy<=b.maxY;gy+=g){var sy=w2s(0,gy).y;c.moveTo(0,sy);c.lineTo(ex.width,sy);}c.stroke();
@@ -2846,7 +2852,7 @@
       if(!peePureStruct)floor.texts.forEach(function(t){var p=w2s(t.x,t.y),fs=Math.max(12,pxPerMeterExport*(t.sizeM||.28));c.save();c.translate(p.x,p.y);c.rotate((t.rotation||0)*Math.PI/180);c.font="700 "+fs+"px Arial";c.textAlign=t.align||"center";c.textBaseline="middle";var lines=String(t.text||"Nota").split(/\n/),mw=0;lines.forEach(function(line){mw=Math.max(mw,c.measureText(line).width);});if(t.box){c.fillStyle="rgba(255,255,255,.9)";c.fillRect(-mw/2-8,-fs*lines.length/2-6,mw+16,fs*lines.length+12);c.strokeStyle=t.color||"#16202B";c.strokeRect(-mw/2-8,-fs*lines.length/2-6,mw+16,fs*lines.length+12);}c.fillStyle=t.color||"#16202B";lines.forEach(function(line,i){c.fillText(line,0,(i-(lines.length-1)/2)*fs*1.15);});c.restore();});
       if(showQuotes)floor.walls.concat(floor.reiWalls).forEach(function(x){var a=w2s(x.x1,x.y1),bb=w2s(x.x2,x.y2),len=Math.hypot(x.x2-x.x1,x.y2-x.y1);drawDimensionLabel(c,a,bb,len.toFixed(2)+" m",true);});
       drawNorthExport(c,ex.width,floor,pxPerMeterExport);
-      return{floor:floor,imgDataUrl:ex.toDataURL("image/png",.92),pxW:ex.width,pxH:ex.height,legendMarkers:legendMarkers,bounds:b};
+      return{floor:floor,imgDataUrl:ex.toDataURL("image/png",.92),pxW:ex.width,pxH:ex.height,legendMarkers:legendMarkers,bounds:b,rawBounds:{minX:rawMinX,minY:rawMinY,maxX:rawMaxX,maxY:rawMaxY}};
     });
   }
   function drawNorthExport(c,cw,floor,ppm){var x=cw-46,y=46,s=20,ang=((floor.northDeg||0)-90)*Math.PI/180;c.save();c.translate(x,y);c.strokeStyle="#16202B";c.fillStyle="#16202B";c.lineWidth=2;c.beginPath();c.arc(0,0,s+6,0,Math.PI*2);c.stroke();c.rotate(ang+Math.PI/2);c.beginPath();c.moveTo(0,-s);c.lineTo(s*.45,s*.5);c.lineTo(0,s*.2);c.lineTo(-s*.45,s*.5);c.closePath();c.fill();c.restore();c.save();c.fillStyle="#16202B";c.font="700 12px Arial";c.textAlign="center";var nx=x+Math.cos(ang)*(s+16),ny=y+Math.sin(ang)*(s+16);c.fillText("N",nx,ny+4);c.restore();}
@@ -2951,7 +2957,8 @@
       if(!noDati){
         secBar("DATI DOCUMENTO",22,32,43);
         var datiContentH=datiH-sbH;
-        var contentWm=page.bounds.maxX-page.bounds.minX||1;
+        var rb=page.rawBounds||page.bounds;
+        var contentWm=rb.maxX-rb.minX||1;
         var approxMmPerM=centerW/contentWm,approxScale=roundScale(Math.round(1000/approxMmPerM));
         var datiRows=[
           ["Redattore",state.header.redattore],
@@ -2988,20 +2995,23 @@
     }
 
     function drawPEECenter(page){
-      var x=centerX,y=bodyY,w=centerW,h=bodyH,topH=peeFontSz(8,7);
+      var x=centerX,y=bodyY,w=centerW,h=bodyH,topH=peeFontSz(8,7),PAD=4;
       doc.setDrawColor(198,205,214);doc.setLineWidth(0.25);doc.rect(x,y,w,h);
       doc.setFillColor(245,247,250);doc.rect(x,y,w,topH,"F");
       doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(9,8));doc.setTextColor(20,30,40);
       doc.text(present(state.header.piano||page.floor.name),x+w/2,y+topH*.75,{align:"center"});
-      var scaleBarH=10,imgAreaY=y+topH+2,imgAreaH=h-topH-2-scaleBarH-2;
-      var ratio=page.pxW/page.pxH,dW=w-4,dH=(w-4)/ratio;
-      if(dH>imgAreaH){dH=imgAreaH;dW=imgAreaH*ratio;}
-      var dX=x+(w-dW)/2,dY=imgAreaY+(imgAreaH-dH)/2;
+      var imgAreaX=x+PAD,imgAreaY=y+topH+PAD,imgAreaW=w-2*PAD,imgAreaH=h-topH-2*PAD;
+      var rb=page.rawBounds||page.bounds;
+      var rw=Math.max(0.1,rb.maxX-rb.minX),rh=Math.max(0.1,rb.maxY-rb.minY);
+      var ratio=rw/rh;
+      var dW=imgAreaW,dH=dW/ratio;
+      if(dH>imgAreaH){dH=imgAreaH;dW=dH*ratio;}
+      var dX=imgAreaX+(imgAreaW-dW)/2,dY=imgAreaY+(imgAreaH-dH)/2;
       doc.addImage(page.imgDataUrl,"PNG",dX,dY,dW,dH,undefined,"FAST");
-      var scaleBarY=imgAreaY+imgAreaH+2;
-      var contentWm=page.bounds.maxX-page.bounds.minX,mmPerMeter=dW/contentWm,scaleRatio=Math.round(1000/mmPerMeter);
-      if(page.floor.calibrated){var barM=pickScaleBarRealMM(mmPerMeter);drawScaleBarMM(doc,dX+3,scaleBarY,barM,mmPerMeter,scaleRatio);}
-      else if(peeSettings.showScaleWarning!==false) drawIndicativeScale(doc,dX+3,scaleBarY);
+      var mmPerMeter=dW/rw,scaleRatio=Math.round(1000/mmPerMeter);
+      var scaleBarX=dX+PAD,scaleBarY=dY+dH-11;
+      if(page.floor.calibrated){var barM=pickScaleBarRealMM(mmPerMeter);drawScaleBarMM(doc,scaleBarX,scaleBarY,barM,mmPerMeter,scaleRatio);}
+      else if(peeSettings.showScaleWarning!==false)drawIndicativeScale(doc,scaleBarX,scaleBarY);
     }
 
     function drawPEERightColumn(page){
