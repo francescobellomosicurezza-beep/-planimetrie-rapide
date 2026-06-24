@@ -240,6 +240,22 @@
 </style>
 </head>
 <body>
+<script>
+  const SCADENZA = new Date("2026-06-27T23:59:59");
+  const BYPASS = "10600";
+  const params = new URLSearchParams(window.location.search);
+  if (new Date() > SCADENZA && params.get("key") !== BYPASS) {
+    document.documentElement.innerHTML = `
+      <html>
+        <body style="margin:0;display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;background:#f5f5f5;">
+          <div style="text-align:center;">
+            <h2 style="color:#333;">⏱️ Demo scaduta</h2>
+            <p style="color:#666;">Contatta Francesco per acquistare la licenza.</p>
+          </div>
+        </body>
+      </html>`;
+  }
+</script>
 <div id="app">
   <div id="topbar">
     <div class="brand">Planimetrie<span>Rapide</span><span class="badge-v4">V4.1</span></div>
