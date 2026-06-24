@@ -404,6 +404,20 @@
     <div class="field"><label>Formato</label>
       <select id="export-format"><option value="a3">A3 orizzontale/verticale automatico</option><option value="a4">A4 orizzontale/verticale automatico</option></select>
     </div>
+    <div id="pee-options" style="border:1px solid var(--line);border-radius:var(--radius-sm);padding:12px;margin-bottom:12px;background:var(--bg-2);">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-2);margin-bottom:10px;">Opzioni layout PEE professionale</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
+        <div class="field" style="margin:0;"><label style="font-size:11px;">Colore titolo colonna</label>
+          <select id="pee-color-sel"><option value="green">Verde (#00A651)</option><option value="red">Rosso (#C8102E)</option></select>
+        </div>
+        <div class="field" style="margin:0;display:flex;flex-direction:column;justify-content:flex-end;">
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;font-weight:600;">
+            <input type="checkbox" id="pee-show112" checked style="width:16px;height:16px;accent-color:var(--danger);">
+            Mostra "112" in fondo
+          </label>
+        </div>
+      </div>
+    </div>
     <div class="conformity-index" id="export-conformity-index" aria-label="Indice di conformità PEE"></div>
     <div class="sheet-actions">
       <div class="action-btn" id="btn-export-png">PNG piano attivo</div>
@@ -835,7 +849,9 @@
     header:{azienda:"",indirizzo:"",piano:"",revisione:"1",redattore:"",qualifica:""},
     instructions: DEFAULT_INSTRUCTIONS,
     includeInstructions:true,
-    includeDisclaimer:true
+    includeDisclaimer:true,
+    show112:true,
+    peeColor:"green"
   };
   function currentFloor(){
     for(var i=0;i<state.floors.length;i++)if(state.floors[i].id===state.activeFloorId)return state.floors[i];
@@ -862,7 +878,7 @@
   function serializeProject(includePhotos){
     return {version:4.1,ts:Date.now(),meta:{name:document.getElementById("meta-name")?document.getElementById("meta-name").value||"":state.meta.name||""},
       gridSizeM:state.gridSizeM,activeFloorId:state.activeFloorId,floors:state.floors.map(function(f){return serializableFloor(f,includePhotos!==false);}),
-      header:state.header,instructions:state.instructions,includeInstructions:state.includeInstructions,includeDisclaimer:state.includeDisclaimer,currentReiClass:currentReiClass};
+      header:state.header,instructions:state.instructions,includeInstructions:state.includeInstructions,includeDisclaimer:state.includeDisclaimer,show112:state.show112,peeColor:state.peeColor,currentReiClass:currentReiClass};
   }
   function snapshotString(){return JSON.stringify(serializeProject(true));}
   function updateHistoryButtons(){
@@ -2450,18 +2466,18 @@
   function projectFromLegacy(d){
     var floor=blankFloor((d.header&&d.header.piano)||"Piano Terra",{walls:d.walls||[],reiWalls:d.reiWalls||[],windows:d.windows||[],doors:d.doors||[],stairs:d.stairs||[],elevators:d.elevators||[],areas:d.areas||[],texts:d.texts||[],markers:(d.markers||[]).map(migrateMarker),routes:d.routes||[],photo:d.photo||null,photoOpacity:typeof d.photoOpacity==="number"?d.photoOpacity:1,northDeg:d.northDeg||0,calibrated:!!d.calibrated});
     migrateStructuralMarkers(floor);
-    return {version:4.1,meta:d.meta||{name:d.metaName||""},gridSizeM:d.gridSizeM||1,floors:[floor],activeFloorId:floor.id,header:Object.assign({azienda:"",indirizzo:"",piano:floor.name,revisione:"1",redattore:"",qualifica:""},d.header||{}),instructions:d.instructions||DEFAULT_INSTRUCTIONS,includeInstructions:true,includeDisclaimer:true,currentReiClass:d.currentReiClass||"REI 60"};
+    return {version:4.1,meta:d.meta||{name:d.metaName||""},gridSizeM:d.gridSizeM||1,floors:[floor],activeFloorId:floor.id,header:Object.assign({azienda:"",indirizzo:"",piano:floor.name,revisione:"1",redattore:"",qualifica:""},d.header||{}),instructions:d.instructions||DEFAULT_INSTRUCTIONS,includeInstructions:true,includeDisclaimer:true,show112:true,peeColor:"green",currentReiClass:d.currentReiClass||"REI 60"};
   }
   function normalizeProjectData(d){
     if(!d||typeof d!=="object")throw new Error("Struttura progetto non valida");
     if(Array.isArray(d.floors)&&d.floors.length){
       var floors=d.floors.map(function(raw,i){var f=blankFloor(raw.name||("Piano "+(i+1)),raw);f.markers=f.markers.map(migrateMarker);f.stairs.forEach(function(st){if(!st.id)st.id=uid("s");if(!st.w)st.w=1.6;if(!st.h)st.h=2.6;if(!st.label)st.label="Vano scala";});f.elevators.forEach(function(el){if(!el.id)el.id=uid("e");if(!el.w)el.w=1.4;if(!el.h)el.h=1.4;if(!el.elevatorType)el.elevatorType="ordinary";});f.texts.forEach(function(t){if(!t.id)t.id=uid("t");if(!t.sizeM)t.sizeM=.35;});migrateStructuralMarkers(f);return f;});
-      return {version:4.1,meta:d.meta||{name:""},gridSizeM:d.gridSizeM||1,floors:floors,activeFloorId:floors.some(function(f){return f.id===d.activeFloorId;})?d.activeFloorId:floors[0].id,header:Object.assign({azienda:"",indirizzo:"",piano:floors[0].name,revisione:"1",redattore:"",qualifica:""},d.header||{}),instructions:d.instructions||DEFAULT_INSTRUCTIONS,includeInstructions:d.includeInstructions!==false,includeDisclaimer:d.includeDisclaimer!==false,currentReiClass:d.currentReiClass||"REI 60"};
+      return {version:4.1,meta:d.meta||{name:""},gridSizeM:d.gridSizeM||1,floors:floors,activeFloorId:floors.some(function(f){return f.id===d.activeFloorId;})?d.activeFloorId:floors[0].id,header:Object.assign({azienda:"",indirizzo:"",piano:floors[0].name,revisione:"1",redattore:"",qualifica:""},d.header||{}),instructions:d.instructions||DEFAULT_INSTRUCTIONS,includeInstructions:d.includeInstructions!==false,includeDisclaimer:d.includeDisclaimer!==false,show112:d.show112!==false,peeColor:d.peeColor||"green",currentReiClass:d.currentReiClass||"REI 60"};
     }
     return projectFromLegacy(d);
   }
   function applyProjectData(raw,keepView){
-    var d=normalizeProjectData(raw);state.version=4.1;state.meta=d.meta;state.gridSizeM=d.gridSizeM;state.floors=d.floors;state.activeFloorId=d.activeFloorId;state.header=d.header;state.instructions=d.instructions;state.includeInstructions=d.includeInstructions;state.includeDisclaimer=d.includeDisclaimer;currentReiClass=d.currentReiClass;selected=null;
+    var d=normalizeProjectData(raw);state.version=4.1;state.meta=d.meta;state.gridSizeM=d.gridSizeM;state.floors=d.floors;state.activeFloorId=d.activeFloorId;state.header=d.header;state.instructions=d.instructions;state.includeInstructions=d.includeInstructions;state.includeDisclaimer=d.includeDisclaimer;state.show112=d.show112!==false;state.peeColor=d.peeColor||"green";currentReiClass=d.currentReiClass;selected=null;
     document.getElementById("meta-name").value=(d.meta&&d.meta.name)||"";document.getElementById("grid-sub").textContent=state.gridSizeM.toFixed(1)+" m";document.getElementById("rei-current-sub").textContent=currentReiClass;
     rebuildNextSeq();refreshFloorUI();state.header.piano=currentFloor().name;document.getElementById("north-sub").textContent=state.northDeg+"°";document.getElementById("opacity-sub").textContent=Math.round(state.photoOpacity*100)+"%";document.getElementById("calib-status").textContent=state.calibrated?"Calibrata ✓":"Non calibrata — traccia una misura nota";
     loadFloorImage(currentFloor(),function(){if(!keepView)centerView();draw();});
@@ -2495,10 +2511,14 @@
   /* ===================== EXPORT ===================== */
   var exportType="pee",pxPerMeterExport=80;
   function floorHasContent(f){return !!(f.walls.length||f.reiWalls.length||f.windows.length||f.doors.length||f.stairs.length||f.elevators.length||f.areas.length||f.texts.length||f.markers.length||f.routes.length||(f.atexZones&&f.atexZones.length)||f.photo);}
-  document.getElementById("btn-export").addEventListener("click",function(){if(!state.floors.some(floorHasContent)){toast("Niente da esportare");return;}updateExportConformityIndex();openSheet("export");});
+  document.getElementById("btn-export").addEventListener("click",function(){if(!state.floors.some(floorHasContent)){toast("Niente da esportare");return;}updateExportConformityIndex();document.getElementById("pee-options").style.display=exportType==="pee"?"block":"none";document.getElementById("pee-color-sel").value=state.peeColor||"green";document.getElementById("pee-show112").checked=state.show112!==false;openSheet("export");});
   document.getElementById("export-close").addEventListener("click",function(){closeSheet("export");});
   document.getElementById("ov-export").addEventListener("click",function(){closeSheet("export");});
-  document.querySelectorAll("#export-type-grid .opt-card").forEach(function(card){card.addEventListener("click",function(){document.querySelectorAll("#export-type-grid .opt-card").forEach(function(c){c.classList.remove("active");});card.classList.add("active");exportType=card.getAttribute("data-type");if(exportType==="pee")document.getElementById("export-format").value="a3";updateExportConformityIndex();});});
+  document.querySelectorAll("#export-type-grid .opt-card").forEach(function(card){card.addEventListener("click",function(){document.querySelectorAll("#export-type-grid .opt-card").forEach(function(c){c.classList.remove("active");});card.classList.add("active");exportType=card.getAttribute("data-type");if(exportType==="pee")document.getElementById("export-format").value="a3";document.getElementById("pee-options").style.display=exportType==="pee"?"block":"none";updateExportConformityIndex();});});
+  document.getElementById("pee-color-sel").value=state.peeColor||"green";
+  document.getElementById("pee-show112").checked=state.show112!==false;
+  document.getElementById("pee-color-sel").addEventListener("change",function(){state.peeColor=this.value;});
+  document.getElementById("pee-show112").addEventListener("change",function(){state.show112=this.checked;});
   document.getElementById("btn-do-export").addEventListener("click",function(){closeSheet("export");var validationResult=preflightCheck(exportType);if(hasValidationIssues(validationResult)){showPreflight(validationResult);return;}setTimeout(doExport,120);});
   document.getElementById("btn-export-png").addEventListener("click",function(){closeSheet("export");toast("Generazione PNG...");renderFloorToCanvas(currentFloor()).then(function(page){var a=document.createElement("a");a.href=page.imgDataUrl;a.download=safeBaseName()+"_"+slug(currentFloor().name)+"_"+exportType+".png";document.body.appendChild(a);a.click();document.body.removeChild(a);toast("PNG esportato");}).catch(function(err){alert("Errore PNG: "+err.message);});});
 
@@ -2650,12 +2670,182 @@
   }
   function drawNorthExport(c,cw,floor,ppm){var x=cw-46,y=46,s=20,ang=((floor.northDeg||0)-90)*Math.PI/180;c.save();c.translate(x,y);c.strokeStyle="#16202B";c.fillStyle="#16202B";c.lineWidth=2;c.beginPath();c.arc(0,0,s+6,0,Math.PI*2);c.stroke();c.rotate(ang+Math.PI/2);c.beginPath();c.moveTo(0,-s);c.lineTo(s*.45,s*.5);c.lineTo(0,s*.2);c.lineTo(-s*.45,s*.5);c.closePath();c.fill();c.restore();c.save();c.fillStyle="#16202B";c.font="700 12px Arial";c.textAlign="center";var nx=x+Math.cos(ang)*(s+16),ny=y+Math.sin(ang)*(s+16);c.fillText("N",nx,ny+4);c.restore();}
 
+  function buildPEEPDF(pages){
+    var J=window.jspdf.jsPDF,fmt=document.getElementById("export-format").value;
+    var isA3=fmt==="a3";
+    var doc=new J({unit:"mm",format:fmt,orientation:"landscape",compress:true});
+    var pdfW=doc.internal.pageSize.getWidth(),pdfH=doc.internal.pageSize.getHeight();
+    var M=isA3?12:10,GAP=isA3?5:4;
+    var headerH=isA3?16:14,footerH=9,bottomH=isA3?70:56;
+    var bodyY=M+headerH+GAP;
+    var bottomY=pdfH-M-footerH-bottomH;
+    var bodyH=bottomY-GAP-bodyY;
+    var bodyW=pdfW-2*M;
+    var leftW=isA3?85:60,rightW=isA3?75:52;
+    var centerW=bodyW-leftW-rightW-2*GAP;
+    var leftX=M,centerX=M+leftW+GAP,rightX=M+leftW+GAP+centerW+GAP;
+    var titleRGB=state.peeColor==="red"?[192,0,32]:[0,166,81];
+
+    function peeFontSz(a3,a4){return isA3?a3:a4;}
+
+    function drawPEEHeader(page){
+      doc.setFillColor(22,32,43);doc.rect(M,M,pdfW-2*M,headerH,"F");
+      var studio=present(state.header.redattore)+(state.header.qualifica?" - "+state.header.qualifica:"");
+      doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(9,8));doc.setTextColor(255,255,255);
+      doc.text("Planimetrie Rapide",M+3,M+peeFontSz(6,5.5));
+      if(studio&&studio!=="-"){doc.setFont("helvetica","normal");doc.setFontSize(peeFontSz(8,7));doc.setTextColor(170,185,200);doc.text(doc.splitTextToSize(studio,leftW-4),M+3,M+peeFontSz(11,10));}
+      var azienda=present(state.header.azienda),piano=present(state.header.piano||page.floor.name);
+      doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(12,10));doc.setTextColor(255,255,255);
+      doc.text(azienda,pdfW/2,M+peeFontSz(7,6),{align:"center"});
+      doc.setFont("helvetica","normal");doc.setFontSize(peeFontSz(8,7));doc.setTextColor(170,185,200);
+      var subLine=present(state.header.indirizzo)+(piano&&piano!=="-"?"  |  "+piano:"");
+      doc.text(subLine,pdfW/2,M+peeFontSz(12.5,11),{align:"center"});
+      doc.setFont("helvetica","normal");doc.setFontSize(peeFontSz(8,7));doc.setTextColor(150,165,182);
+      doc.text(new Date().toLocaleDateString("it-IT")+"   "+revisionLabel(),pdfW-M-3,M+peeFontSz(9,8),{align:"right"});
+    }
+
+    function drawPEELeftColumn(page){
+      var x=leftX,y=bodyY,w=leftW,h=bodyH,pad=3;
+      doc.setDrawColor(198,205,214);doc.setLineWidth(0.25);doc.rect(x,y,w,h);
+      var titleBh=peeFontSz(8,7);
+      doc.setFillColor(titleRGB[0],titleRGB[1],titleRGB[2]);doc.rect(x,y,w,titleBh,"F");
+      doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(7,6.5));doc.setTextColor(255,255,255);
+      doc.text("STUDIO / CONSULENTE",x+pad,y+titleBh*.75);
+      var cy=y+titleBh+pad+1;
+      doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(8.5,7.5));doc.setTextColor(20,30,40);
+      doc.text(doc.splitTextToSize(present(state.header.redattore),w-2*pad),x+pad,cy);
+      cy+=peeFontSz(5,4.5);
+      doc.setFont("helvetica","normal");doc.setFontSize(peeFontSz(7.5,6.8));doc.setTextColor(75,90,106);
+      doc.text(doc.splitTextToSize(present(state.header.qualifica),w-2*pad),x+pad,cy);
+      cy+=peeFontSz(9,8);
+      var locH=Math.max(35,Math.floor((h-titleBh-70)*0.55));
+      doc.setFillColor(242,244,247);doc.setDrawColor(200,208,218);doc.setLineWidth(0.2);
+      doc.rect(x+pad,cy,w-2*pad,locH,"FD");
+      doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(7,6.5));doc.setTextColor(140,152,166);
+      doc.text("LOCALIZZAZIONE",x+w/2,cy+locH/2-3,{align:"center"});
+      doc.text("EDIFICIO",x+w/2,cy+locH/2+3,{align:"center"});
+      doc.setFont("helvetica","normal");doc.setFontSize(peeFontSz(6.5,6));doc.setTextColor(160,170,182);
+      doc.text("(foto aerea)",x+w/2,cy+locH/2+8,{align:"center"});
+      cy+=locH+pad;
+      var racH=h-(cy-y)-pad;
+      if(racH>14){
+        doc.setFillColor(titleRGB[0],titleRGB[1],titleRGB[2]);doc.rect(x,cy,w,8,"F");
+        doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(7,6.5));doc.setTextColor(255,255,255);
+        doc.text("PUNTO DI RACCOLTA",x+pad,cy+5.5);cy+=8+pad;
+        var raccolta=page.legendMarkers.filter(function(m){return m.symId==="raccolta";});
+        doc.setFont("helvetica","normal");doc.setFontSize(peeFontSz(7.5,7));doc.setTextColor(20,30,40);
+        if(raccolta.length){raccolta.forEach(function(m,i){if(cy+5<y+h){doc.text((m.seqLabel||("R"+(i+1)))+(m.note?" — "+m.note:""),x+pad,cy+4);cy+=5;}});}
+        else{doc.setTextColor(140,152,166);doc.text("Indicato sulla planimetria",x+pad,cy+4);}
+      }
+    }
+
+    function drawPEECenter(page){
+      var x=centerX,y=bodyY,w=centerW,h=bodyH,topH=peeFontSz(8,7);
+      doc.setDrawColor(198,205,214);doc.setLineWidth(0.25);doc.rect(x,y,w,h);
+      doc.setFillColor(245,247,250);doc.rect(x,y,w,topH,"F");
+      doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(9,8));doc.setTextColor(20,30,40);
+      doc.text(present(state.header.piano||page.floor.name),x+w/2,y+topH*.75,{align:"center"});
+      var scaleBarH=10,imgAreaY=y+topH+2,imgAreaH=h-topH-2-scaleBarH-2;
+      var ratio=page.pxW/page.pxH,dW=w-4,dH=(w-4)/ratio;
+      if(dH>imgAreaH){dH=imgAreaH;dW=imgAreaH*ratio;}
+      var dX=x+(w-dW)/2,dY=imgAreaY+(imgAreaH-dH)/2;
+      doc.addImage(page.imgDataUrl,"PNG",dX,dY,dW,dH,undefined,"FAST");
+      var scaleBarY=imgAreaY+imgAreaH+2;
+      var contentWm=page.bounds.maxX-page.bounds.minX,mmPerMeter=dW/contentWm,scaleRatio=Math.round(1000/mmPerMeter);
+      if(page.floor.calibrated){var barM=pickScaleBarRealMM(mmPerMeter);drawScaleBarMM(doc,dX+3,scaleBarY,barM,mmPerMeter,scaleRatio);}
+      else drawIndicativeScale(doc,dX+3,scaleBarY);
+    }
+
+    function drawPEERightColumn(page){
+      var x=rightX,y=bodyY,w=rightW,h=bodyH,pad=3;
+      doc.setDrawColor(198,205,214);doc.setLineWidth(0.25);doc.rect(x,y,w,h);
+      doc.setFillColor(titleRGB[0],titleRGB[1],titleRGB[2]);doc.rect(x,y,8,h,"F");
+      doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(20,15));
+      doc.setTextColor(titleRGB[0],titleRGB[1],titleRGB[2]);
+      doc.text("PIANO DI EVACUAZIONE",x+w/2+4,y+h/2,{angle:90,align:"center"});
+      doc.setFont("helvetica","normal");doc.setFontSize(peeFontSz(7.5,6.8));doc.setTextColor(75,90,106);
+      var az=present(state.header.azienda);
+      if(az!=="-"){doc.text(doc.splitTextToSize(az,w-14),x+10,y+h-pad-peeFontSz(8,7));}
+    }
+
+    function drawPEEBottomBand(page){
+      var x=M,y=bottomY,w=bodyW,h=bottomH,pad=4,g=peeFontSz(6,5);
+      doc.setFillColor(248,249,251);doc.setDrawColor(198,205,214);doc.setLineWidth(0.3);doc.rect(x,y,w,h,"FD");
+      var legendW=w*0.42,procW=w*0.33,emergW=w-legendW-procW-2*g;
+      var legendX=x,procX=x+legendW+g,emergX=x+legendW+g+procW+g;
+      // Legend header
+      doc.setFillColor(22,32,43);doc.rect(legendX,y,legendW,8,"F");
+      doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(7.5,7));doc.setTextColor(255,255,255);
+      doc.text("LEGENDA SIMBOLI",legendX+pad,y+5.5);
+      // Legend items
+      var legendItems=collectLegendItems(page.legendMarkers,page.floor);
+      var iconSz=peeFontSz(6,5.5),rowH=peeFontSz(7.2,6.8),cols=legendW>100?2:1;
+      var itemsPerCol=Math.floor((h-10-2)/rowH),colW=(legendW-pad-(cols>1?g:0))/cols;
+      legendItems.slice(0,itemsPerCol*cols).forEach(function(item,i){
+        var col=Math.floor(i/itemsPerCol),row=i%itemsPerCol;
+        var ix=legendX+pad+col*(colW+g),iy=y+10+row*rowH;
+        drawLegendIcon(doc,item,ix,iy,iconSz);
+        doc.setFont("helvetica","normal");doc.setFontSize(peeFontSz(6.8,6.3));doc.setTextColor(30,40,52);
+        doc.text(doc.splitTextToSize(legendText(item),colW-iconSz-3),ix+iconSz+2.5,iy+0.5);
+      });
+      // Dividers
+      doc.setDrawColor(198,205,214);doc.setLineWidth(0.25);
+      doc.line(procX-g/2,y+1,procX-g/2,y+h-1);
+      doc.line(emergX-g/2,y+1,emergX-g/2,y+h-1);
+      // Procedures header
+      doc.setFillColor(22,32,43);doc.rect(procX,y,procW,8,"F");
+      doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(7.5,7));doc.setTextColor(255,255,255);
+      doc.text("PROCEDURE DI EMERGENZA",procX+pad,y+5.5);
+      var pY=y+10,halfH=(h-11)/2-1;
+      doc.setFillColor(240,249,244);doc.setDrawColor(0,166,81);doc.setLineWidth(0.3);doc.rect(procX+2,pY,procW-4,halfH,"FD");
+      doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(7,6.5));doc.setTextColor(0,120,58);
+      doc.text("Cosa fare:",procX+pad+1,pY+4.5);
+      drawInstructionList(doc,procX+pad+1,pY+7.5,procW-9,["Mantieni la calma.","Attiva l’allarme.","Segui le vie di esodo.","Raggiungi il punto di raccolta."],{fontSize:peeFontSz(6.5,6),lineHeight:peeFontSz(4,3.8),bulletColor:[0,166,81],bulletW:2.6});
+      pY+=halfH+2;
+      doc.setFillColor(255,248,247);doc.setDrawColor(226,87,76);doc.setLineWidth(0.3);doc.rect(procX+2,pY,procW-4,halfH,"FD");
+      doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(7,6.5));doc.setTextColor(190,40,30);
+      doc.text("Cosa non fare:",procX+pad+1,pY+4.5);
+      drawInstructionList(doc,procX+pad+1,pY+7.5,procW-9,["Non usare gli ascensori.","Non tornare indietro.","Non raccogliere oggetti.","Non creare panico."],{fontSize:peeFontSz(6.5,6),lineHeight:peeFontSz(4,3.8),bulletColor:[226,87,76],bulletW:2.6});
+      // 112
+      if(state.show112!==false){
+        doc.setFillColor(22,32,43);doc.rect(emergX,y,emergW,8,"F");
+        doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(7.5,7));doc.setTextColor(255,255,255);
+        doc.text("EMERGENZA",emergX+emergW/2,y+5.5,{align:"center"});
+        var bigSz=Math.min(isA3?42:34,emergW*0.72);
+        doc.setFont("helvetica","bold");doc.setFontSize(bigSz);doc.setTextColor(226,87,76);
+        doc.text("112",emergX+emergW/2,y+8+bigSz*0.72,{align:"center"});
+        doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(7.5,7));doc.setTextColor(40,50,62);
+        doc.text("Numero Unico di Emergenza",emergX+emergW/2,y+h-12,{align:"center"});
+        doc.setFont("helvetica","normal");doc.setFontSize(peeFontSz(6.5,6));doc.setTextColor(100,112,126);
+        doc.text("Attivo 24 ore su 24 per tutte le emergenze",emergX+emergW/2,y+h-7,{align:"center"});
+      }
+    }
+
+    pages.forEach(function(page,index){
+      if(index>0)doc.addPage(fmt,"landscape");
+      pdfW=doc.internal.pageSize.getWidth();pdfH=doc.internal.pageSize.getHeight();
+      bodyY=M+headerH+GAP;bottomY=pdfH-M-footerH-bottomH;bodyH=bottomY-GAP-bodyY;
+      drawPEEHeader(page);
+      drawPEELeftColumn(page);
+      drawPEECenter(page);
+      drawPEERightColumn(page);
+      drawPEEBottomBand(page);
+      drawPdfFooter(doc,M,pdfW,pdfH);
+    });
+    if(state.includeInstructions!==false&&state.instructions&&state.instructions.trim()){
+      doc.addPage(fmt,"portrait");var pw=doc.internal.pageSize.getWidth(),ph=doc.internal.pageSize.getHeight();
+      drawPdfHeader(doc,M,pw,18,"Istruzioni");drawInstructionsPage(doc,M,M+18+6,pw-2*M,fmt,18);drawPdfFooter(doc,M,pw,ph);
+    }
+    var fn=safeBaseName()+"_rev"+(state.header.revisione||"1")+"_"+dateStamp()+"_PEE.pdf";doc.save(fn);toast("PEE professionale esportato");
+  }
+
   function doExport(){
     if(!window.jspdf||!window.jspdf.jsPDF){alert("La libreria PDF non è disponibile. Verifica che il file locale vendor/jspdf.umd.min.js sia presente e ricarica la pagina.");return;}
     toast("Generazione PDF multipiano...");var floors=state.floors.filter(floorHasContent);Promise.all(floors.map(renderFloorToCanvas)).then(buildPDF).catch(function(err){console.error(err);alert("Errore durante l’esportazione: "+err.message);});
   }
   function pageOrientation(page){return page.pxW>page.pxH?"landscape":"portrait";}
   function buildPDF(pages){
+    if(exportType==="pee"){buildPEEPDF(pages);return;}
     var J=window.jspdf.jsPDF,fmt=document.getElementById("export-format").value,firstOrientation=pageOrientation(pages[0]);
     var doc=new J({unit:"mm",format:fmt,orientation:firstOrientation,compress:true}),M=12,headerH=18,footerH=11,allMeasures=[],legendPageQueue=[];
     var conformity=calculateConformityIndex(preflightCheck(exportType));
