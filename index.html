@@ -3021,8 +3021,11 @@
       doc.rect(x,y,w,h,"F");
       doc.saveGraphicsState();
       doc.setFont("helvetica","bold");doc.setFontSize(peeFontSz(20,15));
-      doc.setTextColor(255,255,254); // near-white: forza operatore rg (RGB) invece di g (grayscale)
-      doc.text("PIANO DI EVACUAZIONE",x+w/2,y+h/2,{angle:90,align:"center"});
+      doc.setTextColor(255,255,254);
+      // align:"center" con angle:90 sposta x di -textWidth/2, portando il testo fuori dalla striscia.
+      // Fix: nessun align, calcolo manuale: y_start = centro_y + textWidth/2 così il testo è centrato verticalmente.
+      var _txt="PIANO DI EVACUAZIONE",_tw=doc.getTextWidth(_txt);
+      doc.text(_txt,x+w/2,y+h/2+_tw/2,{angle:90});
       doc.restoreGraphicsState();
     }
 
